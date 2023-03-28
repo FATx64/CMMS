@@ -1,12 +1,9 @@
 //db syncronization
 
+const config = require("../config.json");
 const Sequelize=require('sequelize');
 
-const sequelize = new Sequelize('cmms','root','mysql',{
-    host:'localhost',
-    dialect:'mysql'
-   
-  });
+const sequelize = new Sequelize(config.dbUrl);
 
 
   sequelize

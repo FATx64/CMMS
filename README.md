@@ -1,4 +1,5 @@
 # CMMS
+
 ## What is CMMS?
  It stands for Computerized Maintenance Management System. It is a software designed to store the hospital's maintenance data on a computer, whether it's a work order for a breakdown or a daily inspection. This software simplifies the maintenance management by giving users insight into the state of maintenance needs with comprehensive work order schedules, accurate inventory of spare parts, and access to very important reports. This information makes it easier for maintenance workers to do their jobs more effectively. And CMMS is not only used in the medical field, it's used in every industry.
 
@@ -11,29 +12,31 @@
 ![Work Orders](images/Feat_1.png)
 ![Work Orders](images/Feat_2.png)
 
+## Usage
 
-## How to use our software?
- 1- First, you have to download Node and install it. You can download it from [here](https://nodejs.org/en/)
+1. First, you have to download Node and install it. You can download it from [here](https://nodejs.org/en/)
 
- 2- Second, download MySQL database and install it, Preferred Ampps and you can download it from [here](https://www.ampps.com/downloads)
+2. Second, download MySQL database and install it (you can use Ampps for easier process, you can download it from [here](https://www.ampps.com/downloads))
 
- 3- Open Ampps and turn on Apache and MySQL.
+3. Create new database for CMMS, for this example we name it `cmms`.
 
- 4- From [phpMyAdmin](http://localhost/phpmyadmin/) create new database and name it **cmms**.
+4. Open the folder of the project using your IDE.
 
- 5- Open the folder of the project using your IDE.
+5. Copy `config.json-example` and paste it as `config.json`, then change `dbUrl` with your database connection url (e.g. `mysql://root:mysql@localhost:3306/cmms`)
 
- 6- Open the terminal of your IDE and write **npm install**, then **nodemon start**.
+6. Open terminal (or command prompt) and run `npm install`
 
- 7- If it doesn't work you can try **node server.js** or **npm start**.
+7. After all the packages are installed you run the server by running `npm start` or `node server.js`.
 
- 8- In your browser open **localhost:3000**.
+8. You can access the CMMS by opening **localhost:5000** in your browser.
 
- 9- You will find the home of our website. To see the rest of our website you have to log in.
-* Note: **email**: admin@gmail.com, **password**: 0000
+9. You will find the home of the CMMS. To see the rest of the CMMS you have to log in.
 
-10- Now you can see all the content of our website and edit it.
-* Note: There is an uploaded SQL file for our CMMS on our Repository
+> **Note**: **email**: admin@gmail.com, **password**: 0000
+
+10. Now you can see all the content of our website and edit it.
+
+> **Note**: There is an uploaded SQL file for our CMMS on our Repository
 
 ## The Relational Model of Our CMMS Database :
 ![Work Orders](images/RM.png)
