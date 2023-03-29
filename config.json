@@ -1,0 +1,3 @@
+{
+    "dbUrl": "mysql://cmms:mysql@localhost:3306/cmms"
+}
