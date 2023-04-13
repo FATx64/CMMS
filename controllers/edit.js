@@ -53,6 +53,7 @@ exports.editClinicalEngineer = (req, res) => {
                 Email: clinicalEngineer.Email,
                 Age: clinicalEngineer.Age,
                 Image: clinicalEngineer.Image,
+                /*
                 OR: clinicalEngineer.Department.Name == "OR" ? true : false,
                 CSSD: clinicalEngineer.Department.Name == "CSSD" ? true : false,
                 ICU: clinicalEngineer.Department.Name == "ICU" ? true : false,
@@ -60,6 +61,13 @@ exports.editClinicalEngineer = (req, res) => {
                     clinicalEngineer.Department.Name == "Radiology"
                         ? true
                         : false,
+                        */
+                ESP: clinicalEngineer.Department.Name == "ESP" ? true : false,
+                Instrument: clinicalEngineer.Department.Name == "Instrument" ? true : false,
+                Electric: clinicalEngineer.Department.Name == "Electric" ? true : false,
+                Mechanic: clinicalEngineer.Department.Name == "Mechanic" ? true : false,
+                HiLine: clinicalEngineer.Department.Name == "Hi-Line" ? true : false ,
+
             }
 
             console.log(cs)
@@ -105,11 +113,17 @@ exports.editEquipment = (req, res) => {
                 Image: equipment.Image,
                 DepartmentCode: equipment.DepartmentCode,
                 AgentSupplierId: equipment.AgentSupplierId,
+                /*
                 OR: equipment.Department.Name == "OR" ? true : false,
                 CSSD: equipment.Department.Name == "CSSD" ? true : false,
                 ICU: equipment.Department.Name == "ICU" ? true : false,
                 Radiology:
-                    equipment.Department.Name == "Radiology" ? true : false,
+                    equipment.Department.Name == "Radiology" ? true : false, */
+                ESP: equipment.Department.Name == "ESP" ? true : false ,
+                Instrument: equipment.Department.Name == "Instrument" ? true : false,
+                Electric: equipment.Department.Name == "Electric" ? true : false,
+                Mechanic: equipment.Department.Name == "Mechanic" ? true : false,
+                HiLine: equipment.Department.Name == "Hi-Line" ? true : false, 
             }
             if (eq.PM == "Annualy") {
                 res.render("editEquipment", {
