@@ -25,9 +25,17 @@ const reportController = require("./routes/report")
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(
-    session({ secret: "anysecret", resave: false, saveUninitialized: false })
-)
+app.use(session({
+    secret: "mysecret", // TODO: Add to config.json
+    // create new redis store.
+    store: new redisStore({
+        host: "localhost",
+        port: 6379,
+        client: redisClient
+    }),
+    saveUninitialized: false,
+    resave: false
+}));
 const filestorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/images")
