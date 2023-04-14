@@ -29,6 +29,8 @@ CMMS (Computerized Maintenance Management System) is a software designed to stor
 
 3. Copy `config.json-example` and paste it as `config.json`, then change `dbUrl` with your database connection url (e.g. `mysql://root:mysql@localhost:3306/cmms`)
 
+> **Note**: Changing `sessionSecret` is recommended in production!
+
 4. Open terminal (or command prompt) and run `npm install`
 
 5. After all the packages are installed you run the server by running `npm start` or `node server.js`.
