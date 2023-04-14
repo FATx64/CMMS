@@ -12,6 +12,14 @@ const PpmQuestions = require("../models/ppm_questions")
 const PPM = require("../models/ppm")
 const moment = require("moment")
 
+const guard = (req, res) => {
+    if (!req.session.key) {
+        res.redirect("/")
+        return true
+    }
+    return false
+}
+
 exports.homeSignIn = (req, res) => {
     res.render("newHome", { layout: false })
 }
@@ -20,6 +28,7 @@ exports.signIn = (req, res) => {
     email = req.body.email
     pass = req.body.password
     if (email == "admin@gmail.com" && pass == 0000) {
+        req.session.key = email // Very unsecure, but this entire website is unsecure
         res.redirect("/home")
     } else {
         ClinicalEngineer.findOne({ where: { Email: email } }).then(
@@ -30,6 +39,7 @@ exports.signIn = (req, res) => {
                         .then((result) => {
                             if (result) {
                                 req.session.DSSN = clinicalengineer.DSSN
+                                req.session.key = email // Very unsecure, but this entire website is unsecure
                                 res.redirect("/engineer/dialyInspection")
                             } else res.redirect("/")
                         })
@@ -39,10 +49,24 @@ exports.signIn = (req, res) => {
     }
 }
 
+exports.signOut = (req, res) => {
+    if (req.session.key) {
+        req.session.destroy()
+    }
+    res.redirect("/")
+}
+
 exports.home = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     res.render("home", { pageTitle: "Home", Home: true })
 }
+
 exports.dialyInspectionEngineer = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     engineerId = req.session.DSSN
     Equipment.findAll({ include: [{ model: Department }] }).then(
         (equipments) => {
@@ -149,6 +173,9 @@ exports.dialyInspectionEngineerPost = (req, res) => {
 }
 
 exports.ppmEngineer = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     engineerId = req.session.DSSN
     PpmQuestions.findAll({
         include: [{ model: Equipment, include: [{ model: Department }] }],
@@ -182,6 +209,9 @@ exports.ppmEngineerPost = (req, res) => {
 }
 
 exports.ppmEngineerEquipment = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     code = req.params.code
     engineerId = req.session.DSSN
     PpmQuestions.findOne({ where: { EquipmentCode: code } }).then((ppm) => {
@@ -287,6 +317,9 @@ exports.ppmEngineerEquipmentPost = (req, res) => {
 }
 
 exports.department = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     Department.findAll({
         include: [{ model: ClinicalEngineer }, { model: Equipment }],
     })
@@ -322,6 +355,9 @@ exports.department = (req, res) => {
 }
 
 exports.maintenance = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     Maintenance.findAll({
         include: [
             {
@@ -396,6 +432,9 @@ exports.maintenance = (req, res) => {
 }
 
 exports.clinicalEngineer = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     ClinicalEngineer.findAll({ include: [{ model: Department }] })
         .then((clinicalEngineers) => {
             const clinicalengineers = clinicalEngineers.map(
@@ -433,6 +472,9 @@ exports.clinicalEngineer = (req, res) => {
 }
 
 exports.sparePart = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     SparePart.findAll({
         include: [{ model: AgentSupplier }, { model: Equipment }],
     })
@@ -489,6 +531,9 @@ exports.sparePart = (req, res) => {
 }
 
 exports.agentSupplier = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     AgentSupplier.findAll()
         .then((agentsuppliers) => {
             const as = agentsuppliers.map((agentsupplier) => {
@@ -521,6 +566,9 @@ exports.agentSupplier = (req, res) => {
 }
 
 exports.workOrder = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     WorkOrder.findAll({
         include: [{ model: ClinicalEngineer }, { model: Equipment }],
     })
@@ -589,6 +637,9 @@ exports.workOrder = (req, res) => {
 }
 
 exports.breakDown = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     BreakDown.findAll({
         include: [{ model: Equipment, include: [{ model: Department }] }],
     })
@@ -635,6 +686,9 @@ exports.breakDown = (req, res) => {
 }
 
 exports.equipment = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     Equipment.findAll({
         include: [{ model: Department }, { model: AgentSupplier }],
     })
@@ -687,6 +741,9 @@ exports.equipment = (req, res) => {
 }
 
 exports.installation = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     Equipment.findAll({
         include: [{ model: Department }, { model: AgentSupplier }],
     })
@@ -729,6 +786,9 @@ exports.installation = (req, res) => {
 }
 
 exports.ppm = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     PPM.findAll({
         include: [
             { model: Equipment, include: [{ model: PpmQuestions }] },
@@ -779,6 +839,9 @@ exports.ppm = (req, res) => {
 }
 
 exports.dailyInspection = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     DailyInspection.findAll({
         include: [{ model: Equipment }, { model: ClinicalEngineer }],
     })
@@ -815,6 +878,9 @@ exports.dailyInspection = (req, res) => {
 }
 
 exports.workorder = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     dssn = req.session.DSSN
     WorkOrder.findAll({ where: { ClinicalEnginnerDSSN: dssn } })
         .then((orders) => {
@@ -874,6 +940,9 @@ exports.workorder = (req, res) => {
 }
 
 exports.workorderDescription = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     code = req.params.code
     engineerId = req.session.DSSN
     WorkOrder.findOne({

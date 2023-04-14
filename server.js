@@ -22,17 +22,23 @@ const addController = require("./routes/add")
 const deleteController = require("./routes/delete")
 const editController = require("./routes/edit")
 const reportController = require("./routes/report")
+const redis = require("redis")
+const RedisStore = require("connect-redis").default
+
+const redisClient = redis.createClient()
+redisClient.connect().catch(console.error)
+const redisStore = new RedisStore({
+    client: redisClient,
+    port: 6379,
+    prefix: "cmms:",
+})
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session({
     secret: "mysecret", // TODO: Add to config.json
     // create new redis store.
-    store: new redisStore({
-        host: "localhost",
-        port: 6379,
-        client: redisClient
-    }),
+    store: redisStore,
     saveUninitialized: false,
     resave: false
 }));
