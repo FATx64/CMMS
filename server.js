@@ -24,6 +24,7 @@ const editController = require("./routes/edit")
 const reportController = require("./routes/report")
 const redis = require("redis")
 const RedisStore = require("connect-redis").default
+const config = require("./config.json")
 
 const redisClient = redis.createClient()
 redisClient.connect().catch(console.error)
@@ -33,10 +34,16 @@ const redisStore = new RedisStore({
     prefix: "cmms:",
 })
 
+let secret = config.sessionSecret
+if (!secret) {
+    secret = "mySecret"
+    console.warn("You should specify 'sessionSecret' in config.json!")
+}
+
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session({
-    secret: "mysecret", // TODO: Add to config.json
+    secret: secret,
     // create new redis store.
     store: redisStore,
     saveUninitialized: false,
