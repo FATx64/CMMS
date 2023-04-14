@@ -22,12 +22,33 @@ const addController = require("./routes/add")
 const deleteController = require("./routes/delete")
 const editController = require("./routes/edit")
 const reportController = require("./routes/report")
+const redis = require("redis")
+const RedisStore = require("connect-redis").default
+const config = require("./config.json")
+
+const redisClient = redis.createClient()
+redisClient.connect().catch(console.error)
+const redisStore = new RedisStore({
+    client: redisClient,
+    port: 6379,
+    prefix: "cmms:",
+})
+
+let secret = config.sessionSecret
+if (!secret) {
+    secret = "mySecret"
+    console.warn("You should specify 'sessionSecret' in config.json!")
+}
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(
-    session({ secret: "anysecret", resave: false, saveUninitialized: false })
-)
+app.use(session({
+    secret: secret,
+    // create new redis store.
+    store: redisStore,
+    saveUninitialized: false,
+    resave: false
+}));
 const filestorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/images")

@@ -19,6 +19,7 @@ CMMS (Computerized Maintenance Management System) is a software designed to stor
 - SQL-based Database ([MariaDB](https://mariadb.com) is recommended)
   - You can use [Ampps](https://www.ampps.com/downloads) if you're in a hurry
 - A bit of SQL and JavaScript knowledge
+- [Redis](https://redis.com/redis-enterprise-software/download-center/software/) for Session Manager
 
 ### Setup
 
@@ -27,6 +28,8 @@ CMMS (Computerized Maintenance Management System) is a software designed to stor
 2. Open the folder of the project using your IDE.
 
 3. Copy `config.json-example` and paste it as `config.json`, then change `dbUrl` with your database connection url (e.g. `mysql://root:mysql@localhost:3306/cmms`)
+
+> **Note**: Changing `sessionSecret` is recommended in production!
 
 4. Open terminal (or command prompt) and run `npm install`
 

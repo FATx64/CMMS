@@ -34,6 +34,7 @@ router.get(
 )
 router.get("/engineer/ppm/:code", homeController.ppmEngineerEquipment)
 router.post("/signIn", homeController.signIn)
+router.get("/signOut", homeController.signOut)
 router.get("/", homeController.homeSignIn)
 
 module.exports = router
