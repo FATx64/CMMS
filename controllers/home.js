@@ -12,9 +12,11 @@ const PpmQuestions = require("../models/ppm_questions")
 const PPM = require("../models/ppm")
 const moment = require("moment")
 
-const guard = (req, res) => {
+const guard = (req, res, shouldRedirect) => {
     if (!req.session.key) {
-        res.redirect("/")
+        shouldRedirect = typeof shouldRedirect !== "undefined" ? shouldRedirect : true
+        if (shouldRedirect)
+            res.redirect("/")
         return true
     }
     return false
@@ -96,6 +98,9 @@ exports.dialyInspectionEngineer = (req, res) => {
 }
 
 exports.dialyInspectionEngineerPost = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     code = req.body.Code
     date = req.body.DATE
     q1 = req.body.Q1
@@ -204,6 +209,9 @@ exports.ppmEngineer = (req, res) => {
     })
 }
 exports.ppmEngineerPost = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     code = req.body.Code
     res.redirect("/engineer/ppm/" + code)
 }
@@ -241,6 +249,9 @@ exports.ppmEngineerEquipment = (req, res) => {
     })
 }
 exports.ppmEngineerEquipmentPost = (req, res) => {
+    if (guard(req, res)) {
+        return
+    }
     date = req.body.DATE
     equipmentId = req.params.Code
     engineerId = req.session.DSSN
@@ -884,7 +895,7 @@ exports.workorder = (req, res) => {
     dssn = req.session.DSSN
     WorkOrder.findAll({ where: { ClinicalEnginnerDSSN: dssn } })
         .then((orders) => {
-            var events = orders.map((order) => {
+            const events = orders.map((order) => {
                 return {
                     title: order.Description,
                     color:
@@ -950,7 +961,7 @@ exports.workorderDescription = (req, res) => {
         include: [{ model: Equipment }],
     })
         .then((order) => {
-            var order = {
+            const order = {
                 Code: order.Code,
                 EquipmentName: order.Equipment.Name,
                 EquipmentModel: order.Equipment.Model,
@@ -972,7 +983,6 @@ exports.workorderDescription = (req, res) => {
                     pageTitle: "Work Order",
                     WO: true,
                     order: order,
-                    Engineer,
                     Engineer,
                 })
             })
