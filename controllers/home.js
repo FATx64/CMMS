@@ -961,7 +961,7 @@ exports.workorderDescription = (req, res) => {
         include: [{ model: Equipment }],
     })
         .then((order) => {
-            const order = {
+            order = {
                 Code: order.Code,
                 EquipmentName: order.Equipment.Name,
                 EquipmentModel: order.Equipment.Model,
