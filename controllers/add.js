@@ -7,6 +7,7 @@ const SpareParts = require("../models/spare_part")
 const BreakDowns = require("../models/break_down")
 const WorkOrders = require("../models/work_order")
 const Maintenance = require("../models/maintenance")
+const TrackRecord = require("../models/track_record")
 
 exports.addDepartment = (req, res) => {
     code = req.body.Code
@@ -447,4 +448,21 @@ exports.addMaintenance = (req, res) => {
         .catch((err) => {
             console.log("ERROR!!!!!!", err)
         })
+}
+
+exports.addTrackRecord = (req, res) => {
+    date = req.body.DATE
+    location =req.body.Location
+    description = req.body.Description
+    status = req.body.Status
+    ptwno = req.body.PtwNo
+     if (req.body.edit) {
+        image = req.body.Image
+    } else {
+        image = req.file.path.split("\\")
+        if (image.length > 1) image = req.file.path.split("\\").pop()
+        else image = req.file.path.split("/").pop()
+    }
+    manhours = req.body.ManHours
+
 }
