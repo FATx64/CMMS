@@ -464,5 +464,50 @@ exports.addTrackRecord = (req, res) => {
         else image = req.file.path.split("/").pop()
     }
     manhours = req.body.ManHours
-
+    department = req.body.Department
+    maintenanceType = req.Body.MaintenanceType
+    EquipmentID = req.body.EquipmentCode
+    Equipment.findOne({where: {Code: equipmentId} }).then((Equipment) =>{
+        if (Equipment){
+            TrackRecord.findByPk(code). then((track_record) =>{
+                if (track_record){
+                    track_record.DATE = date
+                    track_record.Location = location
+                    track_record.Description = description
+                    track_record.PtwNo = ptwno
+                    track_record.Image = image
+                    track_record.ManHours = manhours
+                    track_record.Department = department
+                    track_record.MaintenanceType = maintenanceType
+                    track_record.EquipmentCode = equipmentId
+                    track_record.save().then(res.redirect("/trackRecord"))
+                }else{
+                    TrackRecord.create({
+                        DATE: date,
+                        Location: location,
+                        PtwNo: ptwno,
+                        Image: image,
+                        ManHours: manhours,
+                        Department: department,
+                        MaintenanceType: maintenanceType,
+                        EquipmentCode: equipmentId
+                    }).then((equipment) => 
+                        res.redirect("/trackRecord")
+                     )
+                }
+            })
+        }else
+            return res.render("error",{
+                layout: false,
+                pageTitle:"Error",
+                href:"/trackRecord",
+                message: "Something went wrong!"
+                
+            })
+            console.log(err)
+    })
+    .catch((err) => {
+        console.log("Error!!", err)
+    })
 }
+
