@@ -16,6 +16,7 @@ router.get("/installation", homeController.installation)
 router.get("/ppm", homeController.ppm)
 router.get("/dialyInspection", homeController.dailyInspection)
 router.get("/home", homeController.home)
+/*router.get("/trackRecord", homeController.trackRecord)*/
 router.get("/engineer/dialyInspection", homeController.dialyInspectionEngineer)
 router.post(
     "/engineer/dialyInspection",
