@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "cmms"
+version = "0.0.1"
+description = "A reliable scheduling, tracking, reporting tools for equipment and facilities maintenance."
+authors = [
+  "FATx64",
+  "null2264"
+]
+license = "BSD-3-Clause"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
