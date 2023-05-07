@@ -1,1 +1,1 @@
-`poetry run python cmms/manage.py runserver`
+`poetry run python manage.py runserver`
