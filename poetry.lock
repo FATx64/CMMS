@@ -37,6 +37,37 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-browser-reload"
+version = "1.8.0"
+description = "Automatically reload your browser in development."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_browser_reload-1.8.0-py3-none-any.whl", hash = "sha256:6db7e6c5807fff87e421b53926c50cfa3de0115e438f3c2de6103d3069557adb"},
+    {file = "django_browser_reload-1.8.0.tar.gz", hash = "sha256:054ef5ce8b80f46e0beda1a3c847becdff51272cad6f2bda607e201a7afe7425"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
+name = "django-tailwind"
+version = "3.5.0"
+description = "Tailwind CSS Framework for Django projects"
+category = "dev"
+optional = false
+python-versions = ">=3.8.1,<4.0.0"
+files = [
+    {file = "django_tailwind-3.5.0-py3-none-any.whl", hash = "sha256:dcc3b29463fff48a0e8ccd15c87fd467f0e746a7987bde0fdde6253dbb7861be"},
+    {file = "django_tailwind-3.5.0.tar.gz", hash = "sha256:c089b05b47d0e9d19567a81a74949fde16cbbfd8e4264c1f8eb4216a644065b2"},
+]
+
+[package.dependencies]
+django = ">=3.2.14"
+django-browser-reload = ">=1.6.0,<2.0.0"
+
+[[package]]
 name = "sqlparse"
 version = "0.4.4"
 description = "A non-validating SQL parser."
@@ -68,4 +99,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d12dea1bfca848f0268fe9490693a029e52739b80b9e288abfa474d3c94589ee"
+content-hash = "d9655126a696afc854f6c5a9ec918bdde481a8dea2f4919d92d888ebbdd9068d"
