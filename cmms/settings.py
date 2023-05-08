@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from os import getenv
 import dj_database_url
 from pathlib import Path
 
@@ -19,11 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-3a+f4k+o0s5gxi*j1v@%rhd@p#v3os!e%*skb#g0slq605bl07"
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = getenv("DJANGO_SECRET_KEY", "django-insecure-3a+f4k+o0s5gxi*j1v@%rhd@p#v3os!e%*skb#g0slq605bl07" if DEBUG else "")
+if not SECRET_KEY and not DEBUG:
+    raise RuntimeError("You must set DJANGO_SECRET_KEY in production mode!")
 
 ALLOWED_HOSTS = []
 
@@ -63,10 +66,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "cmms.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR.parent / 'db.sqlite3'}",
@@ -74,10 +73,6 @@ DATABASES = {
         conn_health_checks=True,
     ),
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -94,10 +89,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -106,14 +97,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
