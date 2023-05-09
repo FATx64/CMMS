@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
+
 from cmms.decorators import admin_exists
 
 

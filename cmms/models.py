@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+
 from cmms.enums import UserType
 
 
