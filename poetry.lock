@@ -68,6 +68,26 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-phonenumber-field"
+version = "7.1.0"
+description = "An international phone number field for django models."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-phonenumber-field-7.1.0.tar.gz", hash = "sha256:63721dbdc7424cd594a08d80f550e790cf6e7c903cbc0fb4dd9d86baac8b8c51"},
+    {file = "django_phonenumber_field-7.1.0-py3-none-any.whl", hash = "sha256:4eaab35fe9a163046dc3a47188771385c56a788e0e11b7bbcc662e1e6b7b9104"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+phonenumberslite = {version = ">=7.0.2", optional = true, markers = "extra == \"phonenumberslite\""}
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
 name = "django-tailwind"
 version = "3.5.0"
 description = "Tailwind CSS Framework for Django projects"
@@ -82,6 +102,18 @@ files = [
 [package.dependencies]
 django = ">=3.2.14"
 django-browser-reload = ">=1.6.0,<2.0.0"
+
+[[package]]
+name = "phonenumberslite"
+version = "8.13.11"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumberslite-8.13.11-py2.py3-none-any.whl", hash = "sha256:90e7ad011dc571c9ba76a0816d7fc92a7de8944dcb273f074edfb48f20f18f75"},
+    {file = "phonenumberslite-8.13.11.tar.gz", hash = "sha256:9d8162427baa4a0fdcb4902c5ca5936d2c165374c0dc6693227c68e5852d5c88"},
+]
 
 [[package]]
 name = "sqlparse"
@@ -127,4 +159,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5ea887c4e6c07756583e5c8171b6bb59691f090415c1692369825bd0abe3c03d"
+content-hash = "61dc588612d1f5cfb415efd582ab32a65bf60b3432cd5954332f140471646102"

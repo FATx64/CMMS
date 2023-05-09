@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.urls import include, path
 
-from cmms.views import HomeView
+from cmms.views import HomeView, SetupView
+
 
 urlpatterns = [
     path("", HomeView.as_view()),
+    path("setup", SetupView.as_view()),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

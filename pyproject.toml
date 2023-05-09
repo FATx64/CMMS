@@ -12,6 +12,7 @@ license = "BSD-3-Clause"
 python = "^3.10"
 Django = "^4.2.1"
 dj-database-url = "^2.0.0"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "^7.1.0"}
 
 [tool.poetry.group.dev.dependencies]
 django-tailwind = "^3.5.0"
@@ -19,3 +20,12 @@ django-tailwind = "^3.5.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 125
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+lines_after_imports = 2
