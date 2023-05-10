@@ -13,7 +13,10 @@ CMMS<br/>
 ## Setup
 > **Note**
 >
-> Python v3.10 or newer is required!
+> Python 3.10 or newer is required!
 
-- Install Poetry
-- `poetry run python manage.py runserver`
+<!-- TODO: environment variables -->
+- Install [Poetry](https://python-poetry.org/docs/#installation)
+- Run `poetry install` to install all required dependencies in a virtualenv
+- Run `poetry run python manage.py tailwind build` to build the website's CSS
+- Finally run `poetry run python manage.py runserver` to start the server
