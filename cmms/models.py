@@ -16,12 +16,12 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email: str, password: str, **kwargs):
-        kwargs.setdefault("is_admin", False)
-        return self.create_user(email, password, **kwargs)
+        kwargs.setdefault("type", UserType.ENGINEER)
+        return self._create_user(email, password, **kwargs)
 
     def create_superuser(self, email: str, password: str, **kwargs):
-        kwargs.setdefault("is_admin", True)
-        return self.create_user(email, password, **kwargs)
+        kwargs.setdefault("type", UserType.ADMIN)
+        return self._create_user(email, password, **kwargs)
 
 
 class User(AbstractBaseUser):
@@ -34,12 +34,15 @@ class User(AbstractBaseUser):
         },
     )
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False, help_text="Whether user have the highest permission on CMMS")
+    type = models.CharField(max_length=5, choices=UserType.choices)
 
     objects = UserManager()
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
+
+    def is_admin(self):
+        return self.type == UserType.ADMIN
 
 
 class Employee(models.Model):
