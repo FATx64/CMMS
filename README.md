@@ -4,6 +4,7 @@
 
 ## About
 CMMS (Computerized Maintenance Management System) is a software designed to store maintenance data on a computer, whether it's a work order for a breakdown or a daily inspection. This software simplifies the maintenance management by giving users insight into the state of maintenance needs with comprehensive work order schedules, accurate inventory of spare parts, and access to very important reports. This information makes it easier for maintenance workers to do their jobs more effectively. CMMS is designed to be used in the medical field, but it can also be used in other industry.
+This web app is used for pertamina hulu energi for maintenance scheduling
 
 ![Work Orders](images/Feat_1.png)
 ![Work Orders](images/Feat_2.png)
