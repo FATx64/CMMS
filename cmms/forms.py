@@ -8,7 +8,7 @@ from cmms.models import User
 
 
 class SetupForm(forms.Form):
-    email = forms.EmailField()
+    email = forms.EmailField(label="Email address")
     password1 = forms.CharField(
         label="Password",
         strip=False,
@@ -33,8 +33,6 @@ class SetupForm(forms.Form):
 
     def _post_clean(self) -> None:
         super()._post_clean()
-        # Validate the password after self.instance is updated with form data
-        # by super().
         password = self.cleaned_data.get("password2")
         if password:
             try:
@@ -44,3 +42,21 @@ class SetupForm(forms.Form):
 
     def save(self) -> User:
         return User.objects.create_superuser(self.cleaned_data["email"], self.cleaned_data["password2"])
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(label="Email address")
+    password = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
+    )
+
+    def _post_clean(self) -> None:
+        super()._post_clean()
+        password = self.cleaned_data.get("password")
+        if password:
+            try:
+                password_validation.validate_password(password)
+            except ValidationError as error:
+                self.add_error("password", error)
