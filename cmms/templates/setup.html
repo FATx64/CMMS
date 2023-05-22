@@ -4,7 +4,9 @@
 {% block title %}{{ block.super }} - Setup{% endblock %}
 
 {% block content %}
-<div class="sm:mx-auto sm:w-full sm:max-w-sm pb-8">
+<h1 class="text-xl font-bold" align="center">Welcome to CMMS</h1>
+<p class="text-sm" align="center">Please setup an admin account before proceeding...</p>
+<div class="sm:mx-auto sm:w-full sm:max-w-sm py-6">
     <form class="space-y-6" method="post">
         {% for hidden in form.hidden_fields %}
             <!-- csrf_token -->
