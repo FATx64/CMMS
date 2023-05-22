@@ -1,3 +1,4 @@
 __pycache__/
 cmms/static/css/dist/
 db.sqlite3
+.env

@@ -20,3 +20,9 @@ CMMS<br/>
 - Run `poetry install` to install all required dependencies in a virtualenv
 - Run `poetry run python manage.py tailwind build` to build the website's CSS
 - Finally run `poetry run python manage.py runserver` to start the server
+
+### Environment Variables
+
+|Name|Description|Example|
+|----|-----------|-------|
+|DATABASE\_URL|URL to your database. Check out [`dj-database-url`](https://github.com/jazzband/dj-database-url#url-schema) for more information|`postgres://user:p#ssword!@localhost/foobar`|
