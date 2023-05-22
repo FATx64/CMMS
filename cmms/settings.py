@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "cmms",
     "django_browser_reload",
     "phonenumber_field",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
