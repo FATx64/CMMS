@@ -8,6 +8,11 @@ authors = [
 ]
 license = "BSD-3-Clause"
 
+[tool.poetry.scripts]
+start = "scripts:runserver"
+tailwind = "scripts:tailwind"
+manage = "scripts:manage"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.2.1"
