@@ -9,12 +9,13 @@
 **Computerized Maintenance Management System** or **CMMS** is a webapp created for Pertamina Hulu Energi, designed to provide a reliable scheduling, tracking, reporting tools for equipment and facilities maintenance.
 
 ## Setup
-> **Note**
->
-> Python 3.10 or newer is required!
 
-<!-- TODO: environment variables -->
-- Install [Poetry](https://python-poetry.org/docs/#installation)
+### Prerequisites
+- Python 3.10 or Newer
+- [Poetry](https://python-poetry.org/docs/#installation)
+- Redis (for Session Management and Cache)
+
+### Deploy
 - Run `poetry install` to install all required dependencies in a virtualenv
 - Run `poetry run manage tailwind build` to build the website's CSS
 - Finally run `poetry run start` to start the server
