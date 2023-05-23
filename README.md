@@ -16,8 +16,8 @@
 <!-- TODO: environment variables -->
 - Install [Poetry](https://python-poetry.org/docs/#installation)
 - Run `poetry install` to install all required dependencies in a virtualenv
-- Run `poetry run python manage.py tailwind build` to build the website's CSS
-- Finally run `poetry run python manage.py runserver` to start the server
+- Run `poetry run manage tailwind build` to build the website's CSS
+- Finally run `poetry run start` to start the server
 
 ### Environment Variables
 
