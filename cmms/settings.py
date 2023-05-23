@@ -142,3 +142,5 @@ AUTHENTICATION_BACKENDS = ["cmms.auth.CMMSBackend"]
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
+
+APPEND_SLASH = True

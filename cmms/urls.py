@@ -13,14 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import include, path
+from django.urls import include, re_path, path
+from django.shortcuts import redirect
 
 from cmms.views import HomeView, SetupView, DashboardView
 
+dashboard_urls = [
+    re_path('^$', lambda request: redirect("/dashboard/home"), name='dashboard'),
+    re_path('^home/?$', DashboardView.as_view(), name='dashboard_home'),
+]
+
 
 urlpatterns = [
-    path("", HomeView.as_view()),
-    path("setup", SetupView.as_view()),
-    path("dashboard", DashboardView.as_view()),
-    path("__reload__/", include("django_browser_reload.urls")),
+    re_path("^$", HomeView.as_view()),
+    re_path("^setup/?$", SetupView.as_view()),
+    re_path("^dashboard/?", include(dashboard_urls)),
+    path("__reload__", include("django_browser_reload.urls")),
 ]

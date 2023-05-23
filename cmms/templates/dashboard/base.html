@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex">
+    <aside class="w-64">
+        <div class="flex flex-col sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
+            <h1>Hello World</h1>
+        </div>
+    </aside>
+
+    <div class="flex-auto">
+        {% block inner-content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

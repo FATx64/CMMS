@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
-from cmms.decorators import admin_exists
+from cmms.decorators import admin_exists, admin_not_exists
 from cmms.forms import SetupForm, LoginForm
 
 
@@ -31,6 +31,7 @@ class HomeView(FormView):
             pass
 
 
+@method_decorator(admin_not_exists, name="dispatch")
 class SetupView(FormView):
     template_name = "setup.html"
     form_class = SetupForm
