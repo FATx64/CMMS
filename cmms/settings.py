@@ -57,6 +57,23 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": getenv("REDIS_URL", "redis://127.0.0.1:6379/0"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_AGE = 60 * 60 * 24  # 1 day in seconds
+
 ROOT_URLCONF = "cmms.urls"
 
 TEMPLATES = [

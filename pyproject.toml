@@ -21,6 +21,7 @@ django-phonenumber-field = {extras = ["phonenumberslite"], version = "^7.1.0"}
 django-widget-tweaks = "^1.4.12"
 typing-extensions = "^4.5.0"
 bcrypt = "^4.0.1"
+django-redis = "^5.2.0"
 
 [tool.poetry.group.dev.dependencies]
 django-tailwind = "^3.5.0"

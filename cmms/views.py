@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import login
 from django.shortcuts import redirect
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from cmms.decorators import admin_exists
@@ -15,6 +16,7 @@ class HomeView(FormView):
     success_url = "/dashboard"
 
     def get(self, request, *args, **kwargs):
+        print(request.user.id)
         # TODO: Redirect user to dashboard when user is already logged in?
         return super().get(request, *args, **kwargs)
 
@@ -22,7 +24,11 @@ class HomeView(FormView):
         user = form.authenticate()
         if user:
             login(self.request, user)
-            return redirect("/")
+            rt = self.request.GET.get("next", self.success_url)
+            return redirect(rt)
+        else:
+            # TODO: Handle failed auth
+            pass
 
 
 class SetupView(FormView):
@@ -31,5 +37,15 @@ class SetupView(FormView):
     success_url = "/"
 
     def form_valid(self, form: SetupForm):
-        form.save()
-        return redirect(self.success_url)
+        user = form.save()
+        if user:
+            rt = self.request.GET.get("next", self.success_url)
+            return redirect(rt)
+        else:
+            # TODO: Handle failed registration
+            pass
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardView(TemplateView):
+    template_name = "dashboard/index.html"

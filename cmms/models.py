@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms.enums import UserType
+from cmms.utils import snowflake
 
 
 class UserManager(BaseUserManager):
@@ -29,6 +30,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     """Holds users' auth detail"""
 
+    id = models.BigIntegerField(primary_key=True, unique=True)
     email = models.EmailField(
         unique=True,
         error_messages={
@@ -45,6 +47,11 @@ class User(AbstractBaseUser):
 
     def is_admin(self):
         return self.type == UserType.ADMIN
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = snowflake()
+        super().save(*args, **kwargs)
 
 
 class Employee(models.Model):
