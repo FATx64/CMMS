@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.contrib.auth.hashers import make_password
 from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms.enums import UserType
@@ -11,6 +12,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Email must be set!")
         email = self.normalize_email(email)
+        password = make_password(password)
         user = self.model(email=email, password=password, **kwargs)
         user.save(using=self._db)
         return user

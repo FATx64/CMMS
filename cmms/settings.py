@@ -119,3 +119,9 @@ INTERNAL_IPS = [
 TAILWIND_APP_NAME = "cmms"
 
 AUTH_USER_MODEL = "cmms.User"
+
+AUTHENTICATION_BACKENDS = ["cmms.auth.CMMSBackend"]
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+]

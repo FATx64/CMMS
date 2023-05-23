@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from django import forms
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
 
 from cmms.models import User
@@ -60,3 +60,6 @@ class LoginForm(forms.Form):
                 password_validation.validate_password(password)
             except ValidationError as error:
                 self.add_error("password", error)
+
+    def authenticate(self):
+        return authenticate(email=self.cleaned_data.get("email"), password=self.cleaned_data.get("password"))

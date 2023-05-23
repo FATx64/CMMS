@@ -15,11 +15,12 @@ manage = "scripts:manage"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = "^4.2.1"
+Django = {extras = ["bcrypt"], version = "^4.2.1"}
 dj-database-url = "^2.0.0"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "^7.1.0"}
 django-widget-tweaks = "^1.4.12"
 typing-extensions = "^4.5.0"
+bcrypt = "^4.0.1"
 
 [tool.poetry.group.dev.dependencies]
 django-tailwind = "^3.5.0"

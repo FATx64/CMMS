@@ -15,7 +15,8 @@ class HomeView(FormView):
     success_url = "/dashboard"
 
     def form_valid(self, form: LoginForm):
-        return redirect(self.success_url)
+        return HttpResponse(form.authenticate())
+        #return redirect(self.success_url)
 
 
 class SetupView(FormView):
