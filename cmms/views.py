@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from django.contrib.auth import login
 from django.shortcuts import redirect
-from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from cmms.decorators import admin_exists
@@ -14,9 +14,15 @@ class HomeView(FormView):
     form_class = LoginForm
     success_url = "/dashboard"
 
+    def get(self, request, *args, **kwargs):
+        # TODO: Redirect user to dashboard when user is already logged in?
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form: LoginForm):
-        return HttpResponse(form.authenticate())
-        #return redirect(self.success_url)
+        user = form.authenticate()
+        if user:
+            login(self.request, user)
+            return redirect("/")
 
 
 class SetupView(FormView):
