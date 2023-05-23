@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from os import getenv
 from pathlib import Path
 
+from cmms.abstract.menu import Item, MenuManager
 import dj_database_url
 
 
@@ -92,6 +93,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.app_directories.load_template_source',
+)
+
 WSGI_APPLICATION = "cmms.wsgi.application"
 
 DATABASES = {
@@ -144,3 +149,7 @@ PASSWORD_HASHERS = [
 ]
 
 APPEND_SLASH = True
+
+MENU_ITEMS = [
+    Item("test", "/dashboard/home"),
+]

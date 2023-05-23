@@ -1,12 +1,19 @@
 {% extends "base.html" %}
+{% load cmms_menu %}
 
 {% block title %}{{ block.super }} - Dashboard{% endblock %}
 
 {% block content %}
+{% get_menu request as menu %}
 <div class="flex">
     <aside class="w-64">
         <div class="flex flex-col sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
             <h1>Hello World</h1>
+            <ul>
+                {% for item in menu.items %}
+                    {{ item.is_active }}
+                {% endfor %}
+            </ul>
         </div>
     </aside>
 
