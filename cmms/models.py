@@ -57,7 +57,7 @@ class User(AbstractBaseUser):
 class Employee(models.Model):
     """Holds users' data"""
 
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
