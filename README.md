@@ -14,9 +14,11 @@
 - Python 3.10 or Newer
 - [Poetry](https://python-poetry.org/docs/#installation)
 - Redis (for Session Management and Cache)
+- NPM (for tailwind)
 
 ### Deploy
 - Run `poetry install` to install all required dependencies in a virtualenv
+- Run `poetry run manage tailwind install` to prepare tailwind
 - Run `poetry run manage tailwind build` to build the website's CSS
 - Finally run `poetry run start` to start the server
 
