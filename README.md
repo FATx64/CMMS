@@ -26,3 +26,4 @@
 |----|-----------|-------|
 |DATABASE\_URL|URL to your database. Check out [`dj-database-url`](https://github.com/jazzband/dj-database-url#url-schema) for more information|`postgres://user:p#ssword!@localhost/foobar`|
 |REDIS\_URL|URL to your redis. Check out [`django-redis`](https://github.com/jazzband/django-redis#configure-as-cache-backend) for more information|`redis://127.0.0.1:6379/1`|
+|DJANGO\_DEBUG|Toggle django's debug mode, for production it's highly recommended to disable it|`true` or `yes`|
