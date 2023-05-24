@@ -152,5 +152,13 @@ APPEND_SLASH = True
 
 MENU_ITEMS = [
     Item("Dashboard", "/dashboard/home", "home"),
-    Item("Employee", "/dashboard/users", "person"),
+    Item("Employees", "/dashboard/users", "person"),
+    Item("Spareparts", "/dashboard/spareparts", "settings"),
+    Item("Agent / Supplier", "/dashboard/supplier", "folder_supervised"),
+    Item("Work Order", "/dashboard/workorder", "assignment"),
+    Item("Work Center", "/dashboard/workcenter", "group"),
+    Item("Equipment", "/dashboard/equipment", "home_repair_service"),
+    Item("Maintenance", "/dashboard/maintenance", "build"),
+    Item("Report", "/dashboard/report", "summarize"),
+    Item("Asset Report", "/dashboard/report", "speed"),
 ]
