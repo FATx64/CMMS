@@ -15,12 +15,6 @@ class HomeView(FormView):
     form_class = LoginForm
     success_url = "/dashboard"
 
-    def post(self, request, *args, **kwargs):
-        data = request.POST
-        if data.get("logout") == "logout":
-            logout(request)
-        return super().post(request, *args, **kwargs)
-
     def get(self, request, *args, **kwargs):
         # TODO: Redirect user to dashboard when user is already logged in?
         return super().get(request, *args, **kwargs)
@@ -52,11 +46,20 @@ class SetupView(FormView):
             pass
 
 
+class DashboardMixin:
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        if data.get("logout") == "logout":
+            logout(request)
+            return redirect("/")
+        return redirect(".")
+
+
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardView(TemplateView):
+class DashboardView(TemplateView, DashboardMixin):
     template_name = "dashboard/index.html"
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardEmployeeView(TemplateView):
+class DashboardEmployeeView(TemplateView, DashboardMixin):
     template_name = "dashboard/index.html"
