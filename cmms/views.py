@@ -55,3 +55,8 @@ class SetupView(FormView):
 @method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardView(TemplateView):
     template_name = "dashboard/index.html"
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardEmployeeView(TemplateView):
+    template_name = "dashboard/index.html"

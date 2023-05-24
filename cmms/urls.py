@@ -16,13 +16,13 @@ Including another URLconf
 from django.urls import include, re_path, path
 from django.shortcuts import redirect
 
-from cmms.views import HomeView, SetupView, DashboardView
+from cmms.views import HomeView, SetupView, DashboardView, DashboardEmployeeView
 
 
 dashboard_urls = [
     re_path('^$', lambda _: redirect("/dashboard/home")),
     re_path('^home/?$', DashboardView.as_view()),
-    re_path('^users/?$', DashboardView.as_view()),
+    re_path('^users/?$', DashboardEmployeeView.as_view()),
 ]
 
 
