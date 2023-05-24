@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
@@ -15,8 +15,13 @@ class HomeView(FormView):
     form_class = LoginForm
     success_url = "/dashboard"
 
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        if data.get("logout") == "logout":
+            logout(request)
+        return super().post(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
-        print(request.user.id)
         # TODO: Redirect user to dashboard when user is already logged in?
         return super().get(request, *args, **kwargs)
 
