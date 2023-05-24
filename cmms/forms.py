@@ -3,12 +3,24 @@ from __future__ import annotations
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
+from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.models import User
 
 
 class SetupForm(forms.Form):
-    email = forms.EmailField(label="Email address")
+    id = forms.CharField(label="ID")  # Employee ID
+    first_name = forms.CharField(label="First Name", max_length=150)
+    last_name = forms.CharField(label="Last Name", max_length=150)
+    address = forms.CharField(label="Address", max_length=150)
+    phone_number = PhoneNumberField(label="Phone", region="ID")
+    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type":"date"}))
+    work_hour = forms.IntegerField(label="Work Hour")
+    avatar = forms.FileField(
+        label="Picture",
+        widget=forms.FileInput(attrs={"class": "px-3"})
+    )
+    email = forms.EmailField(label="Email Address")
     password1 = forms.CharField(
         label="Password",
         strip=False,

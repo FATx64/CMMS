@@ -66,11 +66,13 @@ class Employee(models.Model):
     )
     employee_id = models.BigIntegerField()
     first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True, default="")
     phone_number = PhoneNumberField()
     address = models.CharField(max_length=150, blank=True)
-    work_hour = models.TimeField()
-    work_place = models.CharField(max_length=150, blank=True)
+    work_hour = models.IntegerField()
+    # Empty by default since on first-time setup Work Center is empty
+    work_place = models.CharField(max_length=150, blank=True, default="")
+    avatar = models.CharField(max_length=32, blank=True, default="") # utils.generate_hexa_id()
 
     def get_full_name(self):
         full_name = f"{self.first_name} {self.last_name}"

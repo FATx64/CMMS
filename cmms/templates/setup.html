@@ -1,7 +1,17 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
+{% load static widget_tweaks %}
 
 {% block title %}{{ block.super }} - Setup{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/widgets.css' %}" />
+{% endblock %}
 
 {% block content %}
 <h1 class="text-xl font-bold" align="center">Welcome to CMMS</h1>
@@ -13,6 +23,7 @@
             {{ hidden }}
         {% endfor %}
 
+        {{ form.media }}
         {% for field in form.visible_fields %}
             <div>
                 {% if field.label %}
