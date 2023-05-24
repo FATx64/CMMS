@@ -53,6 +53,9 @@ class User(AbstractBaseUser):
             self.id = snowflake()
         super().save(*args, **kwargs)
 
+    def role(self):
+        return UserType(self.type)
+
 
 class Employee(models.Model):
     """Holds users' data"""

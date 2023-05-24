@@ -152,5 +152,5 @@ APPEND_SLASH = True
 
 MENU_ITEMS = [
     Item("Dashboard", "/dashboard/home", "home"),
-    Item("Users", "/dashboard/users", "person"),
+    Item("Employee", "/dashboard/users", "person"),
 ]
