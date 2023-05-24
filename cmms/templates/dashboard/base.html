@@ -1,24 +1,26 @@
 {% extends "base.html" %}
-{% load cmms_menu %}
+{% load static cmms_menu %}
 
 {% block title %}{{ block.super }} - Dashboard{% endblock %}
 
 {% block content %}
 {% get_menu request as menu %}
 <div class="flex">
-    <aside class="w-64">
-        <div class="flex flex-col sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
-            <h1>Hello World</h1>
-            <ul>
+    <aside class="w-56 shadow-[8px_0_15px_-3px_rgba(0,0,0,0.2)]">
+        <div class="flex flex-col items-center sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
+            <a href="/dashboard"><img src="{% static "logo.svg" %}" class="h-10 mt-4 mb-8"></a>
+            <ul class="w-full">
                 {% for item in menu.items %}
-                    {{ item.is_active }}
+                <li>{% include "menu/item.html" %}</li>
                 {% endfor %}
             </ul>
         </div>
     </aside>
 
     <div class="flex-auto">
-        {% block inner-content %}{% endblock %}
+        <div class="p-4">
+            {% block inner-content %}{% endblock %}
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,10 +1,13 @@
+from django.shortcuts import render
 from django.conf import settings
 
 
 class Item:
-    def __init__(self, label: str = None, url: str = None):
+    def __init__(self, label: str = None, url: str = None, icon: str = None):
         self.label = label
         self.url = url
+        # Use Google "Symbols" name. Not "Icons", to avoid future potential breakage
+        self.icon = icon or "broken_image"
         self.context = None
         self.request = None
 
@@ -20,7 +23,7 @@ class Item:
     def is_active(self) -> bool:
         if not self.constructed:
             raise RuntimeError
-        return self.url in self.request.META["PATH_INFO"]  # type: ignore
+        return self.request.META["PATH_INFO"].rstrip("/") == self.url  # type: ignore
 
 
 class MenuManager:

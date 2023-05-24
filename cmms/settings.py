@@ -151,5 +151,6 @@ PASSWORD_HASHERS = [
 APPEND_SLASH = True
 
 MENU_ITEMS = [
-    Item("test", "/dashboard/home"),
+    Item("Dashboard", "/dashboard/home", "home"),
+    Item("Users", "/dashboard/users", "person"),
 ]
