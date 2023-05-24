@@ -1,7 +1,6 @@
-import django
 from django import template
 from django.http import HttpRequest
-from cmms.abstract.menu import MenuManager
+from cmms.menu import MenuManager
 
 
 register = template.Library()

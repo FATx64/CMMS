@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from os import getenv
 from pathlib import Path
 
-from cmms.abstract.menu import Item, MenuManager
+from cmms.menu import Item
 import dj_database_url
 
 
@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(getenv("DJANGO_DEBUG", "true"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv(
