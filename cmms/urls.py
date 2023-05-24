@@ -18,9 +18,11 @@ from django.shortcuts import redirect
 
 from cmms.views import HomeView, SetupView, DashboardView
 
+
 dashboard_urls = [
-    re_path('^$', lambda request: redirect("/dashboard/home"), name='dashboard'),
-    re_path('^home/?$', DashboardView.as_view(), name='dashboard_home'),
+    re_path('^$', lambda _: redirect("/dashboard/home")),
+    re_path('^home/?$', DashboardView.as_view()),
+    re_path('^users/?$', DashboardView.as_view()),
 ]
 
 
