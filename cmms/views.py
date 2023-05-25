@@ -1,12 +1,12 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from cmms.decorators import admin_exists, admin_not_exists
-from cmms.forms import SetupForm, LoginForm
+from cmms.forms import LoginForm, SetupForm
 
 
 @method_decorator(admin_exists, name="dispatch")

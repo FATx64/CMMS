@@ -8,15 +8,17 @@ from phonenumber_field.formfields import PhoneNumberField
 from cmms.models import User
 
 
-class SetupForm(forms.Form):
+class CMMSForm(forms.Form):
     template_name_div = "form.html"
 
+
+class SetupForm(CMMSForm):
     id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
     last_name = forms.CharField(label="Last Name", max_length=150)
     address = forms.CharField(label="Address", max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
-    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type":"date"}))
+    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
     avatar = forms.FileField(
         label="Picture",
@@ -57,12 +59,14 @@ class SetupForm(forms.Form):
             except ValidationError as error:
                 self.add_error("password1", error)
                 self.add_error("password2", error)
+        else:
+            raise RuntimeError("How?")
 
     def save(self) -> User:
-        return User.objects.create_superuser(self.cleaned_data["email"], self.cleaned_data["password2"])
+        return User.objects.superuser_form(self.cleaned_data)
 
 
-class LoginForm(forms.Form):
+class LoginForm(CMMSForm):
     email = forms.EmailField(label="Email address")
     password = forms.CharField(
         label="Password",

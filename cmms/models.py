@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.db import models
 from django.contrib.auth.hashers import make_password
+from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms.enums import UserType
@@ -25,6 +25,22 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email: str, password: str, **kwargs):
         kwargs.setdefault("type", UserType.ADMIN)
         return self._create_user(email, password, **kwargs)
+
+    def superuser_form(self, form_data: dict):
+        u = self.create_superuser(form_data["email"], form_data["password2"])
+        e = Employee(
+            user=u,
+            employee_id=form_data["id"],
+            first_name=form_data["first_name"],
+            last_name=form_data["last_name"],
+            address=form_data["address"],
+            phone_number=form_data["phone_number"],
+            work_hour=form_data["work_hour"],
+            work_place="",
+            avatar="",
+        )
+        e.save(using=self._db)
+        return u
 
 
 class User(AbstractBaseUser):
@@ -72,8 +88,8 @@ class Employee(models.Model):
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty
     work_place = models.CharField(max_length=150, blank=True, default="")
-    avatar = models.CharField(max_length=32, blank=True, default="") # utils.generate_hexa_id()
+    avatar = models.CharField(max_length=32, blank=True, default="")  # utils.generate_hexa_id()
 
-    def get_full_name(self):
+    def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()

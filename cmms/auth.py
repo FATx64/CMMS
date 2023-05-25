@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth import get_user_model
 
 
 class CMMSBackend(BaseBackend):
@@ -13,7 +13,6 @@ class CMMSBackend(BaseBackend):
             pwd = check_password(password, user.password)
             return user if pwd else None
         return None
-
 
     def get_user(self, user_id):
         User = get_user_model()

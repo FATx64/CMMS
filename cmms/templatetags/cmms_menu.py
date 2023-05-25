@@ -1,5 +1,6 @@
 from django import template
 from django.http import HttpRequest
+
 from cmms.menu import Item, MenuManager
 
 

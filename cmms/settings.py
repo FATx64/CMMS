@@ -13,8 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from os import getenv
 from pathlib import Path
 
-from cmms.menu import Item
 import dj_database_url
+
+from cmms.menu import Item
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -64,7 +65,7 @@ CACHES = {
         "LOCATION": getenv("REDIS_URL", "redis://127.0.0.1:6379/0"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }
 
@@ -93,9 +94,7 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.app_directories.load_template_source',
-)
+TEMPLATE_LOADERS = ('django.template.loaders.app_directories.load_template_source',)
 
 WSGI_APPLICATION = "cmms.wsgi.application"
 

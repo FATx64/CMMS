@@ -7,6 +7,7 @@ class ItemNotConstructed(RuntimeError):
     def __init__(self):
         super().__init__("Item is not yet constructed!")
 
+
 class Item:
     def __init__(self, label: str = None, url: str = None, icon: str = None, *, children: list[Item] = []):
         self.label = label
