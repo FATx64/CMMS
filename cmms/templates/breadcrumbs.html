@@ -1,0 +1,6 @@
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url "dashboard:home" %}">Home</a>
+    {% block crumbs %}{% endblock %}
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ThemeConfig(AppConfig):
+class CMMSConfig(AppConfig):
     name = "cmms"

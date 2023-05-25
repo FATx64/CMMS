@@ -19,16 +19,19 @@ from django.urls import include, path, re_path
 from cmms.views import DashboardEmployeeView, DashboardView, HomeView, SetupView
 
 
-dashboard_urls = [
-    re_path('^$', lambda _: redirect("/dashboard/home")),
-    re_path('^home/?$', DashboardView.as_view()),
-    re_path('^users/?$', DashboardEmployeeView.as_view()),
-]
+dashboard_urls = (
+    [
+        re_path('^$', lambda _: redirect("/dashboard/home"), name="index"),
+        re_path('^/home/?$', DashboardView.as_view(), name="home"),
+        re_path('^/users/?$', DashboardEmployeeView.as_view(), name="users"),
+    ],
+    "dashboard"
+)
 
 
 urlpatterns = [
-    re_path("^$", HomeView.as_view()),
-    re_path("^setup/?$", SetupView.as_view()),
-    re_path("^dashboard/?", include(dashboard_urls)),
-    path("__reload__", include("django_browser_reload.urls")),
+    re_path("^$", HomeView.as_view(), name="index"),
+    re_path("^setup/?$", SetupView.as_view(), name="setup"),
+    re_path("^dashboard", include(dashboard_urls), name="dashboard"),
+    path("__reload__", include("django_browser_reload.urls"), name="meta_reload"),
 ]
