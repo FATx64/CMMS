@@ -9,6 +9,8 @@ from cmms.models import User
 
 
 class SetupForm(forms.Form):
+    template_name_div = "form.html"
+
     id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
     last_name = forms.CharField(label="Last Name", max_length=150)
