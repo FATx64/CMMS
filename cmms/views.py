@@ -27,7 +27,7 @@ class HomeView(FormView):
             return redirect(rt)
         else:
             # TODO: Handle failed auth
-            pass
+            return redirect(".")
 
 
 @method_decorator(admin_not_exists, name="dispatch")
@@ -43,7 +43,7 @@ class SetupView(FormView):
             return redirect(rt)
         else:
             # TODO: Handle failed registration
-            pass
+            return redirect(".")
 
 
 class DashboardMixin:
