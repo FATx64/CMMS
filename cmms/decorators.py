@@ -7,11 +7,14 @@ from cmms.enums import UserType
 from cmms.models import User
 
 
-def admin_exists(*args):
-    def func(*_):
-        return len(User.objects.filter(type=UserType.ADMIN)) > 0
+def admin_exists(view_func):
+    @wraps(view_func)
+    def _wrapper_view(request, *args, **kwargs):
+        if len(User.objects.filter(type=UserType.ADMIN)) > 0:
+            return view_func(request, *args, **kwargs)
+        return redirect("/setup")
 
-    return user_passes_test(func, login_url="/setup")(*args)
+    return _wrapper_view
 
 
 def admin_not_exists(view_func):
