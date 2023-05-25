@@ -46,25 +46,21 @@ class SetupView(FormView):
             return redirect(".")
 
 
-class DashboardMixin:
-    def post(self, request, *args, **kwargs):
-        data = request.POST
-        if data.get("logout") == "logout":
-            logout(request)
-            return redirect("/")
-        return redirect(".")
+def logout_view(request):
+    logout(request)
+    return redirect("/")
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardView(TemplateView, DashboardMixin):
+class DashboardView(TemplateView):
     template_name = "dashboard/index.html"
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardEmployeeView(TemplateView, DashboardMixin):
+class DashboardEmployeeView(TemplateView):
     template_name = "dashboard/users.html"
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardWorkPlaceView(TemplateView, DashboardMixin):
+class DashboardWorkPlaceView(TemplateView):
     template_name = "dashboard/workplace.html"
