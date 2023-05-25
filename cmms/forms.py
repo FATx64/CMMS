@@ -18,19 +18,22 @@ class SetupForm(forms.Form):
     work_hour = forms.IntegerField(label="Work Hour")
     avatar = forms.FileField(
         label="Picture",
-        widget=forms.FileInput(attrs={"class": "px-3"})
+        widget=forms.FileInput(attrs={"class": "px-3"}),
+        required=False,
     )
-    email = forms.EmailField(label="Email Address")
+    email = forms.EmailField(label="Email Address", required=True)
     password1 = forms.CharField(
         label="Password",
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
         help_text=password_validation.password_validators_help_text_html(),
+        required=True,
     )
     password2 = forms.CharField(
         label="Password Confirmation",
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        required=True,
     )
 
     def clean_password2(self) -> str | None:
@@ -50,6 +53,7 @@ class SetupForm(forms.Form):
             try:
                 password_validation.validate_password(password)
             except ValidationError as error:
+                self.add_error("password1", error)
                 self.add_error("password2", error)
 
     def save(self) -> User:
