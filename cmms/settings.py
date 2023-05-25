@@ -155,7 +155,7 @@ MENU_ITEMS = [
     Item("Spareparts", "/dashboard/spareparts", "settings"),
     Item("Agent / Supplier", "/dashboard/supplier", "folder_supervised"),
     Item("Work Order", "/dashboard/workorder", "assignment"),
-    Item("Work Center", "/dashboard/workcenter", "group"),
+    Item("Work Center", "/dashboard/workplace", "group"),
     Item("Equipment", "/dashboard/equipment", "home_repair_service"),
     Item("Maintenance", "/dashboard/maintenance", "build"),
     Item("Report", "/dashboard/report", "summarize"),

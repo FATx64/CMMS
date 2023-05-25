@@ -62,4 +62,9 @@ class DashboardView(TemplateView, DashboardMixin):
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardEmployeeView(TemplateView, DashboardMixin):
-    template_name = "dashboard/index.html"
+    template_name = "dashboard/users.html"
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardWorkPlaceView(TemplateView, DashboardMixin):
+    template_name = "dashboard/workplace.html"
