@@ -77,6 +77,13 @@
                         <div>
                             {% if field.label %}
                                 <label for="{{ field.id_for_label }}" class="block text-sm font-medium leading-6 text-gray-900">{{ field.label }}</label>
+                                {% if field.errors %}
+                                <p class="text-xs text-red-500">{{ field.errors.0 }}<p>
+                                {% endif %}
+                            {% else %}
+                                {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
                             {% endif %}
 
                             <div class="mt-2">
@@ -86,9 +93,6 @@
                             {% if field.help_text %}
                                 <div class="mt-4 text-sm p-4 bg-amber-400 rounded-xl border border-solid border-amber-300">{{ field.help_text }}</div>
                             {% endif %}
-                            {% for error in field.errors %}
-                                <span class="help-block">{{ error }}</span>
-                            {% endfor %}
                         </div>
                     {% endfor %}
 
