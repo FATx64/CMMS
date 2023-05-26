@@ -57,11 +57,12 @@ class DashboardView(TemplateView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardEmployeeView(TemplateView):
+class DashboardEmployeeView(FormView):
     template_name = "dashboard/users.html"
+    form_class = forms.EmployeeForm
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardWorkPlaceView(FormView):
     template_name = "dashboard/workplace.html"
-    form_class = forms.EmployeeForm
+    form_class = forms.WorkPlaceForm

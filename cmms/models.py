@@ -93,3 +93,12 @@ class Employee(models.Model):
     def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
+
+class WorkPlace(models.Model):
+    employee = models.OneToOneField(
+        Employee,
+        on_delete=models.CASCADE,
+    )
+    name = models.CharField(max_length=150)
+    code = models.IntegerField()
+    location = models.CharField(max_length=150, blank=True)

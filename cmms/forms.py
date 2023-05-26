@@ -134,3 +134,14 @@ class EmployeeForm(CMMSForm):
         modal_id = "employee-modal"
         modal_confirm_label = "Add Employee"
         model_cancel_enabled = False
+
+
+class WorkPlaceForm(CMMSForm):
+    name = forms.CharField(label="Name")
+    code = forms.IntegerField(label="Code")
+    location = forms.CharField(label="Location")
+
+    class Meta:
+        modal_id = "workplace-modal"
+        modal_confirm_label = "Add Work Center"
+        model_cancel_enabled = False
