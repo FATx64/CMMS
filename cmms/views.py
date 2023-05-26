@@ -6,20 +6,20 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from cmms.decorators import admin_exists, admin_not_exists
-from cmms.forms import LoginForm, SetupForm
+from cmms import forms
 
 
 @method_decorator(admin_exists, name="dispatch")
 class HomeView(FormView):
     template_name = "home.html"
-    form_class = LoginForm
+    form_class = forms.LoginForm
     success_url = "/dashboard"
 
     def get(self, request, *args, **kwargs):
         # TODO: Redirect user to dashboard when user is already logged in?
         return super().get(request, *args, **kwargs)
 
-    def form_valid(self, form: LoginForm):
+    def form_valid(self, form: forms.LoginForm):
         user = form.authenticate()
         if user:
             login(self.request, user)
@@ -33,10 +33,10 @@ class HomeView(FormView):
 @method_decorator(admin_not_exists, name="dispatch")
 class SetupView(FormView):
     template_name = "setup.html"
-    form_class = SetupForm
+    form_class = forms.SetupForm
     success_url = "/"
 
-    def form_valid(self, form: SetupForm):
+    def form_valid(self, form: forms.SetupForm):
         user = form.save()
         if user:
             rt = self.request.GET.get("next", self.success_url)
@@ -62,5 +62,6 @@ class DashboardEmployeeView(TemplateView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardWorkPlaceView(TemplateView):
+class DashboardWorkPlaceView(FormView):
     template_name = "dashboard/workplace.html"
+    form_class = forms.EmployeeForm

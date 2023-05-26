@@ -9,7 +9,28 @@ from cmms.models import User
 
 
 class CMMSForm(forms.Form):
-    template_name_div = "form.html"
+    template_name_div = "form/basic.html"
+    template_name_modal = "form/modal.html"
+
+    def get_meta(self):
+        return getattr(self, "Meta", None)
+
+    @property
+    def modal_id(self) -> str:
+        return getattr(self.get_meta(), "modal_id", "modal")
+
+    def as_modal(self, context=None):
+        """Render as <div> elements."""
+        context = context or self.get_context()
+        context_additions = {
+            "modal_id": self.modal_id,
+            "modal_confirm_label": getattr(self.get_meta(), "modal_confirm_label", "Confirm"),
+            "modal_confirm_color": getattr(self.get_meta(), "modal_confirm_color", "green"),
+            "modal_cancel_label": getattr(self.get_meta(), "modal_cancel_label", "Cancel"),
+            "model_cancel_enabled": getattr(self.get_meta(), "model_cancel_enabled", True),
+        }
+        context.update(context_additions)
+        return self.render(self.template_name_modal, context=context)
 
 
 class SetupForm(CMMSForm):
@@ -85,3 +106,31 @@ class LoginForm(CMMSForm):
 
     def authenticate(self):
         return authenticate(email=self.cleaned_data.get("email"), password=self.cleaned_data.get("password"))
+
+
+class EmployeeForm(CMMSForm):
+    id = forms.CharField(label="ID")  # Employee ID
+    first_name = forms.CharField(label="First Name", max_length=150)
+    last_name = forms.CharField(label="Last Name", max_length=150)
+    address = forms.CharField(label="Address", max_length=150)
+    phone_number = PhoneNumberField(label="Phone", region="ID")
+    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
+    work_hour = forms.IntegerField(label="Work Hour")
+    avatar = forms.FileField(
+        label="Picture",
+        widget=forms.FileInput(attrs={"class": "px-3"}),
+        required=False,
+    )
+    email = forms.EmailField(label="Email Address", required=True)
+    password = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=password_validation.password_validators_help_text_html(),
+        required=True,
+    )
+
+    class Meta:
+        modal_id = "employee-modal"
+        modal_confirm_label = "Add Employee"
+        model_cancel_enabled = False
