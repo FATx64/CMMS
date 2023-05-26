@@ -4,7 +4,7 @@
 <div>
 
     <h1 class="text-lg font-medium">Work Center List</h1>
-    <button data-modal="#test-modal" onclick="openModal(this)">Open</button>
+    <button data-modal="#test-modal">Open</button>
 
 </div>
 {% endblock %}
@@ -13,17 +13,29 @@
 <script>
 let modal
 
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll("button[data-modal]")
+    buttons.forEach((btn) => {
+        btn.onclick = openModal
+    })
+})
 
-function openModal(self) {
+function openModal() {
     if (modal)  // How?
         closeModal()
-    modal = document.querySelector(self.getAttribute("data-modal"))
+    modal = document.querySelector(this.getAttribute("data-modal"))
+
+    const buttons = modal.querySelectorAll("button[data-dismiss]")
+    buttons.forEach((btn) => {
+        btn.onclick = closeModal
+    })
+
     modal.classList.remove("hidden")
 }
 
 function closeModal() {
     if (!modal)  // Just in-case
-        modal = document.querySelector(self.getAttribute("data-dismiss"))
+        modal = document.querySelector(this.getAttribute("data-dismiss"))
     modal.classList.add("hidden")
     modal = null
 }
@@ -58,7 +70,7 @@ window.onclick = function(event) {
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Deactivate</button>
-                    <button type="button" data-dismiss="#test-modal" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" onclick="closeModal(this)">Cancel</button>
+                    <button type="button" data-dismiss="#test-modal" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
                 </div>
             </div>
         </div>
