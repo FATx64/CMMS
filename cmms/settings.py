@@ -147,7 +147,7 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 MENU_ITEMS = [
     Item("Dashboard", "/dashboard/home", "home"),
