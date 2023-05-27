@@ -11,10 +11,10 @@
 ## Setup
 
 ### Prerequisites
-- Python 3.10 or Newer
+- [Python 3.10 or later](https://www.python.org/)
 - [Poetry](https://python-poetry.org/docs/#installation)
-- Redis (for Session Management and Cache)
-- NPM (for tailwind)
+- [Redis](https://redis.com/redis-enterprise-software/download-center/software/) (for Session Management and Cache)
+- [NodeJS v18 or later](https://nodejs.org/en/) (for tailwind)
 
 ### Deploy
 - Run `poetry install` to install all required dependencies in a virtualenv
