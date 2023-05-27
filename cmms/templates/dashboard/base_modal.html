@@ -2,7 +2,7 @@
 
 {% block script %}
 <script>
-let modal
+let openedModal = null
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll("button[data-modal]")
@@ -12,29 +12,29 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function openModal() {
-    if (modal)  // How?
+    if (openedModal)  // How?
         closeModal()
-    modal = document.getElementById(this.getAttribute("data-modal"))
+    openedModal = document.querySelector(this.getAttribute("data-modal"))
 
-    const buttons = modal.querySelectorAll("button[data-dismiss]")
+    const buttons = openedModal.querySelectorAll("button[data-dismiss]")
     buttons.forEach((btn) => {
         btn.onclick = closeModal
     })
 
     document.documentElement.style.overflow = "hidden"
-    modal.classList.remove("hidden")
+    openedModal.showModal()
 }
 
 function closeModal() {
-    if (!modal)  // Just in-case
-        modal = document.getElementById(this.getAttribute("data-dismiss"))
+    if (!openedModal)  // Just in-case
+        openedModal = document.querySelector(this.getAttribute("data-dismiss"))
     document.documentElement.style.overflow = ""
-    modal.classList.add("hidden")
-    modal = null
+    openedModal.close()
+    openedModal = null
 }
 
 window.onclick = function(event) {
-    if (modal && event.target === modal.children[1].children[0])
+    if (openedModal && event.target === openedModal)
         closeModal()
 }
 </script>
