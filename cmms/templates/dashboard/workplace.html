@@ -13,6 +13,7 @@
         </button>
     </div>
 
+    {% if workplaces %}
     <table class="w-full">
     <thead>
         <tr>
@@ -43,6 +44,11 @@
     {% endfor %}
     </tbody>
     </table>
+    {% else %}
+    <p class="select-none p-8 text-sm text-center text-gray-400">
+        No work center yet.
+    </p>
+    {% endif %}
 
 </div>
 {% endblock %}

@@ -5,7 +5,7 @@
 
     <div class="space-y-2 mb-12">
         <h1 class="text-lg font-medium">Employee List</h1>
-        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.modal_id }}" {% if not workplaces_exists %} disabled {% endif %}>
+        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 enabled:hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.modal_id }}" {% if not workplaces_exists %} disabled {% endif %}>
             <span class="flex material-symbols-outlined">
             add
             </span>
@@ -13,7 +13,7 @@
         </button>
 
         {% if not workplaces_exists %}
-        <p class="text-sm text-white bg-red-600 px-2 py-1">
+        <p class="select-none text-sm text-white bg-red-600 px-2 py-1">
         There's no work center yet! Please add one first from
         <a class="underline font-semibold" href="{% url "dashboard:workplace" %}">Work Center</a> page.
         </p>
