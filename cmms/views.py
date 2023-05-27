@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -61,11 +63,26 @@ class DashboardEmployeeView(FormView):
     template_name = "dashboard/users.html"
     form_class = forms.EmployeeForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workplaces_exists"] = len(models.WorkPlace.objects.all()) > 0
+        return context
+
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardWorkPlaceView(FormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
+
+    def post(self, request, *args, **kwargs):
+        manage: str | None = request.POST.get("manage")
+        if not manage:
+            return super().post(request, *args, **kwargs)
+        if manage.startswith("delete"):
+            p = models.WorkPlace.objects.get(pk=manage.split(":")[1])
+            if p:
+                p.delete()
+        return redirect(self.request.path_info)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

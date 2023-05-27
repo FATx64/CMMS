@@ -116,6 +116,7 @@ class EmployeeForm(CMMSForm):
     phone_number = PhoneNumberField(label="Phone", region="ID")
     age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
+    work_place = forms.ChoiceField(label="Work Center", choices=[(p.id, p.name) for p in WorkPlace.objects.all()])
     avatar = forms.FileField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),

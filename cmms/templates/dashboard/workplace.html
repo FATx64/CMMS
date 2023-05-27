@@ -21,6 +21,7 @@
             <th>Location</th>
             <th>Engineer</th>
             <th>Equipment</th>
+            <th></th>
         </tr>
     </thead>
     <tbody class="text-center overflow-auto border-t-8 border-transparent">
@@ -31,6 +32,13 @@
             <td>{{ workplace.location }}</td>
             <td>0</td>
             <td>0</td>
+            <td>
+                <form action="" method="POST">
+                    <button type="submit" name="manage" value="edit:{{ workplace.id }}">Edit</button>
+                    <button type="submit" name="manage" value="delete:{{ workplace.id }}">Delete</button>
+                    <button type="submit" name="manage" value="more:{{ workplace.id }}">More</button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
