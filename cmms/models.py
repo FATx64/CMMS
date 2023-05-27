@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
@@ -36,7 +37,6 @@ class UserManager(BaseUserManager):
             address=form_data["address"],
             phone_number=form_data["phone_number"],
             work_hour=form_data["work_hour"],
-            work_place="",
             avatar="",
         )
         e.save(using=self._db)
@@ -73,6 +73,15 @@ class User(AbstractBaseUser):
         return UserType(self.type)
 
 
+class WorkPlace(models.Model):
+    if TYPE_CHECKING:
+        objects: models.Manager
+
+    name = models.CharField(max_length=150)
+    code = models.IntegerField()
+    location = models.CharField(max_length=150, blank=True)
+
+
 class Employee(models.Model):
     """Holds users' data"""
 
@@ -87,18 +96,9 @@ class Employee(models.Model):
     address = models.CharField(max_length=150, blank=True)
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty
-    work_place = models.CharField(max_length=150, blank=True, default="")
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.CASCADE, blank=True, null=True, default=None)
     avatar = models.CharField(max_length=32, blank=True, default="")  # utils.generate_hexa_id()
 
     def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
-
-class WorkPlace(models.Model):
-    employee = models.OneToOneField(
-        Employee,
-        on_delete=models.CASCADE,
-    )
-    name = models.CharField(max_length=150)
-    code = models.IntegerField()
-    location = models.CharField(max_length=150, blank=True)

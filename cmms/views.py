@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from cmms.decorators import admin_exists, admin_not_exists
-from cmms import forms
+from cmms import forms, models
 
 
 @method_decorator(admin_exists, name="dispatch")
@@ -66,3 +66,12 @@ class DashboardEmployeeView(FormView):
 class DashboardWorkPlaceView(FormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workplaces"] = models.WorkPlace.objects.all()
+        return context
+
+    def form_valid(self, form: forms.WorkPlaceForm):
+        form.save()
+        return redirect(self.request.path_info)

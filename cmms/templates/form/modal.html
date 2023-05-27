@@ -6,13 +6,13 @@
             {% include "./basic.html" %}
         </div>
         <div class="bg-gray-50 px-4 pt-3 pb-5 sm:flex sm:flex-row-reverse sm:px-6">
-            <button type="button" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm
+            <button type="submit" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm
                 {% if modal_confirm_color == "red" %}
-                    bg-red-600 hover:bg-red-500 text-white
+                    bg-red-500 hover:bg-red-600 text-white
                 {% elif modal_confirm_color == "green" %}
-                    bg-green-600 hover:bg-green-500 text-white
+                    bg-green-500 hover:bg-green-600 text-white
                 {% elif modal_confirm_color == "blue" %}
-                    bg-cyan-600 hover:bg-cyan-500 text-white
+                    bg-cyan-500 hover:bg-cyan-600 text-white
                 {% else %}
                     bg-white ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-gray-900
                 {% endif %}

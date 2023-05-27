@@ -3,8 +3,38 @@
 {% block inner-content %}
 <div>
 
-    <h1 class="text-lg font-medium">Work Center List</h1>
-    <button data-modal="#{{ form.modal_id }}">Open</button>
+    <div class="space-y-2 mb-12">
+        <h1 class="text-lg font-medium">Work Center List</h1>
+        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 hover:bg-green-600 focus-visible:outline-green-500" data-modal="#{{ form.modal_id }}">
+            <span class="flex material-symbols-outlined">
+            add
+            </span>
+            Add Work Center
+        </button>
+    </div>
+
+    <table class="w-full">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Engineer</th>
+            <th>Equipment</th>
+        </tr>
+    </thead>
+    <tbody class="text-center overflow-auto border-t-8 border-transparent">
+    {% for workplace in workplaces %}
+        <tr>
+            <td>{{ workplace.code }}</td>
+            <td>{{ workplace.name }}</td>
+            <td>{{ workplace.location }}</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 
 </div>
 {% endblock %}

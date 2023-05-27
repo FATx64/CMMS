@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
-from cmms.models import User
+from cmms.models import User, WorkPlace
 
 
 class CMMSForm(forms.Form):
@@ -145,3 +145,8 @@ class WorkPlaceForm(CMMSForm):
         modal_id = "workplace-modal"
         modal_confirm_label = "Add Work Center"
         model_cancel_enabled = False
+
+    def save(self):
+        workplace = WorkPlace(code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"])
+        workplace.save()
+        return workplace
