@@ -9,6 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
     buttons.forEach((btn) => {
         btn.onclick = openModal
     })
+
+    const modals = document.querySelectorAll("dialog.modal")
+    modals.forEach((modal) => {
+        modal.addEventListener("cancel", (event) => {
+            event.preventDefault()
+            closeModal()
+        })
+    })
 })
 
 function openModal() {
@@ -26,14 +34,25 @@ function openModal() {
 }
 
 function closeModal() {
-    if (!openedModal)  // Just in-case
+    if (!openedModal ) {  // Just in-case
+        if (!(this instanceof HTMLButtonElement))
+            return
         openedModal = document.querySelector(this.getAttribute("data-dismiss"))
+    }
     document.documentElement.style.overflow = ""
-    openedModal.close()
-    const form = openedModal.children[0]
-    if (form)
-        form.reset()
-    openedModal = null
+    openedModal.classList.add("hide")
+
+    openedModal.addEventListener("animationend", function() {
+        if (!openedModal)
+            return
+        openedModal.classList.remove("hide")
+        const form = openedModal.children[0]
+        if (form)
+            form.reset()
+
+        openedModal.close()
+        openedModal = null
+    }, { once: true })
 }
 
 window.onclick = function(event) {
