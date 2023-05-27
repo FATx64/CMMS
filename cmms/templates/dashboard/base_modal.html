@@ -30,6 +30,9 @@ function closeModal() {
         openedModal = document.querySelector(this.getAttribute("data-dismiss"))
     document.documentElement.style.overflow = ""
     openedModal.close()
+    const form = openedModal.children[0]
+    if (form)
+        form.reset()
     openedModal = null
 }
 
