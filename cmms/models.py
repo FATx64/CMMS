@@ -6,7 +6,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms.enums import UserType
-from cmms.utils import snowflake
+from cmms.utils import snowflake, handle_avatar_upload
 
 
 class UserManager(BaseUserManager):
@@ -27,8 +27,13 @@ class UserManager(BaseUserManager):
         kwargs.setdefault("type", UserType.ADMIN)
         return self._create_user(email, password, **kwargs)
 
-    def superuser_form(self, form_data: dict):
-        u = self.create_superuser(form_data["email"], form_data["password2"])
+    def from_form(self, form_data: dict, **kwargs):
+        u = self.create_user(form_data["email"], form_data.get("password", form_data.get("password2")), type=kwargs.get("type", UserType.ENGINEER))
+
+        avatar = form_data.get("avatar")
+        if avatar:
+            avatar = handle_avatar_upload(u.id, avatar)
+
         e = Employee(
             user=u,
             employee_id=form_data["id"],
@@ -37,7 +42,7 @@ class UserManager(BaseUserManager):
             address=form_data["address"],
             phone_number=form_data["phone_number"],
             work_hour=form_data["work_hour"],
-            avatar="",
+            avatar=avatar,
         )
         e.save(using=self._db)
         return u
@@ -80,6 +85,9 @@ class WorkPlace(models.Model):
     name = models.CharField(max_length=150)
     code = models.IntegerField()
     location = models.CharField(max_length=150, blank=True)
+
+    def __str__(self) -> str:
+        return self.name  # type: ignore
 
 
 class Employee(models.Model):

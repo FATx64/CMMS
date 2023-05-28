@@ -65,8 +65,16 @@ class DashboardEmployeeView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["workplaces_exists"] = len(models.WorkPlace.objects.all()) > 0
+        data = {
+            "workplaces_exists": len(models.WorkPlace.objects.all()) > 0,
+            "employees": models.Employee.objects.all()
+        }
+        context.update(data)
         return context
+
+    def form_valid(self, form: forms.EmployeeForm):
+        form.save()
+        return redirect(self.request.path_info)
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")

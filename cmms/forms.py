@@ -3,8 +3,10 @@ from __future__ import annotations
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
+from django.db.utils import OperationalError
 from phonenumber_field.formfields import PhoneNumberField
 
+from cmms.enums import UserType
 from cmms.models import User, WorkPlace
 
 
@@ -19,6 +21,10 @@ class CMMSForm(forms.Form):
     def modal_id(self) -> str:
         return getattr(self.get_meta(), "modal_id", "modal")
 
+    @property
+    def file_upload(self) -> bool:
+        return getattr(self.get_meta(), "file_upload", False)
+
     def as_modal(self, context=None):
         """Render as <div> elements."""
         context = context or self.get_context()
@@ -28,6 +34,7 @@ class CMMSForm(forms.Form):
             "modal_confirm_color": getattr(self.get_meta(), "modal_confirm_color", "green"),
             "modal_cancel_label": getattr(self.get_meta(), "modal_cancel_label", "Cancel"),
             "model_cancel_enabled": getattr(self.get_meta(), "model_cancel_enabled", True),
+            "file_upload": self.file_upload,
         }
         context.update(context_additions)
         return self.render(self.template_name_modal, context=context)
@@ -84,7 +91,7 @@ class SetupForm(CMMSForm):
             raise RuntimeError("How?")
 
     def save(self) -> User:
-        return User.objects.superuser_form(self.cleaned_data)
+        return User.objects.from_form(self.cleaned_data, type=UserType.ADMIN)
 
 
 class LoginForm(CMMSForm):
@@ -116,7 +123,7 @@ class EmployeeForm(CMMSForm):
     phone_number = PhoneNumberField(label="Phone", region="ID")
     age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
-    work_place = forms.ChoiceField(label="Work Center", choices=[(p.id, p.name) for p in WorkPlace.objects.all()])
+    work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)
     avatar = forms.FileField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
@@ -131,10 +138,14 @@ class EmployeeForm(CMMSForm):
         required=True,
     )
 
+    def save(self):
+        return User.objects.from_form(self.cleaned_data)
+
     class Meta:
         modal_id = "employee-modal"
         modal_confirm_label = "Add Employee"
         model_cancel_enabled = False
+        file_upload = True
 
 
 class WorkPlaceForm(CMMSForm):

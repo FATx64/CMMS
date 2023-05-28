@@ -18,6 +18,10 @@
         <a class="underline font-semibold" href="{% url "dashboard:workplace" %}">Work Center</a> page.
         </p>
         {% endif %}
+
+        {% for employee in employees %}
+            <img src="/avatars/{{ employee.user.id }}/{{ employee.avatar }}"/>
+        {% endfor %}
     </div>
 
 </div>

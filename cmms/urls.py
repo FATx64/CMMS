@@ -1,3 +1,5 @@
+from pathlib import Path
+from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
 
@@ -15,8 +17,18 @@ dashboard_urls = (
 )
 
 
+def avatars(request, user_id, file_id):
+    path = Path("data/avatars") / user_id / file_id
+    with open(path, "rb") as a:
+       response = HttpResponse(a.read())
+    response["Content-Type"] = ""
+    response["Content-Disposition"] = "inline; filename=\"" + file_id + "\""
+    return response
+
+
 urlpatterns = [
     re_path("^$", views.HomeView.as_view(), name="index"),
+    re_path(r"^avatars/(?P<user_id>\d+)/(?P<file_id>[\w]+)", avatars),
     re_path("^setup/?$", views.SetupView.as_view(), name="setup"),
     re_path("^dashboard", include(dashboard_urls), name="dashboard"),
     re_path("^logout/?$", views.logout_view, name="logout"),

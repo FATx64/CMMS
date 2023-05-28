@@ -1,6 +1,9 @@
 import datetime
 import random
 import uuid
+from pathlib import Path
+
+from django.core.files.uploadedfile import UploadedFile
 
 
 CMMS_EPOCH: int = 1672531200000
@@ -30,3 +33,13 @@ def time_from_snowflake(id: int, /) -> datetime.datetime:
 def generate_hexa_id() -> str:
     """Generate 32 long hexa id"""
     return uuid.uuid1().hex
+
+
+def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
+    _id = generate_hexa_id()
+    path = Path(f"data/avatars/{user_id}")
+    path.mkdir(parents=True, exist_ok=True)
+    with open(path / f"{_id}.png", "wb+") as dest:
+        for chunk in file.chunks():
+            dest.write(chunk)
+    return _id
