@@ -42,7 +42,8 @@ class UserManager(BaseUserManager):
             address=form_data["address"],
             phone_number=form_data["phone_number"],
             work_hour=form_data["work_hour"],
-            avatar=avatar,
+            work_place=form_data.get("work_place"),
+            avatar=avatar or "",
         )
         e.save(using=self._db)
         return u
