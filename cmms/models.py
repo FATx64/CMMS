@@ -78,10 +78,12 @@ class User(AbstractBaseUser):
         return UserType(self.type)
 
 
-class WorkPlace(models.Model):
+class TypedModel:
     if TYPE_CHECKING:
         objects: models.Manager
 
+
+class WorkPlace(models.Model, TypedModel):
     name = models.CharField(max_length=150)
     code = models.IntegerField()
     location = models.CharField(max_length=150, blank=True)
@@ -90,7 +92,7 @@ class WorkPlace(models.Model):
         return self.name  # type: ignore
 
 
-class Employee(models.Model):
+class Employee(models.Model, TypedModel):
     """Holds users' data"""
 
     user = models.OneToOneField(

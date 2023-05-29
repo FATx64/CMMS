@@ -1,7 +1,10 @@
 import datetime
+import io
 import random
 import uuid
 from pathlib import Path
+from PIL import Image
+from django.core.files.base import File
 
 from django.core.files.uploadedfile import UploadedFile
 
@@ -39,7 +42,12 @@ def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
     _id = generate_hexa_id()
     path = Path(f"data/avatars/{user_id}")
     path.mkdir(parents=True, exist_ok=True)
-    with open(path / f"{_id}.png", "wb+") as dest:
-        for chunk in file.chunks():
-            dest.write(chunk)
+
+    buffer = io.BytesIO()
+    for chunk in File(file):
+        buffer.write(chunk)
+
+    buffer.seek(0)
+    img = Image.open(buffer)
+    img.save(path / f"{_id}.webp", "WEBP")
     return _id

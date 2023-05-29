@@ -25,9 +25,12 @@ class CMMSForm(forms.Form):
     def file_upload(self) -> bool:
         return getattr(self.get_meta(), "file_upload", False)
 
+    def require_context(self, context=None):
+        return context or self.get_context() or {}
+
     def as_modal(self, context=None):
         """Render as <div> elements."""
-        context = context or self.get_context()
+        context = self.require_context(context)
         context_additions = {
             "modal_id": self.modal_id,
             "modal_confirm_label": getattr(self.get_meta(), "modal_confirm_label", "Confirm"),
@@ -48,7 +51,7 @@ class SetupForm(CMMSForm):
     phone_number = PhoneNumberField(label="Phone", region="ID")
     age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
-    avatar = forms.FileField(
+    avatar = forms.ImageField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
         required=False,
@@ -124,7 +127,7 @@ class EmployeeForm(CMMSForm):
     age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
     work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)
-    avatar = forms.FileField(
+    avatar = forms.ImageField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
         required=False,

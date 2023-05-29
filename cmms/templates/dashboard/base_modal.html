@@ -17,12 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
             closeModal()
         })
     })
+
+    {% if form.errors and form.modal_id %}
+    const modal = document.querySelector("#{{ form.modal_id }}")
+    openModal(modal)
+    {% endif %}
 })
 
-function openModal() {
+function openModal(probablyModal) {
     if (openedModal)  // How?
         closeModal()
-    openedModal = document.querySelector(this.getAttribute("data-modal"))
+    openedModal = probablyModal instanceof HTMLDialogElement ? probablyModal : document.querySelector(this.getAttribute("data-modal"))
 
     const buttons = openedModal.querySelectorAll("button[data-dismiss]")
     buttons.forEach((btn) => {
@@ -38,6 +43,8 @@ function closeModal() {
         if (!(this instanceof HTMLButtonElement))
             return
         openedModal = document.querySelector(this.getAttribute("data-dismiss"))
+        if (!openedModal)  // Let's just assume it's already closed
+            openedModal = null
     }
     document.documentElement.style.overflow = ""
     openedModal.classList.add("hide")

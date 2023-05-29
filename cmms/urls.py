@@ -28,7 +28,7 @@ def avatars(request, user_id, file_id):
 
 urlpatterns = [
     re_path("^$", views.HomeView.as_view(), name="index"),
-    re_path(r"^avatars/(?P<user_id>\d+)/(?P<file_id>[\w]+)", avatars),
+    re_path(r"^avatars/(?P<user_id>\d+)/(?P<file_id>[\w]+\.webp)", avatars),
     re_path("^setup/?$", views.SetupView.as_view(), name="setup"),
     re_path("^dashboard", include(dashboard_urls), name="dashboard"),
     re_path("^logout/?$", views.logout_view, name="logout"),
