@@ -3,7 +3,6 @@ from __future__ import annotations
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
-from django.db.utils import OperationalError
 from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import UserType
@@ -162,6 +161,8 @@ class WorkPlaceForm(CMMSForm):
         model_cancel_enabled = False
 
     def save(self):
-        workplace = WorkPlace(code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"])
+        workplace = WorkPlace(
+            code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"]
+        )
         workplace.save()
         return workplace

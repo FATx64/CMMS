@@ -3,10 +3,10 @@ import io
 import random
 import uuid
 from pathlib import Path
-from PIL import Image
-from django.core.files.base import File
 
+from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
+from PIL import Image
 
 
 CMMS_EPOCH: int = 1672531200000

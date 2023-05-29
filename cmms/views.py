@@ -7,8 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
-from cmms.decorators import admin_exists, admin_not_exists
 from cmms import forms, models
+from cmms.decorators import admin_exists, admin_not_exists
 
 
 @method_decorator(admin_exists, name="dispatch")
@@ -65,10 +65,7 @@ class DashboardEmployeeView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        data = {
-            "workplaces_exists": len(models.WorkPlace.objects.all()) > 0,
-            "employees": models.Employee.objects.all()
-        }
+        data = {"workplaces_exists": len(models.WorkPlace.objects.all()) > 0, "employees": models.Employee.objects.all()}
         context.update(data)
         return context
 

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
@@ -13,14 +14,14 @@ dashboard_urls = (
         re_path('^/users/?$', views.DashboardEmployeeView.as_view(), name="users"),
         re_path('^/workplace/?$', views.DashboardWorkPlaceView.as_view(), name="workplace"),
     ],
-    "dashboard"
+    "dashboard",
 )
 
 
 def avatars(request, user_id, file_id):
     path = Path("data/avatars") / user_id / file_id
     with open(path, "rb") as a:
-       response = HttpResponse(a.read())
+        response = HttpResponse(a.read())
     response["Content-Type"] = ""
     response["Content-Disposition"] = "inline; filename=\"" + file_id + "\""
     return response
