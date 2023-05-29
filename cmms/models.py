@@ -78,12 +78,16 @@ class User(AbstractBaseUser):
         return UserType(self.type)
 
 
-class TypedModel:
+class TypedModel(models.Model):
+    """models.Model but with better typehint support"""
     if TYPE_CHECKING:
         objects: models.Manager
 
+    class Meta:
+        abstract = True
 
-class WorkPlace(models.Model, TypedModel):
+
+class WorkPlace(TypedModel):
     name = models.CharField(max_length=150)
     code = models.IntegerField()
     location = models.CharField(max_length=150, blank=True)
@@ -92,7 +96,7 @@ class WorkPlace(models.Model, TypedModel):
         return self.name  # type: ignore
 
 
-class Employee(models.Model, TypedModel):
+class Employee(TypedModel):
     """Holds users' data"""
 
     user = models.OneToOneField(
