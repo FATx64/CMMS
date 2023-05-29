@@ -53,7 +53,7 @@ function closeModal() {
         if (!openedModal)
             return
         openedModal.classList.remove("hide")
-        const form = openedModal.children[0]
+        const form = openedModal.querySelector("form")
         if (form)
             form.reset()
 

@@ -10,19 +10,15 @@ from cmms.models import User, WorkPlace
 
 
 class CMMSForm(forms.Form):
+    modal_id = "modal"
+    modal_confirm_label = "Confirm"
+    modal_confirm_color = "green"
+    modal_cancel_label = "Cancel"
+    modal_cancel_enabled = True
+    file_upload = False
+
     template_name_div = "form/basic.html"
     template_name_modal = "form/modal.html"
-
-    def get_meta(self):
-        return getattr(self, "Meta", None)
-
-    @property
-    def modal_id(self) -> str:
-        return getattr(self.get_meta(), "modal_id", "modal")
-
-    @property
-    def file_upload(self) -> bool:
-        return getattr(self.get_meta(), "file_upload", False)
 
     def require_context(self, context=None):
         return context or self.get_context() or {}
@@ -30,15 +26,6 @@ class CMMSForm(forms.Form):
     def as_modal(self, context=None):
         """Render as <div> elements."""
         context = self.require_context(context)
-        context_additions = {
-            "modal_id": self.modal_id,
-            "modal_confirm_label": getattr(self.get_meta(), "modal_confirm_label", "Confirm"),
-            "modal_confirm_color": getattr(self.get_meta(), "modal_confirm_color", "green"),
-            "modal_cancel_label": getattr(self.get_meta(), "modal_cancel_label", "Cancel"),
-            "model_cancel_enabled": getattr(self.get_meta(), "model_cancel_enabled", True),
-            "file_upload": self.file_upload,
-        }
-        context.update(context_additions)
         return self.render(self.template_name_modal, context=context)
 
 
@@ -118,6 +105,11 @@ class LoginForm(CMMSForm):
 
 
 class EmployeeForm(CMMSForm):
+    modal_id = "employee-modal"
+    modal_confirm_label = "Add Employee"
+    modal_cancel_enabled = False
+    file_upload = True
+
     id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
     last_name = forms.CharField(label="Last Name", max_length=150)
@@ -143,22 +135,15 @@ class EmployeeForm(CMMSForm):
     def save(self):
         return User.objects.from_form(self.cleaned_data)
 
-    class Meta:
-        modal_id = "employee-modal"
-        modal_confirm_label = "Add Employee"
-        model_cancel_enabled = False
-        file_upload = True
-
 
 class WorkPlaceForm(CMMSForm):
+    modal_id = "workplace-modal"
+    modal_confirm_label = "Add Work Center"
+    modal_cancel_enabled = False
+
     name = forms.CharField(label="Name")
     code = forms.IntegerField(label="Code")
     location = forms.CharField(label="Location")
-
-    class Meta:
-        modal_id = "workplace-modal"
-        modal_confirm_label = "Add Work Center"
-        model_cancel_enabled = False
 
     def save(self):
         workplace = WorkPlace(
