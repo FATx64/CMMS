@@ -15,6 +15,7 @@
 - [Poetry](https://python-poetry.org/docs/#installation)
 - [Redis](https://redis.com/redis-enterprise-software/download-center/software/) (for Session Management and Cache)
 - [NodeJS v18 or later](https://nodejs.org/en/) (for tailwind)
+- `libwebp` (`libwebp-dev` in Debian/Ubuntu, for Pillow)
 
 ### Deploy
 - Run `poetry install` to install all required dependencies in a virtualenv
