@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.forms.forms import Form
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -9,6 +10,29 @@ from django.views.generic.edit import FormView
 
 from cmms import forms, models
 from cmms.decorators import admin_exists, admin_not_exists
+
+
+class CMMSFormView(FormView):
+    """FormView with multi-form support. form_class will act as default form"""
+    forms: dict[str, Form] = {}
+
+    def post(self, request, *args, **kwargs):
+        """Directly copied from Django's source code and modified to allow multi-form support
+
+        REF: https://github.com/django/django/blob/0030814/django/views/generic/edit.py#L144-L153
+        """
+        target_form = request.POST.get("form_id")
+        form = self.get_form(self.forms.get(target_form))
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        for k, v in self.forms:
+            ctx[k] = self.get_form(v)
+        return ctx
 
 
 @method_decorator(admin_exists, name="dispatch")

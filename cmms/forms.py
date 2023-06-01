@@ -10,23 +10,16 @@ from cmms.models import User, WorkPlace
 
 
 class CMMSForm(forms.Form):
-    modal_id = "modal"
-    modal_confirm_label = "Confirm"
-    modal_confirm_color = "green"
-    modal_cancel_label = "Cancel"
-    modal_cancel_enabled = True
-    file_upload = False
+    form_id = ""
+
+    @property
+    def modal_id(self) -> str:
+        return f"{self.form_id}-modal"
 
     template_name_div = "form/basic.html"
-    template_name_modal = "form/modal.html"
 
     def require_context(self, context=None):
         return context or self.get_context() or {}
-
-    def as_modal(self, context=None):
-        """Render as <div> elements."""
-        context = self.require_context(context)
-        return self.render(self.template_name_modal, context=context)
 
 
 class SetupForm(CMMSForm):
@@ -105,10 +98,7 @@ class LoginForm(CMMSForm):
 
 
 class EmployeeForm(CMMSForm):
-    modal_id = "employee-modal"
-    modal_confirm_label = "Add Employee"
-    modal_cancel_enabled = False
-    file_upload = True
+    form_id = "employee"
 
     id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
@@ -137,9 +127,7 @@ class EmployeeForm(CMMSForm):
 
 
 class WorkPlaceForm(CMMSForm):
-    modal_id = "workplace-modal"
-    modal_confirm_label = "Add Work Center"
-    modal_cancel_enabled = False
+    form_id = "workplace"
 
     name = forms.CharField(label="Name")
     code = forms.IntegerField(label="Code")
