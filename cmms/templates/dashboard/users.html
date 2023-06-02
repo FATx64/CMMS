@@ -28,13 +28,20 @@
 </div>
 {% endblock %}
 
+{% block script %}
+{{ block.super }}
+<script>
+    
+</script>
+{% endblock %}
+
 {% block headerbody %}
 {% modal form.modal_id %}
-<form method="post" enctype="multipart/form-data">
-    <div class="space-y-6 bg-white pb-4 sm:px-6 sm:pb-4">
+<form class="p-8" method="post" enctype="multipart/form-data">
+    <div class="space-y-6 bg-white pb-4">
         {{ form.as_div }}
     </div>
-    <div class="bg-gray-50 pt-3 sm:flex sm:flex-row-reverse sm:px-6">
+    <div class="bg-gray-50 pt-3 sm:flex sm:flex-row-reverse">
         <button type="submit" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm bg-green-500 hover:bg-green-600 text-white">
             Add Employee
         </button>

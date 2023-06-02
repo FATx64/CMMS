@@ -3,6 +3,15 @@
 {% block script %}
 <script>
 let openedModal = null
+const onModalOpen = new Event("modalOpen");
+
+function getModal(name) {
+    return document.querySelector(`dialog.modal#${name}`)
+}
+
+function getModalButton(name) {
+    return document.querySelector(`button[data-modal="#${name}"]`)
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll("button[data-modal]")
@@ -35,6 +44,7 @@ function openModal(probablyModal) {
     })
 
     document.documentElement.style.overflow = "hidden"
+    openedModal.dispatchEvent(onModalOpen)
     openedModal.showModal()
 }
 

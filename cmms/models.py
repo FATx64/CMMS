@@ -117,7 +117,7 @@ class Employee(TypedModel):
     address = models.CharField(max_length=150, blank=True)
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty
-    work_place = models.ForeignKey(WorkPlace, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True, default=None)
     avatar = models.CharField(max_length=32, blank=True, default="")  # utils.generate_hexa_id()
 
     def full_name(self):

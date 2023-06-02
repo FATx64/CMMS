@@ -111,7 +111,6 @@ class EmployeeForm(CMMSForm):
     avatar = forms.ImageField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
-        required=False,
     )
     email = forms.EmailField(label="Email Address", required=True)
     password = forms.CharField(
