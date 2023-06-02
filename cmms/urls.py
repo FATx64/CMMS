@@ -12,7 +12,9 @@ dashboard_urls = (
         re_path('^/?$', lambda _: redirect("/dashboard/home"), name="index"),
         re_path('^/home/?$', views.DashboardView.as_view(), name="home"),
         re_path('^/users/?$', views.DashboardEmployeeView.as_view(), name="users"),
+        re_path(r'^/users/(?P<id>[\w]+)/?$', views.DashboardEmployeeView.as_view(), name="ajax_users"),
         re_path('^/workplace/?$', views.DashboardWorkPlaceView.as_view(), name="workplace"),
+        re_path(r'^/workplace/(?P<id>[\w]+)/?$', views.DashboardWorkPlaceView.as_view(), name="ajax_workplace"),
     ],
     "dashboard",
 )

@@ -38,6 +38,15 @@ function openModal(probablyModal) {
         closeModal()
     openedModal = probablyModal instanceof HTMLDialogElement ? probablyModal : document.querySelector(this.getAttribute("data-modal"))
 
+    const modalValue = this.getAttribute("data-modal-value")
+    if (modalValue !== null) {
+        const modalValueTarget = openedModal.getAttribute("data-modal-value-target")
+        const modalValueTargetAttribute = openedModal.getAttribute("data-modal-value-target-attribute") || "value"
+        const targetDOM = openedModal.querySelector(modalValueTarget)
+        if (targetDOM !== null)
+            targetDOM.setAttribute(modalValueTargetAttribute, modalValue)
+    }
+
     const buttons = openedModal.querySelectorAll("button[data-dismiss]")
     buttons.forEach((btn) => {
         btn.onclick = closeModal

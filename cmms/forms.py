@@ -125,12 +125,14 @@ class EmployeeForm(CMMSForm):
         return User.objects.from_form(self.cleaned_data)
 
 
-class WorkPlaceForm(CMMSForm):
-    form_id = "workplace"
-
+class WorkPlaceCommon(CMMSForm):
     name = forms.CharField(label="Name")
     code = forms.IntegerField(label="Code")
     location = forms.CharField(label="Location")
+
+
+class WorkPlaceForm(WorkPlaceCommon):
+    form_id = "new-workplace"
 
     def save(self):
         workplace = WorkPlace(
@@ -138,3 +140,17 @@ class WorkPlaceForm(CMMSForm):
         )
         workplace.save()
         return workplace
+
+
+class EditWorkPlaceForm(WorkPlaceCommon):
+    form_id = "edit-workplace"
+
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def edit(self):
+        return WorkPlace.objects.filter(pk=self.cleaned_data["id"]).update(
+            code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"]
+        )
+
+    class Media:
+        js = ("js/edit_work_place.js",)

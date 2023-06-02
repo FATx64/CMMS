@@ -3,6 +3,7 @@ from __future__ import annotations
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.forms.forms import Form
+from django.http.response import JsonResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -14,15 +15,17 @@ from cmms.decorators import admin_exists, admin_not_exists
 
 class CMMSFormView(FormView):
     """FormView with multi-form support. form_class will act as default form"""
-    forms: dict[str, Form] = {}
+    form_classes: dict[str, Form] = {}
+
+    def get_cmms_form(self, id: str):
+        return self.get_form(self.form_classes.get(id))
 
     def post(self, request, *args, **kwargs):
         """Directly copied from Django's source code and modified to allow multi-form support
 
         REF: https://github.com/django/django/blob/0030814/django/views/generic/edit.py#L144-L153
         """
-        target_form = request.POST.get("form_id")
-        form = self.get_form(self.forms.get(target_form))
+        form = self.get_cmms_form(request.POST.get("form_id"))
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -30,8 +33,12 @@ class CMMSFormView(FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        for k, v in self.forms:
-            ctx[k] = self.get_form(v)
+        for k, v in self.form_classes.items():
+            _id = k
+            if not _id.endswith("form"):
+                _id += "_form"
+            form = self.get_form(v)
+            ctx[_id] = { "modal_id": _id, "form_id": k, "as_div": form.as_div, "media": form.media }
         return ctx
 
 
@@ -72,6 +79,7 @@ class SetupView(FormView):
             return redirect(".")
 
 
+@login_required(login_url="/")
 def logout_view(request):
     logout(request)
     return redirect("/")
@@ -87,6 +95,24 @@ class DashboardEmployeeView(FormView):
     template_name = "dashboard/users.html"
     form_class = forms.EmployeeForm
 
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get("id")
+        if not user_id:
+            return super().get(request, *args, **kwargs)
+        user = models.User.objects.get(pk=user_id)
+        rt = dict(
+            id = user.id,
+            employee_id = user.employee.employee_id,
+            first_name = user.employee.first_name,
+            last_name = user.employee.last_name,
+            phone_number = str(user.employee.phone_number),
+            address = user.employee.address,
+            work_hour = user.employee.work_hour,
+            work_place = user.employee.work_place,
+            avatar = user.employee.avatar,
+        )
+        return JsonResponse(rt)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         data = {"workplaces_exists": len(models.WorkPlace.objects.all()) > 0, "employees": models.Employee.objects.all()}
@@ -99,9 +125,25 @@ class DashboardEmployeeView(FormView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardWorkPlaceView(FormView):
+class DashboardWorkPlaceView(CMMSFormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
+    form_classes = {
+        "edit": forms.EditWorkPlaceForm
+    }
+
+    def get(self, request, *args, **kwargs):
+        wp_id = kwargs.get("id")
+        if not wp_id:
+            return super().get(request, *args, **kwargs)
+        work_place = models.WorkPlace.objects.get(pk=wp_id)
+        rt = dict(
+            id = work_place.id,
+            name = work_place.name,
+            code = work_place.code,
+            location = work_place.location,
+        )
+        return JsonResponse(rt)
 
     def post(self, request, *args, **kwargs):
         manage: str | None = request.POST.get("manage")
@@ -118,6 +160,10 @@ class DashboardWorkPlaceView(FormView):
         context["workplaces"] = models.WorkPlace.objects.all()
         return context
 
-    def form_valid(self, form: forms.WorkPlaceForm):
-        form.save()
+    def form_valid(self, form: forms.WorkPlaceForm | forms.EditWorkPlaceForm):
+        if isinstance(form, forms.EditWorkPlaceForm):
+            form.edit()
+        elif isinstance(form, forms.WorkPlaceForm):
+            form.save()
+
         return redirect(self.request.path_info)
