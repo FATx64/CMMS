@@ -1,0 +1,4 @@
+# vim: set filetype=zsh
+DATABASE_URL=mysql://root:mysql@localhost:3306/cmms
+REDIS_URL=redis://127.0.0.1:6379/0
+DJANGO_DEBUG=no
