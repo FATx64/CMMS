@@ -36,12 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
 function openModal(probablyModal) {
     if (openedModal)  // How?
         closeModal()
-    openedModal = probablyModal instanceof HTMLDialogElement ? probablyModal : document.querySelector(this.getAttribute("data-modal"))
+    openedModal = probablyModal instanceof HTMLDialogElement ? probablyModal : document.querySelector(this.dataset.modal)
 
-    const modalValue = this.getAttribute("data-modal-value")
+    const modalValue = this.dataset.modalValue
     if (modalValue !== null) {
-        const modalValueTarget = openedModal.getAttribute("data-modal-value-target")
-        const modalValueTargetAttribute = openedModal.getAttribute("data-modal-value-target-attribute") || "value"
+        const modalValueTarget = openedModal.dataset.modalValueTarget
+        const modalValueTargetAttribute = openedModal.dataset.modalValueTargetAttribute || "value"
         const targetDOM = openedModal.querySelector(modalValueTarget)
         if (targetDOM !== null)
             targetDOM.setAttribute(modalValueTargetAttribute, modalValue)
@@ -61,7 +61,7 @@ function closeModal() {
     if (!openedModal ) {  // Just in-case
         if (!(this instanceof HTMLButtonElement))
             return
-        openedModal = document.querySelector(this.getAttribute("data-dismiss"))
+        openedModal = document.querySelector(this.dataset.dismiss)
         if (!openedModal)  // Let's just assume it's already closed
             openedModal = null
     }
