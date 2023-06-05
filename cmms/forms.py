@@ -122,6 +122,15 @@ class EmployeeForm(CMMSForm):
     )
     type = forms.ChoiceField(label="Account Type", choices=UserType.choices)
 
+    def _post_clean(self) -> None:
+        super()._post_clean()
+        password = self.cleaned_data.get("password")
+        if password:
+            try:
+                password_validation.validate_password(password)
+            except ValidationError as error:
+                self.add_error("password", error)
+
     def save(self):
         return User.objects.from_form(self.cleaned_data)
 

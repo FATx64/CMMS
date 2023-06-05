@@ -29,10 +29,14 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **kwargs)
 
     def from_form(self, form_data: dict, **kwargs):
+        _type = form_data.get("type", kwargs.get("type"))
+        if _type:
+            _type = UserType(_type)
+
         u = self.create_user(
             form_data["email"],
             form_data.get("password", form_data.get("password2")),
-            type=kwargs.get("type", UserType.ENGINEER),
+            type=_type or UserType.ENGINEER,
         )
 
         avatar = form_data.get("avatar")
