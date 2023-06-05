@@ -1,0 +1,51 @@
+{% extends "dashboard/base_modal.html" %}
+{% load static cmms_modal %}
+
+{% block inner-content %}
+<div>
+
+    <div class="space-y-2 mb-12">
+        <h1 class="text-lg font-medium">Employee List</h1>
+        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 enabled:hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.modal_id }}" {% if not workplaces_exists %} disabled {% endif %}>
+            <span class="flex material-symbols-outlined">
+            add
+            </span>
+            Add Employee
+        </button>
+
+        {% if not workplaces_exists %}
+        <p class="select-none text-sm text-white bg-red-600 px-2 py-1">
+        There's no work center yet! Please add one first from
+        <a class="underline font-semibold" href="{% url "dashboard:workplace" %}">Work Center</a> page.
+        </p>
+        {% endif %}
+
+        {% for employee in employees %}
+            <img src="/avatars/{{ employee.user.id }}/{{ employee.avatar }}.webp"/>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+{{ block.super }}
+<script>
+    
+</script>
+{% endblock %}
+
+{% block headerbody %}
+{% modal form.modal_id %}
+<form class="p-8" method="post" enctype="multipart/form-data">
+    <div class="flex flex-col gap-6 bg-white pb-4">
+        {{ form.as_div }}
+    </div>
+    <div class="bg-gray-50 pt-3 sm:flex sm:flex-row-reverse">
+        <button type="submit" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm bg-green-500 hover:bg-green-600 text-white">
+            Add Employee
+        </button>
+    </div>
+</form>
+{% endmodal %}
+{% endblock %}

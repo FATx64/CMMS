@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static cmms_menu %}
+
+{% block title %}{{ block.super }} - Dashboard{% endblock %}
+
+{% block content %}
+{% get_menu request as menu %}
+<div class="flex">
+    <aside class="w-56 shadow-[8px_0_15px_-3px_rgba(0,0,0,0.2)]">
+        <div class="flex flex-col items-center sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
+            <a href="/dashboard"><img src="{% static "logo.svg" %}" class="h-10 mt-4 mb-8"></a>
+            <ul class="w-full">
+                {% for item in menu.items %}
+                <li>{% include "menu/item.html" %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </aside>
+
+    <div class="flex-auto">
+        <div class="flex items-center justify-end h-16 shadow-lg px-6">
+            <span class="mr-16">{{ user.employee.full_name }} - {{ user.role.label }}</span>
+            <a class="material-symbols-outlined text-3xl" href="/logout">
+                power_rounded
+            </a>
+        </div>
+        <div class="p-4">
+            {% block inner-content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
