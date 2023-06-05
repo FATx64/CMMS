@@ -94,11 +94,10 @@ class LoginForm(CMMSForm):
                 self.add_error("password", error)
 
     def authenticate(self):
-        return authenticate(email=self.cleaned_data.get("email"), password=self.cleaned_data.get("password"))
+        return authenticate(**self.cleaned_data)
 
 
-class EmployeeForm(CMMSForm):
-    form_id = "employee"
+class EmployeeCommon(CMMSForm):
 
     id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
@@ -131,8 +130,23 @@ class EmployeeForm(CMMSForm):
             except ValidationError as error:
                 self.add_error("password", error)
 
+class EmployeeForm(EmployeeCommon):
+    form_id = "new-employee"
+
     def save(self):
         return User.objects.from_form(self.cleaned_data)
+
+
+class EditEmployeeForm(EmployeeCommon):
+    form_id = "edit-employee"
+
+    user_id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def save(self):
+        return User.objects.filter(pk=self.cleaned_data.pop("user_id")).update(**self.cleaned_data)
+
+    class Media:
+        js = ("js/edit_employee.js",)
 
 
 class WorkPlaceCommon(CMMSForm):
@@ -145,9 +159,7 @@ class WorkPlaceForm(WorkPlaceCommon):
     form_id = "new-workplace"
 
     def save(self):
-        workplace = WorkPlace(
-            code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"]
-        )
+        workplace = WorkPlace(**self.cleaned_data)
         workplace.save()
         return workplace
 
@@ -157,10 +169,8 @@ class EditWorkPlaceForm(WorkPlaceCommon):
 
     id = forms.IntegerField(widget=forms.HiddenInput())
 
-    def edit(self):
-        return WorkPlace.objects.filter(pk=self.cleaned_data["id"]).update(
-            code=self.cleaned_data["code"], name=self.cleaned_data["name"], location=self.cleaned_data["location"]
-        )
+    def save(self):
+        return WorkPlace.objects.filter(pk=self.cleaned_data.pop("id")).update(**self.cleaned_data)
 
     class Media:
         js = ("js/edit_work_place.js",)

@@ -170,9 +170,5 @@ class DashboardWorkPlaceView(CMMSFormView):
         return context
 
     def form_valid(self, form: forms.WorkPlaceForm | forms.EditWorkPlaceForm):
-        if isinstance(form, forms.EditWorkPlaceForm):
-            form.edit()
-        elif isinstance(form, forms.WorkPlaceForm):
-            form.save()
-
+        form.save()
         return redirect(self.request.path_info)
