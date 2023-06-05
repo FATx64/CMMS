@@ -19,9 +19,11 @@
         <a class="underline font-semibold" href="{% url "dashboard:workplace" %}">Work Center</a> page.
         </p>
         {% endif %}
+    </div>
 
+    <div class="grid grid-cols-3 gap-8">
         {% for employee in employees %}
-        <div class="w-96 border-solid border border-gray-400 rounded-md">
+        <div class="w-full border-solid border border-gray-400 rounded-md">
             <img class="h-48 w-full" src="/avatars/{{ employee.user.id }}/{{ employee.avatar }}.webp"/>
             <div class="text-sm px-4 py-2">
                 <p>ID: {{ employee.id }}</p>
