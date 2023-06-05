@@ -46,3 +46,12 @@ dialog.modal::backdrop {
         background: transparent;
     }
 }
+
+.spinner {
+    animation: 1.2s cubic-bezier(0.32, 0.65, 0.71, 0.4) 0s infinite normal none running spin;
+}
+
+@keyframes spin {
+    from {rotate: 0deg}
+    to {rotate: 360deg}
+}

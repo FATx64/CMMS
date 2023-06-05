@@ -84,6 +84,9 @@
 {% endmodal %}
 
 {% modal edit_form.modal_id data-modal-value-target="input[name='id']" %}
+<div id="spinner" class="flex justify-center items-center bg-white stroke-black absolute rounded-xl w-full h-full hidden">
+    {% include "spinner.html" %}
+</div>
 <form class="p-8" method="post">
     <div class="flex flex-col gap-6 bg-white pb-4">
         {{ edit_form.as_div }}
