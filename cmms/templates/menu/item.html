@@ -1,0 +1,9 @@
+{% load cmms_menu %}
+<!-- Workaround to tell tailwind to load these -->
+<a class="text-cyan-600"></a>
+<a href="{{ item.url }}" class="flex {{ item|if_active:"text-cyan-600|no" }} py-2 px-6 items-center font-medium text-base">
+    <span class="material-symbols-outlined mr-4 text-3xl">
+        {{ item.icon }}
+    </span>
+    {{ item.label }}
+</a>
