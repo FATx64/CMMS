@@ -120,6 +120,7 @@ class EmployeeForm(CMMSForm):
         help_text=password_validation.password_validators_help_text_html(),
         required=True,
     )
+    type = forms.ChoiceField(label="Account Type", choices=UserType.choices)
 
     def save(self):
         return User.objects.from_form(self.cleaned_data)
