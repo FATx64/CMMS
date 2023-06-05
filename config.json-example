@@ -1,4 +1,0 @@
-{
-    "dbUrl": "dbType://username:password@host:port/database",
-    "sessionSecret": "mySecret"
-}
