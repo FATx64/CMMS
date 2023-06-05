@@ -92,7 +92,7 @@ class DashboardView(TemplateView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
-class DashboardEmployeeView(FormView):
+class DashboardEmployeeView(CMMSFormView):
     template_name = "dashboard/users.html"
     form_class = forms.EmployeeForm
 
@@ -113,6 +113,16 @@ class DashboardEmployeeView(FormView):
             avatar=user.employee.avatar,
         )
         return JsonResponse(rt)
+
+    def post(self, request, *args, **kwargs):
+        manage: str | None = request.POST.get("manage")
+        if not manage:
+            return super().post(request, *args, **kwargs)
+        if manage.startswith("delete"):
+            p = models.User.objects.get(pk=manage.split(":")[1])
+            if p:
+                p.delete()
+        return redirect(self.request.path_info)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

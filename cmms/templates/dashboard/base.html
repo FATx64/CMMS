@@ -6,8 +6,8 @@
 {% block content %}
 {% get_menu request as menu %}
 <div class="flex">
-    <aside class="w-56 shadow-[8px_0_15px_-3px_rgba(0,0,0,0.2)]">
-        <div class="flex flex-col items-center sticky top-0 bottom-0 z-30 min-h-screen max-h-screen">
+    <aside class="w-56">
+        <div class="flex flex-col items-center sticky top-0 bottom-0 z-30 min-h-screen shadow-[8px_0_15px_-3px_rgba(0,0,0,0.2)]">
             <a href="/dashboard"><img src="{% static "logo.svg" %}" class="h-10 mt-4 mb-8"></a>
             <ul class="w-full">
                 {% for item in menu.items %}
