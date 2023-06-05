@@ -15,6 +15,7 @@ from cmms.decorators import admin_exists, admin_not_exists
 
 class CMMSFormView(FormView):
     """FormView with multi-form support. form_class will act as default form"""
+
     form_classes: dict[str, Form] = {}
 
     def get_cmms_form(self, id: str):
@@ -38,7 +39,7 @@ class CMMSFormView(FormView):
             if not _id.endswith("form"):
                 _id += "_form"
             form = self.get_form(v)
-            ctx[_id] = { "modal_id": _id, "form_id": k, "as_div": form.as_div, "media": form.media }
+            ctx[_id] = {"modal_id": _id, "form_id": k, "as_div": form.as_div, "media": form.media}
         return ctx
 
 
@@ -101,15 +102,15 @@ class DashboardEmployeeView(FormView):
             return super().get(request, *args, **kwargs)
         user = models.User.objects.get(pk=user_id)
         rt = dict(
-            id = user.id,
-            employee_id = user.employee.employee_id,
-            first_name = user.employee.first_name,
-            last_name = user.employee.last_name,
-            phone_number = str(user.employee.phone_number),
-            address = user.employee.address,
-            work_hour = user.employee.work_hour,
-            work_place = user.employee.work_place,
-            avatar = user.employee.avatar,
+            id=user.id,
+            employee_id=user.employee.employee_id,
+            first_name=user.employee.first_name,
+            last_name=user.employee.last_name,
+            phone_number=str(user.employee.phone_number),
+            address=user.employee.address,
+            work_hour=user.employee.work_hour,
+            work_place=user.employee.work_place,
+            avatar=user.employee.avatar,
         )
         return JsonResponse(rt)
 
@@ -128,9 +129,7 @@ class DashboardEmployeeView(FormView):
 class DashboardWorkPlaceView(CMMSFormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
-    form_classes = {
-        "edit": forms.EditWorkPlaceForm
-    }
+    form_classes = {"edit": forms.EditWorkPlaceForm}
 
     def get(self, request, *args, **kwargs):
         wp_id = kwargs.get("id")
@@ -138,10 +137,10 @@ class DashboardWorkPlaceView(CMMSFormView):
             return super().get(request, *args, **kwargs)
         work_place = models.WorkPlace.objects.get(pk=wp_id)
         rt = dict(
-            id = work_place.id,
-            name = work_place.name,
-            code = work_place.code,
-            location = work_place.location,
+            id=work_place.id,
+            name=work_place.name,
+            code=work_place.code,
+            location=work_place.location,
         )
         return JsonResponse(rt)
 
