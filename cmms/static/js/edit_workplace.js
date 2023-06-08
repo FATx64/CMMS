@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 spinner.classList.add("hidden")
                 modal.classList.remove("overflow-hidden")
 
-                modal.querySelector("input[name='name']").setAttribute("value", data.name)
-                modal.querySelector("input[name='code']").setAttribute("value", data.code)
-                modal.querySelector("input[name='location']").setAttribute("value", data.location)
+                modal.querySelector("input[name='name']").value = data.name
+                modal.querySelector("input[name='code']").value = data.code
+                modal.querySelector("input[name='location']").value = data.location
             })
     })
 })

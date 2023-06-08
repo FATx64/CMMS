@@ -55,6 +55,8 @@ function openModal(probablyModal) {
     document.documentElement.style.overflow = "hidden"
     openedModal.dispatchEvent(onModalOpen)
     openedModal.showModal()
+    if (openedModal.dataset.scrollToTopOnOpen || false)
+        openedModal.scrollTop = 0
 }
 
 function closeModal() {

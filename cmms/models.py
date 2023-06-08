@@ -50,6 +50,7 @@ class UserManager(BaseUserManager):
             last_name=form_data["last_name"],
             address=form_data["address"],
             phone_number=form_data["phone_number"],
+            date_of_birth=form_data["date_of_birth"],
             work_hour=form_data["work_hour"],
             work_place=form_data.get("work_place"),
             avatar=avatar or "",
@@ -118,6 +119,7 @@ class Employee(TypedModel):
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True, default="")
     phone_number = PhoneNumberField()
+    date_of_birth = models.DateField()
     address = models.CharField(max_length=150, blank=True)
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty

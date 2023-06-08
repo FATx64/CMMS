@@ -72,7 +72,7 @@
 {% endblock %}
 
 {% block headerbody %}
-{% modal form.meta.id %}
+{% modal form.meta.id data-scroll-to-top-on-open="true" %}
 <form class="p-8" method="post">
     <div class="flex flex-col gap-6 bg-white pb-4">
         {{ form.as_div }}
@@ -83,7 +83,7 @@
 </form>
 {% endmodal %}
 
-{% modal forms.edit_workplace.meta.id data-modal-value-target="input[name='id']" %}
+{% modal forms.edit_workplace.meta.id data-modal-value-target="input[name='id']" data-scroll-to-top-on-open="true" %}
 <div id="spinner" class="flex justify-center items-center bg-white stroke-black absolute rounded-xl w-full h-full hidden">
     {% include "spinner.html" %}
 </div>

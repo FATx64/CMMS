@@ -108,6 +108,7 @@ class DashboardView(TemplateView):
 class DashboardEmployeeView(CMMSFormView):
     template_name = "dashboard/users.html"
     form_class = forms.EmployeeForm
+    form_classes = [forms.EditEmployeeForm]
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get("id")
@@ -120,9 +121,10 @@ class DashboardEmployeeView(CMMSFormView):
             first_name=user.employee.first_name,
             last_name=user.employee.last_name,
             phone_number=str(user.employee.phone_number),
+            date_of_birth=user.employee.date_of_birth,
             address=user.employee.address,
             work_hour=user.employee.work_hour,
-            work_place=user.employee.work_place,
+            work_place_code=user.employee.work_place.id,
             avatar=user.employee.avatar,
         )
         return JsonResponse(rt)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from cmms.utils import handle_avatar_upload
 
 from typing import Type
 
@@ -35,7 +36,7 @@ class SetupForm(CMMSForm):
     last_name = forms.CharField(label="Last Name", max_length=150)
     address = forms.CharField(label="Address", max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
-    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
+    date_of_birth = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
     avatar = forms.ImageField(
         label="Picture",
@@ -106,22 +107,22 @@ class LoginForm(CMMSForm):
 
 class EmployeeCommon(CMMSForm):
 
-    id = forms.CharField(label="ID")  # Employee ID
+    employee_id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
     last_name = forms.CharField(label="Last Name", max_length=150)
     address = forms.CharField(label="Address", max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
-    age = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
+    date_of_birth = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
     work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)
     avatar = forms.ImageField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
     )
-    email = forms.EmailField(label="Email Address", required=True)
 
 
 class EmployeeForm(EmployeeCommon):
+    email = forms.EmailField(label="Email Address", required=True)
     password = forms.CharField(
         label="Password",
         strip=False,
@@ -148,11 +149,25 @@ class EmployeeForm(EmployeeCommon):
 
 
 class EditEmployeeForm(EmployeeCommon):
-    user_id = forms.IntegerField(widget=forms.HiddenInput())
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["avatar"].required = False
 
     def save(self):
-        # TODO
-        return User.objects.filter(pk=self.cleaned_data.pop("user_id")).employee.update(**self.cleaned_data)
+        user = User.objects.get(pk=self.cleaned_data.pop("id"))
+        employee = user.employee
+
+        avatar = self.cleaned_data.pop("avatar", None)
+        if avatar:
+            employee.avatar = handle_avatar_upload(user.id, avatar)
+
+        for key, value in self.cleaned_data.items():
+            setattr(employee, key, value)
+
+        employee.save()
+        return employee
 
     class Media:
         js = ("js/edit_employee.js",)
@@ -184,7 +199,7 @@ class EditWorkPlaceForm(WorkPlaceCommon):
         return WorkPlace.objects.filter(pk=self.cleaned_data.pop("id")).update(**self.cleaned_data)
 
     class Media:
-        js = ("js/edit_work_place.js",)
+        js = ("js/edit_workplace.js",)
 
     class Meta:
         id = "edit_workplace"
