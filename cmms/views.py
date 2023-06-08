@@ -124,7 +124,7 @@ class DashboardEmployeeView(CMMSFormView):
             date_of_birth=user.employee.date_of_birth,
             address=user.employee.address,
             work_hour=user.employee.work_hour,
-            work_place_id=user.employee.work_place.id,
+            work_place_id=getattr(user.employee.work_place, "id", None),
             avatar=user.employee.avatar,
         )
         return JsonResponse(rt)
@@ -160,7 +160,7 @@ class DashboardWorkPlaceView(CMMSFormView):
         wp_id = kwargs.get("id")
         if not wp_id:
             return super().get(request, *args, **kwargs)
-        work_place = models.WorkPlace.objects.get(pk=wp_id)
+        work_place = models.WorkPlace.objects.filter(pk=wp_id).order_by("code")
         rt = dict(
             id=work_place.id,
             name=work_place.name,
@@ -181,7 +181,9 @@ class DashboardWorkPlaceView(CMMSFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["workplaces"] = models.WorkPlace.objects.all()
+        workplaces = [models.WorkPlace(pk=None, code=-1, name="No Work Center", location="The Void")]
+        workplaces.extend(models.WorkPlace.objects.all().order_by("code"))
+        context["workplaces"] = workplaces
         return context
 
     def form_valid(self, form: forms.WorkPlaceForm | forms.EditWorkPlaceForm):

@@ -107,6 +107,9 @@ class WorkPlace(TypedModel):
     def __str__(self) -> str:
         return self.name  # type: ignore
 
+    def employee_count(self) -> int:
+        return Employee.objects.filter(work_place=self).count()
+
 
 class Employee(TypedModel):
     """Holds users' data"""

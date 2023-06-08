@@ -28,32 +28,40 @@
     </thead>
     <tbody class="text-center overflow-auto border-t-8 border-transparent">
     {% for workplace in workplaces %}
+    {% if not workplace.id and workplace.employee_count >= 1 or workplace.id %}
         <tr>
-            <td>{{ workplace.code }}</td>
+            <td>
+                {% if not workplace.id %}
+                <span title="User(s) with no work center is detected!" class="flex justify-center items-center material-symbols-outlined text-red-600 select-none">
+                warning
+                </span>
+                {% else %}
+                {{ workplace.code }}
+                {% endif %}
+            </td>
             <td>{{ workplace.name }}</td>
             <td>{{ workplace.location }}</td>
-            <td>0</td>
+            <td>{{ workplace.employee_count }}</td>
             <td>0</td>
             <td>
-                <form class="space-x-4" action="" method="POST">
-                    <button type="button" data-modal="#{{ forms.edit_workplace.meta.id }}" data-modal-value="{{ workplace.id }}">
-                        <span class="flex material-symbols-outlined">
-                        edit
-                        </span>
-                    </button>
-                    <button type="button" data-modal="#confirmation-modal" data-modal-value="delete:{{ workplace.id }}">
-                        <span class="flex material-symbols-outlined">
-                        delete
-                        </span>
-                    </button>
-                    <button type="submit" name="manage" value="more:{{ workplace.id }}">
-                        <span class="flex material-symbols-outlined">
-                        more_horiz
-                        </span>
-                    </button>
-                </form>
+                <button class="disabled:opacity-50" data-modal="#{{ forms.edit_workplace.meta.id }}" data-modal-value="{{ workplace.id }}" {% if not workplace.id %}disabled{% endif %}>
+                    <span class="flex material-symbols-outlined">
+                    edit
+                    </span>
+                </button>
+                <button class="disabled:opacity-50" data-modal="#confirmation-modal" data-modal-value="delete:{{ workplace.id }}" {% if not workplace.id %}disabled{% endif %}>
+                    <span class="flex material-symbols-outlined">
+                    delete
+                    </span>
+                </button>
+                <button class="disabled:opacity-50" data-modal-value="more:{{ workplace.id }}" {% if not workplace.id %}disabled{% endif %}>
+                    <span class="flex material-symbols-outlined">
+                    more_horiz
+                    </span>
+                </button>
             </td>
         </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
     </table>
