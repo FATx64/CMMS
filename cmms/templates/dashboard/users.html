@@ -76,7 +76,7 @@
 <div id="spinner" class="flex justify-center items-center bg-white stroke-black absolute rounded-xl w-full h-full hidden">
     {% include "spinner.html" %}
 </div>
-<form class="p-8" method="post">
+<form class="p-8" method="post" enctype="multipart/form-data">
     <div class="flex flex-col gap-6 bg-white pb-4">
         {{ forms.edit_employee.as_div }}
     </div>
