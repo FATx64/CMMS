@@ -124,7 +124,7 @@ class DashboardEmployeeView(CMMSFormView):
             date_of_birth=user.employee.date_of_birth,
             address=user.employee.address,
             work_hour=user.employee.work_hour,
-            work_place_code=user.employee.work_place.id,
+            work_place_id=user.employee.work_place.id,
             avatar=user.employee.avatar,
         )
         return JsonResponse(rt)
