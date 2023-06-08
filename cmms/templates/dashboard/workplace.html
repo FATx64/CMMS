@@ -68,7 +68,7 @@
 
 {% block script %}
 {{ block.super }}
-{{ edit_form.media }}
+{{ forms.edit_workplace.media }}
 {% endblock %}
 
 {% block headerbody %}
@@ -89,10 +89,10 @@
 </div>
 <form class="p-8" method="post">
     <div class="flex flex-col gap-6 bg-white pb-4">
-        {{ edit_form.as_div }}
+        {{ forms.edit_workplace.as_div }}
     </div>
     <div class="bg-gray-50 pt-3 sm:flex sm:flex-row-reverse">
-        <button type="submit" name="form_id" value="{{ edit_form.form_id }}" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm bg-green-500 hover:bg-green-600 text-white">Edit Work Center</button>
+        <button type="submit" name="form_id" value="{{ forms.edit_workplace.meta.id }}" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm bg-green-500 hover:bg-green-600 text-white">Edit Work Center</button>
     </div>
 </form>
 {% endmodal %}

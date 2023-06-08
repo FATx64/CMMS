@@ -12,9 +12,8 @@ from cmms.models import User, WorkPlace
 
 
 class CMMSForm(forms.Form):
-
     @property
-    def meta(self) -> Meta:
+    def meta(self) -> Type[Meta]:
         return self.Meta
 
     @property

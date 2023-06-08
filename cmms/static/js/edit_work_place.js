@@ -3,7 +3,7 @@ function parseJSON(response) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const modal = getModal("edit_form")
+    const modal = getModal("edit_workplace")
     modal.addEventListener("modalOpen", () => {
         const spinner = modal.querySelector("#spinner")
 
