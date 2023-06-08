@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Type
+
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
@@ -10,16 +12,22 @@ from cmms.models import User, WorkPlace
 
 
 class CMMSForm(forms.Form):
-    form_id = ""
+
+    @property
+    def meta(self) -> Meta:
+        return self.Meta
 
     @property
     def modal_id(self) -> str:
-        return f"{self.form_id}-modal"
+        return f"{self.Meta.id}-modal"
 
     template_name_div = "form/basic.html"
 
     def require_context(self, context=None):
         return context or self.get_context() or {}
+
+    class Meta:
+        id = "form"
 
 
 class SetupForm(CMMSForm):
@@ -112,6 +120,9 @@ class EmployeeCommon(CMMSForm):
         widget=forms.FileInput(attrs={"class": "px-3"}),
     )
     email = forms.EmailField(label="Email Address", required=True)
+
+
+class EmployeeForm(EmployeeCommon):
     password = forms.CharField(
         label="Password",
         strip=False,
@@ -130,23 +141,25 @@ class EmployeeCommon(CMMSForm):
             except ValidationError as error:
                 self.add_error("password", error)
 
-class EmployeeForm(EmployeeCommon):
-    form_id = "new-employee"
-
     def save(self):
         return User.objects.from_form(self.cleaned_data)
 
+    class Meta:
+        id = "new_employee"
+
 
 class EditEmployeeForm(EmployeeCommon):
-    form_id = "edit-employee"
-
     user_id = forms.IntegerField(widget=forms.HiddenInput())
 
     def save(self):
-        return User.objects.filter(pk=self.cleaned_data.pop("user_id")).update(**self.cleaned_data)
+        # TODO
+        return User.objects.filter(pk=self.cleaned_data.pop("user_id")).employee.update(**self.cleaned_data)
 
     class Media:
         js = ("js/edit_employee.js",)
+
+    class Meta:
+        id = "edit_employee"
 
 
 class WorkPlaceCommon(CMMSForm):
@@ -156,17 +169,16 @@ class WorkPlaceCommon(CMMSForm):
 
 
 class WorkPlaceForm(WorkPlaceCommon):
-    form_id = "new-workplace"
-
     def save(self):
         workplace = WorkPlace(**self.cleaned_data)
         workplace.save()
         return workplace
 
+    class Meta:
+        id = "new_workplace"
+
 
 class EditWorkPlaceForm(WorkPlaceCommon):
-    form_id = "edit-workplace"
-
     id = forms.IntegerField(widget=forms.HiddenInput())
 
     def save(self):
@@ -174,3 +186,6 @@ class EditWorkPlaceForm(WorkPlaceCommon):
 
     class Media:
         js = ("js/edit_work_place.js",)
+
+    class Meta:
+        id = "edit_workplace"

@@ -6,7 +6,7 @@
 
     <div class="space-y-2 mb-12">
         <h1 class="text-lg font-medium">Work Center List</h1>
-        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 hover:bg-green-600 focus-visible:outline-green-500" data-modal="#{{ form.modal_id }}">
+        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 hover:bg-green-600 focus-visible:outline-green-500" data-modal="#{{ form.meta.id }}">
             <span class="flex material-symbols-outlined">
             add
             </span>
@@ -36,7 +36,7 @@
             <td>0</td>
             <td>
                 <form class="space-x-4" action="" method="POST">
-                    <button type="button" data-modal="#{{ edit_form.modal_id }}" data-modal-value="{{ workplace.id }}">
+                    <button type="button" data-modal="#{{ forms.edit_workplace.meta.id }}" data-modal-value="{{ workplace.id }}">
                         <span class="flex material-symbols-outlined">
                         edit
                         </span>
@@ -72,7 +72,7 @@
 {% endblock %}
 
 {% block headerbody %}
-{% modal form.modal_id %}
+{% modal form.meta.id %}
 <form class="p-8" method="post">
     <div class="flex flex-col gap-6 bg-white pb-4">
         {{ form.as_div }}
@@ -83,7 +83,7 @@
 </form>
 {% endmodal %}
 
-{% modal edit_form.modal_id data-modal-value-target="input[name='id']" %}
+{% modal forms.edit_workplace.meta.id data-modal-value-target="input[name='id']" %}
 <div id="spinner" class="flex justify-center items-center bg-white stroke-black absolute rounded-xl w-full h-full hidden">
     {% include "spinner.html" %}
 </div>

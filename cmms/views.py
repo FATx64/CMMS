@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Type
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.forms.forms import Form
@@ -16,10 +18,17 @@ from cmms.decorators import admin_exists, admin_not_exists
 class CMMSFormView(FormView):
     """FormView with multi-form support. form_class will act as default form"""
 
-    form_classes: dict[str, Form] = {}
+    form_classes: list[Type[forms.CMMSForm]] = []
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for form in self.form_classes:
+            _id = form.Meta.id
+            form = form
+            self.Meta.forms[_id] = form
 
     def get_cmms_form(self, id: str):
-        return self.get_form(self.form_classes.get(id))
+        return self.get_form(self.Meta.forms.get(id))
 
     def post(self, request, *args, **kwargs):
         """Directly copied from Django's source code and modified to allow multi-form support
@@ -34,13 +43,17 @@ class CMMSFormView(FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        for k, v in self.form_classes.items():
+        initialized = {}
+        for k, v in self.Meta.forms.items():
             _id = k
-            if not _id.endswith("form"):
-                _id += "_form"
             form = self.get_form(v)
-            ctx[_id] = {"modal_id": _id, "form_id": k, "as_div": form.as_div, "media": form.media}
+            initialized[_id] = form
+
+        ctx.update({"forms": self.Meta.forms})
         return ctx
+
+    class Meta:
+        forms: dict[str, Type[Form]] = {}
 
 
 @method_decorator(admin_exists, name="dispatch")
@@ -139,7 +152,7 @@ class DashboardEmployeeView(CMMSFormView):
 class DashboardWorkPlaceView(CMMSFormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
-    form_classes = {"edit": forms.EditWorkPlaceForm}
+    form_classes = [forms.EditWorkPlaceForm]
 
     def get(self, request, *args, **kwargs):
         wp_id = kwargs.get("id")

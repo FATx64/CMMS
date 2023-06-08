@@ -6,7 +6,7 @@
 
     <div class="space-y-2 mb-12">
         <h1 class="text-lg font-medium">Employee List</h1>
-        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 enabled:hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.modal_id }}" {% if not workplaces_exists %} disabled {% endif %}>
+        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 enabled:hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.meta.id }}" {% if not workplaces_exists %} disabled {% endif %}>
             <span class="flex material-symbols-outlined">
             add
             </span>
@@ -35,7 +35,7 @@
                 <p>Email: {{ employee.user.email }}</p>
             </div>
             <div class="flex flex-row-reverse gap-2 p-2">
-                <button type="button" data-modal="#{{ edit_form.modal_id }}" data-modal-value="{{ employee.user.id }}">
+                <button type="button" data-modal="#{{ forms.edit_employee.meta.id }}" data-modal-value="{{ employee.user.id }}">
                     <span class="flex material-symbols-outlined">
                     edit
                     </span>
@@ -61,7 +61,7 @@
 {% endblock %}
 
 {% block headerbody %}
-{% modal form.modal_id %}
+{% modal form.meta.id %}
 <form class="p-8" method="post" enctype="multipart/form-data">
     <div class="flex flex-col gap-6 bg-white pb-4">
         {{ form.as_div }}
