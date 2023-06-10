@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
-from cmms.enums import UserType
+from cmms.enums import Periodicity, UserType
 from cmms.models import User, WorkPlace
 
 
@@ -106,7 +106,6 @@ class LoginForm(CMMSForm):
 
 
 class EmployeeCommon(CMMSForm):
-
     employee_id = forms.CharField(label="ID")  # Employee ID
     first_name = forms.CharField(label="First Name", max_length=150)
     last_name = forms.CharField(label="Last Name", max_length=150)
@@ -114,7 +113,7 @@ class EmployeeCommon(CMMSForm):
     phone_number = PhoneNumberField(label="Phone", region="ID")
     date_of_birth = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
     work_hour = forms.IntegerField(label="Work Hour")
-    work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)
+    work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)  # type: ignore
     avatar = forms.ImageField(
         label="Picture",
         widget=forms.FileInput(attrs={"class": "px-3"}),
@@ -203,3 +202,24 @@ class EditWorkPlaceForm(WorkPlaceCommon):
 
     class Meta:
         id = "edit_workplace"
+
+
+class Equipment(CMMSForm):
+    tag = forms.CharField(max_length=150)
+    name = forms.CharField(max_length=150)
+    manufacture = forms.CharField(max_length=150)
+    pm_frequency = forms.ChoiceField(label="PM", choices=Periodicity.choices, empty_label=None)
+    work_place = forms.ModelChoiceField(label="Work Station", queryset=WorkPlace.objects.all(), empty_label=None)  # type: ignore
+    cost = forms.IntegerField()
+    picture = forms.ImageField(
+        label="Picture",
+        widget=forms.FileInput(attrs={"class": "px-3"}),
+    )
+    location = forms.CharField(max_length=150)
+    installation_date = forms.DateField()
+    warranty_date = forms.DateField()
+    arrival_date = forms.DateField()
+    note = forms.CharField(max_length=150, required=False)
+
+    class Meta:
+        id = "new_equipment"

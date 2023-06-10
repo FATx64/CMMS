@@ -7,7 +7,7 @@ class UserType(models.TextChoices):
 
 
 class Periodicity(models.TextChoices):
-    DAILY = "D", "Daily"
-    WEEKLY = "W", "Weekly"
     MONTHLY = "M", "Monthly"
+    WEEKLY = "W", "Weekly"
+    DAILY = "D", "Daily"
     NEVER = "N", "Never"
