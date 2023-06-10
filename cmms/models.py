@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
@@ -6,11 +6,15 @@ from django.contrib.auth.hashers import make_password
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from cmms.models import User
 from cmms.enums import Periodicity, UserType
 from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake
 
 
 class UserManager(BaseUserManager):
+    if TYPE_CHECKING:
+        model: Type[User]
+
     def _create_user(self, email: str, password: str, **kwargs):
         if not email:
             raise ValueError("Email must be set!")
@@ -62,7 +66,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     """Holds users' auth detail"""
 
-    id = models.BigIntegerField(primary_key=True, unique=True)
+    id: int = models.BigIntegerField(primary_key=True, unique=True)  # type: ignore
     email = models.EmailField(
         unique=True,
         error_messages={
@@ -132,7 +136,7 @@ class Employee(TypedModel):
     def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
-    
+
 
 class Equipment(TypedModel):
     tag = models.CharField(max_length=150)
