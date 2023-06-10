@@ -6,8 +6,8 @@ from django.contrib.auth.hashers import make_password
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from cmms.enums import UserType
-from cmms.utils import handle_avatar_upload, snowflake
+from cmms.enums import Periodicity, UserType
+from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake
 
 
 class UserManager(BaseUserManager):
@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Email must be set!")
         email = self.normalize_email(email)
-        password = make_password(password)
+        password = make_password(password)  # type: ignore
         user = self.model(email=email, password=password, **kwargs)
         user.save(using=self._db)
         return user
@@ -69,7 +69,7 @@ class User(AbstractBaseUser):
             "unique": "Email is already registered",
         },
     )
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)  # type: ignore
     type = models.CharField(max_length=5, choices=UserType.choices)
 
     objects = UserManager()
@@ -127,8 +127,23 @@ class Employee(TypedModel):
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty
     work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True, default=None)
-    avatar = models.CharField(max_length=32, blank=True, default="")  # utils.generate_hexa_id()
+    avatar = models.CharField(max_length=32, blank=True, default=generate_hexa_id)
 
     def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
+    
+
+class Equipment(TypedModel):
+    tag = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
+    manufacture = models.CharField(max_length=150)
+    pm_frequency = models.CharField(max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY)
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True, default=None)
+    cost = models.IntegerField()
+    picture = models.CharField(max_length=32, blank=True, default=generate_hexa_id)
+    location = models.CharField(max_length=150)
+    installation_date = models.DateField()
+    warranty_date = models.DateField()
+    arrival_date = models.DateField()
+    note = models.CharField(max_length=150, blank=True)
