@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import io
 import random
@@ -16,7 +18,7 @@ def utcnow() -> datetime.datetime:
     return datetime.datetime.now(datetime.timezone.utc)
 
 
-def snowflake(dt: datetime.datetime = None, /, *, high: bool = False) -> int:
+def snowflake(dt: datetime.datetime | None = None, /, *, high: bool = False) -> int:
     """Simplified version of how discord ID generated
 
     REF: https://github.com/Rapptz/discord.py/blob/e870bb1335e3f824c83a40df4ea9b17f215fde63/discord/utils.py#L395-L422
@@ -36,6 +38,11 @@ def time_from_snowflake(id: int, /) -> datetime.datetime:
 def generate_hexa_id() -> str:
     """Generate 32 long hexa id"""
     return uuid.uuid1().hex
+
+
+def handle_image_upload() -> str:
+    # TODO
+    pass
 
 
 def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
