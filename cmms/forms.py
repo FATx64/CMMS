@@ -1,15 +1,18 @@
 from __future__ import annotations
-from cmms.utils import handle_avatar_upload
 
-from typing import Type
+from typing import Any, Type
 
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
+from django.forms.utils import flatatt
+from django.forms.widgets import static
+from django.utils.html import format_html, html_safe, mark_safe
 from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import Periodicity, UserType
 from cmms.models import User, WorkPlace
+from cmms.utils import handle_avatar_upload
 
 
 class CMMSForm(forms.Form):
@@ -22,6 +25,11 @@ class CMMSForm(forms.Form):
         return f"{self.Meta.id}-modal"
 
     template_name_div = "form/basic.html"
+
+    def get_context(self) -> dict | None:
+        rt = super().get_context()
+        rt.update({"meta": self.meta})
+        return rt
 
     def require_context(self, context=None):
         return context or self.get_context() or {}
@@ -191,14 +199,35 @@ class WorkPlaceForm(WorkPlaceCommon):
         id = "new_workplace"
 
 
+@html_safe
+class JS:
+    def __init__(self, js: str | None, attrs: dict[str, Any] | None = None):
+        self.js = js
+        self.attrs = attrs or {}
+
+    def __str__(self):
+        if self.js is None:
+            return format_html("<script {}></script>", mark_safe(flatatt(self.attrs)))
+        return format_html(
+            '<script src="{}"{}></script>',
+            self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
+            mark_safe(flatatt(self.attrs)),
+        )
+
+
 class EditWorkPlaceForm(WorkPlaceCommon):
     id = forms.IntegerField(widget=forms.HiddenInput())
 
     def save(self):
         return WorkPlace.objects.filter(pk=self.cleaned_data.pop("id")).update(**self.cleaned_data)
 
-    class Media:
-        js = ("js/edit_workplace.js",)
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_workplace.js", {"data-id": self.meta.id}),
+            ]
+        )
 
     class Meta:
         id = "edit_workplace"

@@ -160,7 +160,7 @@ class DashboardWorkPlaceView(CMMSFormView):
         wp_id = kwargs.get("id")
         if not wp_id:
             return super().get(request, *args, **kwargs)
-        work_place = models.WorkPlace.objects.filter(pk=wp_id).order_by("code")
+        work_place = models.WorkPlace.objects.get(pk=wp_id)
         rt = dict(
             id=work_place.id,
             name=work_place.name,
