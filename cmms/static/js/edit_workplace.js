@@ -2,20 +2,10 @@ function parseJSON(response) {
     return response.json()
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    let modal = null
+const self = document.currentScript
 
-    try {
-        throw new Error();
-    } catch (err) {
-        const stackDetails = (/(\/static\/js\/\S+\.js)/ig).exec(err.stack)
-        const scriptLocation = (stackDetails && stackDetails[1]) || false
-        if (!scriptLocation)
-            return
-        
-        const self = document.querySelector(`script[src="${scriptLocation}"]`)
-        modal = getModal(self.dataset.id)
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = getModal(self.dataset.id)
     
     if (modal)
         modal.addEventListener("modalOpen", () => {
