@@ -40,14 +40,8 @@ def generate_hexa_id() -> str:
     return uuid.uuid1().hex
 
 
-def handle_image_upload() -> str:
-    # TODO
-    pass
-
-
-def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
+def handle_image_upload(path: Path, file: UploadedFile) -> str:
     _id = generate_hexa_id()
-    path = Path(f"data/avatars/{user_id}")
     path.mkdir(parents=True, exist_ok=True)
 
     buffer = io.BytesIO()
@@ -58,3 +52,11 @@ def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
     img = Image.open(buffer)
     img.save(path / f"{_id}.webp", "WEBP")
     return _id
+
+
+def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
+    return handle_image_upload(Path(f"data/avatars/{user_id}"), file)
+
+
+def handle_equipment_pict_upload(equipment_id: int, file: UploadedFile) -> str:
+    return handle_image_upload(Path(f"data/pictures/{equipment_id}"), file)
