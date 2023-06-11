@@ -208,7 +208,7 @@ class Equipment(CMMSForm):
     tag = forms.CharField(max_length=150)
     name = forms.CharField(max_length=150)
     manufacture = forms.CharField(max_length=150)
-    pm_frequency = forms.ChoiceField(label="PM", choices=Periodicity.choices, empty_label=None)
+    pm_frequency = forms.ChoiceField(label="PM", choices=Periodicity.choices)
     work_place = forms.ModelChoiceField(label="Work Station", queryset=WorkPlace.objects.all(), empty_label=None)  # type: ignore
     cost = forms.IntegerField()
     picture = forms.ImageField(
