@@ -12,7 +12,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import Periodicity, UserType
 from cmms.models import User, WorkPlace
-from cmms.utils import handle_avatar_upload
+from cmms.utils import JS, handle_avatar_upload
 
 
 class CMMSForm(forms.Form):
@@ -176,8 +176,13 @@ class EditEmployeeForm(EmployeeCommon):
         employee.save()
         return employee
 
-    class Media:
-        js = ("js/edit_employee.js",)
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_employee.js", {"data-id": self.meta.id}),
+            ]
+        )
 
     class Meta:
         id = "edit_employee"
@@ -197,22 +202,6 @@ class WorkPlaceForm(WorkPlaceCommon):
 
     class Meta:
         id = "new_workplace"
-
-
-@html_safe
-class JS:
-    def __init__(self, js: str | None, attrs: dict[str, Any] | None = None):
-        self.js = js
-        self.attrs = attrs or {}
-
-    def __str__(self):
-        if self.js is None:
-            return format_html("<script {}></script>", mark_safe(flatatt(self.attrs)))
-        return format_html(
-            '<script src="{}"{}></script>',
-            self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
-            mark_safe(flatatt(self.attrs)),
-        )
 
 
 class EditWorkPlaceForm(WorkPlaceCommon):

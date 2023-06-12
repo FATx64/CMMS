@@ -5,9 +5,13 @@ import io
 import random
 import uuid
 from pathlib import Path
+from typing import Any
 
 from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
+from django.forms.utils import flatatt
+from django.forms.widgets import static
+from django.utils.html import format_html, html_safe, mark_safe
 from PIL import Image
 
 
@@ -60,3 +64,19 @@ def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
 
 def handle_equipment_pict_upload(equipment_id: int, file: UploadedFile) -> str:
     return handle_image_upload(Path(f"data/pictures/{equipment_id}"), file)
+
+
+@html_safe
+class JS:
+    def __init__(self, js: str | None, attrs: dict[str, Any] | None = None):
+        self.js = js
+        self.attrs = attrs or {}
+
+    def __str__(self):
+        if self.js is None:
+            return format_html("<script {}></script>", mark_safe(flatatt(self.attrs)))
+        return format_html(
+            '<script src="{}"{}></script>',
+            self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
+            mark_safe(flatatt(self.attrs)),
+        )
