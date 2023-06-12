@@ -75,10 +75,8 @@ class JS:
     def __str__(self):
         if self.js is None:
             return format_html("<script {}></script>", mark_safe(flatatt(self.attrs)))
-        return (
-            format_html(
-                '<script src="{}"{}></script>',
-                self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
-                mark_safe(flatatt(self.attrs)),
-            ),
+        return format_html(
+            '<script src="{}"{}></script>',
+            self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
+            mark_safe(flatatt(self.attrs)),
         )
