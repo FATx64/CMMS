@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 from os import strerror
+from random import choices
 from typing import TYPE_CHECKING, Any, Type
 
 from django.conf import settings
@@ -10,7 +11,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from cmms.enums import Periodicity, UserType
+from cmms.enums import Periodicity, UserType, WorkOrderType
 from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake
 
 
@@ -146,7 +147,7 @@ class Equipment(TypedModel):
     name = models.CharField(max_length=150)
     manufacture = models.CharField(max_length=150)
     pm_frequency = models.CharField(max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY)
-    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True, default=None)
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True)
     cost = models.IntegerField()
     picture = models.CharField(max_length=32, blank=True, default=generate_hexa_id)
     location = models.CharField(max_length=150)
@@ -173,3 +174,16 @@ class Timer(TypedModel):
     )  # type: ignore
     expires_at = models.DateField()  # type: ignore
     extra = models.JSONField(default={})  # type: ignore
+
+
+class WorkOrder(TypedModel):
+    type = models.CharField(max_length=5, choices=WorkOrderType.choices)
+    code = models.IntegerField()
+    description = models.CharField(max_length=150)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    cost = models.IntegerField()
+    # TODO: Why do we need this? Equipment already has these values
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True)
+    location = models.CharField(max_length=150)
+    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)

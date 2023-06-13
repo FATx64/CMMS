@@ -11,3 +11,8 @@ class Periodicity(models.TextChoices):
     WEEKLY = "W", "Weekly"
     DAILY = "D", "Daily"
     NEVER = "N", "Never"
+
+
+class WorkOrderType(models.TextChoices):
+    PM = "PM", "Preventive Maintenance"
+    CM = "CM", "Corrective Maintenance"

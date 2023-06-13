@@ -4,7 +4,10 @@ import datetime as dt
 import threading
 from contextlib import suppress
 
+from dateutil.relativedelta import relativedelta
+
 from cmms import models
+from cmms.enums import Periodicity
 from cmms.utils import dispatch, utcnow
 
 
@@ -64,7 +67,25 @@ class Timer(threading.Thread):
             timer.delete()
         elif timer.repeat >= 1:
             timer.repeat -= 1
-            timer.save()
+
+            dt_kwargs = {}
+            key = None
+            match timer.repeat_frequency:
+                case Periodicity.MONTHLY:
+                    key = "months"
+                case Periodicity.WEEKLY:
+                    key = "weeks"
+                case Periodicity.DAILY:
+                    key = "days"
+                case None | Periodicity.NEVER:
+                    key = None
+
+            if key:
+                dt_kwargs[key] = 1
+                timer.expires_at = timer.expires_at + relativedelta(**dt_kwargs)
+                timer.save()
+            else:
+                timer.delete()
 
     def run(self):
         while True:
