@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datetime as dt
+from os import strerror
 from typing import TYPE_CHECKING, Type
 
 from django.conf import settings
@@ -152,3 +154,20 @@ class Equipment(TypedModel):
     warranty_date = models.DateField()
     arrival_date = models.DateField()
     note = models.CharField(max_length=150, blank=True)
+
+
+class Timer(TypedModel):
+    if TYPE_CHECKING:
+        name: str
+        repeat: int
+        repeat_frequency: str
+        expires_at: dt.datetime
+
+    name = models.SlugField(max_length=150)  # type: ignore
+    # repeat = -1 means it'll repeat forever
+    repeat = models.IntegerField(default=0)  # type: ignore
+    # if frequency is null or blank, it'll cancel out repeat's value, we'll assume that it only meant to execute once
+    repeat_frequency = models.CharField(
+        max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY, blank=True, null=True
+    )  # type: ignore
+    expires_at = models.DateField()  # type: ignore

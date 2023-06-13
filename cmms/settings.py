@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 
+from cmms.events import Events
 from cmms.menu import Item
 
 
@@ -162,3 +163,5 @@ MENU_ITEMS = [
     Item("Report", "/dashboard/report", "summarize"),
     Item("Asset Report", "/dashboard/report", "speed"),
 ]
+
+EVENTS = Events()

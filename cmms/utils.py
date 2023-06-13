@@ -4,15 +4,19 @@ import datetime
 import io
 import random
 import uuid
+from contextlib import suppress
 from pathlib import Path
 from typing import Any
 
+from django.conf import settings
 from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import flatatt
 from django.forms.widgets import static
 from django.utils.html import format_html, html_safe, mark_safe
 from PIL import Image
+
+from cmms.events import Events
 
 
 CMMS_EPOCH: int = 1672531200000
@@ -80,3 +84,11 @@ class JS:
             self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
             mark_safe(flatatt(self.attrs)),
         )
+
+
+def dispatch(event_name: str, *args, **kwargs):
+    events: Events = settings.EVENTS
+    with suppress(AttributeError):
+        probably_event = getattr(events, f"on_{event_name}", events.on_timer_complete)
+        if callable(probably_event):
+            probably_event(*args, **kwargs)
