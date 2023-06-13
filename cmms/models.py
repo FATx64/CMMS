@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 from os import strerror
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Any, Type
 
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
@@ -162,6 +162,7 @@ class Timer(TypedModel):
         repeat: int
         repeat_frequency: str
         expires_at: dt.datetime
+        extra: dict[str, Any]
 
     name = models.SlugField(max_length=150)  # type: ignore
     # repeat = -1 means it'll repeat forever
@@ -171,3 +172,4 @@ class Timer(TypedModel):
         max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY, blank=True, null=True
     )  # type: ignore
     expires_at = models.DateField()  # type: ignore
+    extra = models.JSONField(default={})  # type: ignore

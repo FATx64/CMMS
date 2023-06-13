@@ -54,7 +54,11 @@ class Timer(threading.Thread):
         return self.get_active_timer()  # type: ignore
 
     def handle_timer(self, timer: models.Timer):
-        dispatch(timer.name, timer)
+        args = timer.extra.get("args", [])
+        kwargs = timer.extra.get("kwargs", {})
+        kwargs.update({"timer": timer})
+
+        dispatch(timer.name, *args, **kwargs)
 
         if timer.repeat == 0:
             timer.delete()
