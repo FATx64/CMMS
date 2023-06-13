@@ -67,6 +67,21 @@ class UserManager(BaseUserManager):
         return u
 
 
+class WorkOrderManager(models.Manager):
+    def create(
+        self,
+        type: WorkOrderType,
+        description: str,
+        start_date: dt.datetime,
+        end_date: dt.datetime,
+        equipment: Equipment,
+    ):
+        last = WorkOrder.objects.filter(type=type).order_by("code").last()
+
+        wo = WorkOrder(type, last.code + 1 if last else 0, description, start_date, end_date, equipment)
+        wo.save()
+
+
 class User(AbstractBaseUser):
     """Holds users' auth detail"""
 
@@ -183,7 +198,9 @@ class WorkOrder(TypedModel):
     start_date = models.DateField()
     end_date = models.DateField()
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(default=False)  # type: ignore
+
+    objects = WorkOrderManager()
 
     class Meta:
         unique_together = ("type", "code")

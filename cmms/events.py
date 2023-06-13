@@ -14,9 +14,7 @@ class Events:
         """Should be triggered by cmms.Timer"""
 
         e = models.Equipment.objects.get(pk=equipment_id)
-        last = models.WorkOrder.objects.filter(type=WorkOrderType.PM).order_by("code").last()
         date = timer.expires_at + dt.timedelta(weeks=1)  # automated PM is triggered 7 days before the actual scheduled PM
         end_date = date + relativedelta(months=1)
 
-        wo = models.WorkOrder(WorkOrderType.PM, last.code + 1 if last else 0, e.name, date, end_date, e)
-        wo.save()
+        models.WorkOrder.objects.create(WorkOrderType.PM, e.name, date, end_date, e)
