@@ -178,12 +178,12 @@ class Timer(TypedModel):
 
 class WorkOrder(TypedModel):
     type = models.CharField(max_length=5, choices=WorkOrderType.choices)
-    code = models.IntegerField()
+    code = models.IntegerField()  # will be generated automatically, last_row.code + 1
     description = models.CharField(max_length=150)
     start_date = models.DateField()
     end_date = models.DateField()
-    cost = models.IntegerField()
-    # TODO: Why do we need this? Equipment already has these values
-    work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True)
-    location = models.CharField(max_length=150)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    is_complete = models.BooleanField()
+
+    class Meta:
+        unique_together = ("type", "code")

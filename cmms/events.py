@@ -3,7 +3,7 @@ import datetime as dt
 from dateutil.relativedelta import relativedelta
 
 from cmms import models
-from cmms.enums import Periodicity, WorkOrderType
+from cmms.enums import WorkOrderType
 
 
 class Events:
@@ -14,12 +14,9 @@ class Events:
         """Should be triggered by cmms.Timer"""
 
         e = models.Equipment.objects.get(pk=equipment_id)
-        last = models.WorkOrder.objects.all().order_by("code").last
-        date = timer.expires_at
-        end_date = timer.expires_at  # TODO: When exactly?
-        cost = 0  # TODO
-        # TODO: Why do we need these?
-        wp = e.work_place
-        loc = e.location
+        last = models.WorkOrder.objects.filter(type=WorkOrderType.PM).order_by("code").last()
+        date = timer.expires_at + dt.timedelta(weeks=1)  # automated PM is triggered 7 days before the actual scheduled PM
+        end_date = date + relativedelta(months=1)
 
-        models.WorkOrder(WorkOrderType.PM, last.code + 1 if last else 0, "TODO: DESC", date, end_date, cost, wp, loc, e)
+        wo = models.WorkOrder(WorkOrderType.PM, last.code + 1 if last else 0, e.name, date, end_date, e)
+        wo.save()

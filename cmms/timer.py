@@ -68,21 +68,9 @@ class Timer(threading.Thread):
         elif timer.repeat >= 1:
             timer.repeat -= 1
 
-            dt_kwargs = {}
-            key = None
-            match timer.repeat_frequency:
-                case Periodicity.MONTHLY:
-                    key = "months"
-                case Periodicity.WEEKLY:
-                    key = "weeks"
-                case Periodicity.DAILY:
-                    key = "days"
-                case None | Periodicity.NEVER:
-                    key = None
-
-            if key:
-                dt_kwargs[key] = 1
-                timer.expires_at = timer.expires_at + relativedelta(**dt_kwargs)
+            dt_kwargs = Periodicity.to_dt_kwargs(timer.repeat_frequency, 1)
+            if dt_kwargs:
+                timer.expires_at = timer.expires_at + relativedelta(**dt_kwargs)  # type: ignore
                 timer.save()
             else:
                 timer.delete()
