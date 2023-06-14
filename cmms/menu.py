@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from typing import Collection
+
 from django.conf import settings
+
+from cmms.enums import UserType
 
 
 class ItemNotConstructed(RuntimeError):
@@ -9,14 +13,23 @@ class ItemNotConstructed(RuntimeError):
 
 
 class Item:
-    def __init__(self, label: str = None, url: str = None, icon: str = None, *, children: list[Item] = []):
-        self.label = label
-        self.url = url
+    def __init__(
+        self,
+        label: str,
+        url: str,
+        icon: str | None = None,
+        *,
+        children: Collection[Item] = [],
+        roles: Collection[UserType] = [],
+    ):
+        self.label: str = label
+        self.url: str = url
         # Use Google "Symbols" name. Not "Icons", to avoid future potential breakage
-        self.icon = icon or "broken_image"
+        self.icon: str = icon or "broken_image"
         self.context = None
         self.request = None
-        self.children = children
+        self.children: Collection[Item] = children
+        self.roles: Collection[UserType] = roles
 
     @property
     def constructed(self):

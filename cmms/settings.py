@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 
+from cmms.enums import UserType
 from cmms.events import Events
 from cmms.menu import Item
 
@@ -153,11 +154,11 @@ APPEND_SLASH = False
 
 MENU_ITEMS = [
     Item("Dashboard", "/dashboard/home", "home"),
-    Item("Employees", "/dashboard/users", "person"),
-    Item("Spareparts", "/dashboard/spareparts", "settings"),
-    Item("Agent / Supplier", "/dashboard/supplier", "folder_supervised"),
+    Item("Employees", "/dashboard/users", "person", roles=[UserType.ADMIN]),
+    Item("Spareparts", "/dashboard/spareparts", "settings", roles=[UserType.ADMIN]),
+    Item("Agent / Supplier", "/dashboard/supplier", "folder_supervised", roles=[UserType.ADMIN]),
     Item("Work Order", "/dashboard/workorder", "assignment"),
-    Item("Work Center", "/dashboard/workplace", "group"),
+    Item("Work Center", "/dashboard/workplace", "group", roles=[UserType.ADMIN]),
     Item("Equipment", "/dashboard/equipment", "home_repair_service"),
     Item("Maintenance", "/dashboard/maintenance", "build"),
     Item("Report", "/dashboard/report", "summarize"),
