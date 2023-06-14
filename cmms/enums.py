@@ -13,7 +13,7 @@ class Periodicity(models.TextChoices):
     NEVER = "N", "Never"
 
     @staticmethod
-    def to_dt_kwargs(keyword: str, time: int) -> dict[str, int] | None:
+    def to_dt_kwargs(keyword: str, time: int) -> dict[str, int]:
         kwargs = {}
         key = None
         match keyword:
@@ -27,7 +27,7 @@ class Periodicity(models.TextChoices):
                 key = None
 
         if not key:
-            return
+            return kwargs
 
         kwargs[key] = time
         return kwargs

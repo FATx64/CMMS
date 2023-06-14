@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import datetime as dt
-from os import strerror
-from random import choices
 from typing import TYPE_CHECKING, Any, Type
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from cmms import constants
 from cmms.enums import Periodicity, UserType, WorkOrderType
-from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake
+from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake, utcnow
 
 
 class UserManager(BaseUserManager):
@@ -67,6 +67,69 @@ class UserManager(BaseUserManager):
         return u
 
 
+class EquipmentManager(models.Manager):
+    def create(
+        self,
+        tag,
+        name,
+        manufacture,
+        pm_frequency: Periodicity,
+        work_place,
+        cost,
+        picture,
+        location,
+        installation_date,
+        warranty_date,
+        arrival_date,
+        note,
+    ) -> Equipment:
+        e = Equipment(
+            tag=tag,
+            name=name,
+            manufacture=manufacture,
+            pm_frequency=pm_frequency,
+            work_place=work_place,
+            cost=cost,
+            picture=picture,
+            location=location,
+            installation_date=installation_date,
+            warranty_date=warranty_date,
+            arrival_date=arrival_date,
+            note=note,
+        )
+        e.save()
+
+        if not pm_frequency or pm_frequency == Periodicity.NEVER:
+            return e
+
+        timer_expiry_delta = relativedelta(**Periodicity.to_dt_kwargs(pm_frequency, 1))  # type: ignore
+        timer_expiry_date = utcnow() - dt.timedelta(weeks=1) + timer_expiry_delta
+
+        t = Timer.objects.create(
+            constants.SCHEDULED_PM,
+            -1,
+            pm_frequency,
+            timer_expiry_date,
+            {"kwargs": {"equipment_id": e.pk}},
+        )
+
+        return e
+
+
+class TimerManager(models.Manager):
+    def create(
+        self,
+        name: str,
+        repeat: int,
+        repeat_frequency: Periodicity,
+        expires_at: dt.datetime,
+        extra: dict[str, Any],
+    ) -> Timer:
+        t = Timer(name=name, repeat=repeat, repeat_frequency=repeat_frequency, expirers_at=expires_at, extra=extra)
+        t.save()
+        return t
+
+
 class WorkOrderManager(models.Manager):
     def create(
         self,
@@ -75,11 +138,19 @@ class WorkOrderManager(models.Manager):
         start_date: dt.datetime,
         end_date: dt.datetime,
         equipment: Equipment,
-    ):
+    ) -> WorkOrder:
         last = WorkOrder.objects.filter(type=type).order_by("code").last()
 
-        wo = WorkOrder(type, last.code + 1 if last else 0, description, start_date, end_date, equipment)
+        wo = WorkOrder(
+            type=type,
+            code=last.code + 1 if last else 0,
+            description=description,
+            start_date=start_date,
+            end_date=end_date,
+            equipment=equipment,
+        )
         wo.save()
+        return wo
 
 
 class User(AbstractBaseUser):
@@ -171,24 +242,21 @@ class Equipment(TypedModel):
     arrival_date = models.DateField()
     note = models.CharField(max_length=150, blank=True)
 
+    objects = EquipmentManager()
+
 
 class Timer(TypedModel):
-    if TYPE_CHECKING:
-        name: str
-        repeat: int
-        repeat_frequency: str
-        expires_at: dt.datetime
-        extra: dict[str, Any]
-
-    name = models.SlugField(max_length=150)  # type: ignore
+    name = models.SlugField(max_length=150)
     # repeat = -1 means it'll repeat forever
     repeat = models.IntegerField(default=0)  # type: ignore
     # if frequency is null or blank, it'll cancel out repeat's value, we'll assume that it only meant to execute once
     repeat_frequency = models.CharField(
         max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY, blank=True, null=True
-    )  # type: ignore
-    expires_at = models.DateField()  # type: ignore
-    extra = models.JSONField(default={})  # type: ignore
+    )
+    expires_at = models.DateField()
+    extra = models.JSONField(default={})
+
+    objects = TimerManager()
 
 
 class WorkOrder(TypedModel):
