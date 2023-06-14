@@ -11,7 +11,7 @@ from django.utils.html import format_html, html_safe, mark_safe
 from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import Periodicity, UserType
-from cmms.models import User, WorkPlace
+from cmms.models import Equipment, User, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
 
@@ -127,6 +127,9 @@ class EmployeeCommon(CMMSForm):
         widget=forms.FileInput(attrs={"class": "px-3"}),
     )
 
+    def save(self):
+        raise NotImplementedError()
+
 
 class EmployeeForm(EmployeeCommon):
     email = forms.EmailField(label="Email Address", required=True)
@@ -193,6 +196,9 @@ class WorkPlaceCommon(CMMSForm):
     code = forms.IntegerField(label="Code")
     location = forms.CharField(label="Location")
 
+    def save(self):
+        raise NotImplementedError()
+
 
 class WorkPlaceForm(WorkPlaceCommon):
     def save(self):
@@ -222,7 +228,7 @@ class EditWorkPlaceForm(WorkPlaceCommon):
         id = "edit_workplace"
 
 
-class Equipment(CMMSForm):
+class EquipmentForm(CMMSForm):
     tag = forms.CharField(max_length=150)
     name = forms.CharField(max_length=150)
     manufacture = forms.CharField(max_length=150)
@@ -238,6 +244,9 @@ class Equipment(CMMSForm):
     warranty_date = forms.DateField()
     arrival_date = forms.DateField()
     note = forms.CharField(max_length=150, required=False)
+
+    def save(self):
+        return Equipment.objects.create(**self.cleaned_data)
 
     class Meta:
         id = "new_equipment"
