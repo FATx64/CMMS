@@ -11,7 +11,7 @@
             <a href="/dashboard"><img src="{% static "logo.svg" %}" class="h-10 mt-4 mb-8"></a>
             <ul class="w-full">
                 {% for item in menu.items %}
-                {% if item.roles and user.role in item.roles or not item.roles %}
+                {% if item.should_be_shown %}
                 <li>{% include "menu/item.html" %}</li>
                 {% endif %}
                 {% endfor %}

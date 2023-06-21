@@ -6,16 +6,18 @@ import random
 import uuid
 from contextlib import suppress
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings
 from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import flatatt
 from django.forms.widgets import static
+from django.http.request import HttpRequest
 from django.utils.html import format_html, html_safe, mark_safe
 from PIL import Image
 
+from cmms import models
 from cmms.events import Events
 
 
@@ -92,3 +94,8 @@ def dispatch(event_name: str, *args, **kwargs):
         probably_event = getattr(events, f"on_{event_name}", events.on_timer_complete)
         if callable(probably_event):
             probably_event(*args, **kwargs)
+
+
+class CMMSRequest(HttpRequest):
+    if TYPE_CHECKING:
+        user: models.User

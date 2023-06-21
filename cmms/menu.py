@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from typing import Collection
+from typing import TYPE_CHECKING, Collection
 
 from django.conf import settings
+from django.http.request import HttpRequest
+from django.template import Context
 
 from cmms.enums import UserType
+
+
+if TYPE_CHECKING:
+    from cmms.models import User
 
 
 class ItemNotConstructed(RuntimeError):
@@ -26,8 +32,8 @@ class Item:
         self.url: str = url
         # Use Google "Symbols" name. Not "Icons", to avoid future potential breakage
         self.icon: str = icon or "broken_image"
-        self.context = None
-        self.request = None
+        self.context: Context | None = None
+        self.request: HttpRequest | None = None
         self.children: Collection[Item] = children
         self.roles: Collection[UserType] = roles
 
@@ -39,6 +45,15 @@ class Item:
         self.context = context
         self.request = request
         return self
+
+    def should_be_shown(self) -> bool:
+        if not self.roles:
+            return True
+
+        user: User = self.request.user  # type: ignore
+        if user.role() == UserType.ADMIN:
+            return True
+        return user.role() in self.roles
 
     def is_active(self) -> bool:
         if not self.constructed:
