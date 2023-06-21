@@ -69,6 +69,7 @@ def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
 
 
 def handle_equipment_pict_upload(equipment_id: int, file: UploadedFile) -> str:
+    print(equipment_id)
     return handle_image_upload(Path(f"data/pictures/{equipment_id}"), file)
 
 

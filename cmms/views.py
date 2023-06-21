@@ -189,3 +189,42 @@ class DashboardWorkPlaceView(CMMSFormView):
     def form_valid(self, form: forms.WorkPlaceForm | forms.EditWorkPlaceForm):
         form.save()
         return redirect(self.request.path_info)
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardEquipmentView(CMMSFormView):
+    template_name = "dashboard/equipment.html"
+    form_class = forms.EquipmentForm
+    form_classes = [forms.EditEquipmentForm]
+
+    def post(self, request, *args, **kwargs):
+        manage: str | None = request.POST.get("manage")
+        if not manage:
+            return super().post(request, *args, **kwargs)
+        if manage.startswith("delete"):
+            p = models.Equipment.objects.get(pk=manage.split(":")[1])
+            if p:
+                p.delete()
+        return redirect(self.request.path_info)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workplaces_exists"] = len(models.WorkPlace.objects.all()) > 0
+        context["equipments"] = models.Equipment.objects.all()
+        return context
+
+    def form_valid(self, form: forms.EquipmentForm | forms.EditEquipmentForm):
+        form.save()
+        return redirect(self.request.path_info)
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardWorkOrderView(CMMSFormView):
+    template_name = "dashboard/workorder.html"
+    form_class = forms.WorkOrderForm
+    form_classes = [forms.EditWorkOrderForm]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workorders"] = models.WorkOrder.objects.all()
+        return context

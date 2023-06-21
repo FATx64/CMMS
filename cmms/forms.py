@@ -15,6 +15,12 @@ from cmms.models import Equipment, User, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
 
+class CMMSDateField(forms.DateField):
+    def __init__(self, *, input_formats=None, **kwargs):
+        kwargs.setdefault("widget", forms.NumberInput(attrs={"type": "date"}))
+        super().__init__(input_formats=input_formats, **kwargs)
+
+
 class CMMSForm(forms.Form):
     @property
     def meta(self) -> Type[Meta]:
@@ -44,7 +50,7 @@ class SetupForm(CMMSForm):
     last_name = forms.CharField(label="Last Name", max_length=150)
     address = forms.CharField(label="Address", max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
-    date_of_birth = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
+    date_of_birth = CMMSDateField(label="Date of Birth")
     work_hour = forms.IntegerField(label="Work Hour")
     avatar = forms.ImageField(
         label="Picture",
@@ -119,7 +125,7 @@ class EmployeeCommon(CMMSForm):
     last_name = forms.CharField(label="Last Name", max_length=150)
     address = forms.CharField(label="Address", max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
-    date_of_birth = forms.DateField(label="Date of Birth", widget=forms.NumberInput(attrs={"type": "date"}))
+    date_of_birth = CMMSDateField(label="Date of Birth")
     work_hour = forms.IntegerField(label="Work Hour")
     work_place = forms.ModelChoiceField(label="Work Center", queryset=WorkPlace.objects.all(), empty_label=None)  # type: ignore
     avatar = forms.ImageField(
@@ -228,7 +234,7 @@ class EditWorkPlaceForm(WorkPlaceCommon):
         id = "edit_workplace"
 
 
-class EquipmentForm(CMMSForm):
+class EquipmentCommon(CMMSForm):
     tag = forms.CharField(max_length=150)
     name = forms.CharField(max_length=150)
     manufacture = forms.CharField(max_length=150)
@@ -240,13 +246,67 @@ class EquipmentForm(CMMSForm):
         widget=forms.FileInput(attrs={"class": "px-3"}),
     )
     location = forms.CharField(max_length=150)
-    installation_date = forms.DateField()
-    warranty_date = forms.DateField()
-    arrival_date = forms.DateField()
+    installation_date = CMMSDateField()
+    warranty_date = CMMSDateField()
+    arrival_date = CMMSDateField()
     note = forms.CharField(max_length=150, required=False)
 
+
+class EquipmentForm(EquipmentCommon):
     def save(self):
         return Equipment.objects.create(**self.cleaned_data)
 
     class Meta:
         id = "new_equipment"
+
+
+class EditEquipmentForm(EquipmentCommon):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["picture"].required = False
+
+    def save(self):
+        return Equipment.objects.edit(**self.cleaned_data)
+
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_equipment.js", {"data-id": self.meta.id}),
+            ]
+        )
+
+    class Meta:
+        id = "edit_equipment"
+
+
+class WorkOrderCommon(CMMSForm):
+    pass
+
+
+class WorkOrderForm(WorkOrderCommon):
+    def save(self):
+        raise NotImplementedError
+
+    class Meta:
+        id = "new_workorder"
+
+
+class EditWorkOrderForm(WorkOrderCommon):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def save(self):
+        raise NotImplementedError
+
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_workorder.js", {"data-id": self.meta.id}),
+            ]
+        )
+
+    class Meta:
+        id = "edit_workorder"

@@ -12,7 +12,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms import constants
 from cmms.enums import Periodicity, UserType, WorkOrderType
-from cmms.utils import generate_hexa_id, handle_avatar_upload, snowflake, utcnow
+from cmms.utils import (
+    generate_hexa_id,
+    handle_avatar_upload,
+    handle_equipment_pict_upload,
+    snowflake,
+    utcnow,
+)
 
 
 class UserManager(BaseUserManager):
@@ -76,12 +82,12 @@ class EquipmentManager(models.Manager):
         pm_frequency: Periodicity,
         work_place,
         cost,
-        picture,
         location,
         installation_date,
         warranty_date,
         arrival_date,
         note,
+        **kwargs,
     ) -> Equipment:
         e = Equipment(
             tag=tag,
@@ -90,7 +96,6 @@ class EquipmentManager(models.Manager):
             pm_frequency=pm_frequency,
             work_place=work_place,
             cost=cost,
-            picture=picture,
             location=location,
             installation_date=installation_date,
             warranty_date=warranty_date,
@@ -98,22 +103,80 @@ class EquipmentManager(models.Manager):
             note=note,
         )
         e.save()
+        picture = kwargs.get("picture")
+        if picture:
+            pict = handle_equipment_pict_upload(e.id, picture)
+            if pict:
+                e.picture = pict
+                e.save()
 
-        if not pm_frequency or pm_frequency == Periodicity.NEVER:
-            return e
-
-        timer_expiry_delta = relativedelta(**Periodicity.to_dt_kwargs(pm_frequency, 1))  # type: ignore
-        timer_expiry_date = utcnow() - dt.timedelta(weeks=1) + timer_expiry_delta
-
-        t = Timer.objects.create(
-            constants.SCHEDULED_PM,
-            -1,
-            pm_frequency,
-            timer_expiry_date,
-            {"kwargs": {"equipment_id": e.pk}},
-        )
+        self.create_timer(pm_frequency, e.id)
 
         return e
+
+    def edit(
+        self,
+        id,
+        tag,
+        name,
+        manufacture,
+        pm_frequency: Periodicity,
+        work_place,
+        cost,
+        location,
+        installation_date,
+        warranty_date,
+        arrival_date,
+        note,
+        **kwargs,
+    ) -> Equipment:
+        filter = Equipment.objects.filter(pk=id)
+        filter.update(
+            tag=tag,
+            name=name,
+            manufacture=manufacture,
+            pm_frequency=pm_frequency,
+            work_place=work_place,
+            cost=cost,
+            location=location,
+            installation_date=installation_date,
+            warranty_date=warranty_date,
+            arrival_date=arrival_date,
+            note=note,
+        )
+
+        picture = kwargs.get("picture")
+        if picture:
+            pict = handle_equipment_pict_upload(id, picture)
+            if pict:
+                filter.update(picture=pict)
+
+        t = Timer.objects.get(extra={"kwargs": {"equipment_id": id}})
+        if t:
+            t.delete()
+
+        self.create_timer(pm_frequency, id)
+
+        return Equipment.objects.get(pk=id)
+
+    def create_timer(
+        self,
+        frequency: Periodicity,
+        equipment_id,
+    ) -> None:
+        if not frequency or frequency == Periodicity.NEVER:
+            return
+
+        timer_expiry_delta = relativedelta(**Periodicity.to_dt_kwargs(frequency, 1))  # type: ignore
+        timer_expiry_date = utcnow() - dt.timedelta(weeks=1) + timer_expiry_delta
+
+        Timer.objects.create(
+            constants.SCHEDULED_PM,
+            -1,
+            frequency,
+            timer_expiry_date,
+            {"kwargs": {"equipment_id": equipment_id}},
+        )
 
 
 class TimerManager(models.Manager):
@@ -125,7 +188,7 @@ class TimerManager(models.Manager):
         expires_at: dt.datetime,
         extra: dict[str, Any],
     ) -> Timer:
-        t = Timer(name=name, repeat=repeat, repeat_frequency=repeat_frequency, expirers_at=expires_at, extra=extra)
+        t = Timer(name=name, repeat=repeat, repeat_frequency=repeat_frequency, expires_at=expires_at, extra=extra)
         t.save()
         return t
 
@@ -229,6 +292,7 @@ class Employee(TypedModel):
 
 
 class Equipment(TypedModel):
+    id: int = models.BigIntegerField(primary_key=True, unique=True)  # type: ignore
     tag = models.CharField(max_length=150)
     name = models.CharField(max_length=150)
     manufacture = models.CharField(max_length=150)
@@ -243,6 +307,11 @@ class Equipment(TypedModel):
     note = models.CharField(max_length=150, blank=True)
 
     objects = EquipmentManager()
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = snowflake()
+        super().save(*args, **kwargs)
 
 
 class Timer(TypedModel):
