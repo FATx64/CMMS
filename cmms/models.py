@@ -322,7 +322,7 @@ class Timer(TypedModel):
     repeat_frequency = models.CharField(
         max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY, blank=True, null=True
     )
-    expires_at = models.DateField()
+    expires_at = models.DateTimeField()
     extra = models.JSONField(default=dict)
 
     objects = TimerManager()
