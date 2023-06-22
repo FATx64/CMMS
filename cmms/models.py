@@ -167,8 +167,10 @@ class EquipmentManager(models.Manager):
         if not frequency or frequency == Periodicity.NEVER:
             return
 
-        timer_expiry_delta = relativedelta(**Periodicity.to_dt_kwargs(frequency, 1))  # type: ignore
-        timer_expiry_date = utcnow() - dt.timedelta(weeks=1) + timer_expiry_delta
+        timer_expiry_date = utcnow()
+        if frequency == Periodicity.MONTHLY:
+            timer_expiry_date -= dt.timedelta(weeks=1)
+        timer_expiry_date += relativedelta(**Periodicity.to_dt_kwargs(frequency, 1))  # type: ignore
 
         Timer.objects.create(
             constants.SCHEDULED_PM,
