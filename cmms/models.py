@@ -323,7 +323,7 @@ class Timer(TypedModel):
         max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY, blank=True, null=True
     )
     expires_at = models.DateTimeField()
-    extra = models.JSONField(blank=True, null=True, default=dict)
+    extra = models.JSONField(default=dict)
 
     objects = TimerManager()
 
