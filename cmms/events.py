@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import datetime as dt
-from typing import TYPE_CHECKING
+from contextlib import suppress
 
 from dateutil.relativedelta import relativedelta
 
+from cmms import models
 from cmms.enums import WorkOrderType
-
-
-if TYPE_CHECKING:
-    from cmms import models
 
 
 class Events:
@@ -29,3 +26,9 @@ class Events:
         end_date = date + relativedelta(months=1)
 
         models.WorkOrder.objects.create(WorkOrderType.PM, e.name, date, end_date, e)
+
+    def dispatch(self, event_name: str, *args, **kwargs):
+        with suppress(AttributeError):
+            probably_event = getattr(self, f"on_{event_name}", self.on_timer_complete)
+            if callable(probably_event):
+                probably_event(*args, **kwargs)

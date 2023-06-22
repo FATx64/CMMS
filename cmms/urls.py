@@ -4,7 +4,8 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
 
-from cmms import views
+from cmms.timer import Timer
+from cmms import events, views
 
 
 dashboard_urls = (
@@ -43,3 +44,8 @@ urlpatterns = [
     re_path("^logout/?$", views.logout_view, name="logout"),
     path("__reload__", include("django_browser_reload.urls"), name="meta_reload"),
 ]
+
+
+events = events.Events()
+timer = Timer()
+timer.start()

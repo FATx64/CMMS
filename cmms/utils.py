@@ -4,7 +4,6 @@ import datetime
 import io
 import random
 import uuid
-from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -87,14 +86,6 @@ class JS:
             self.js if self.js.startswith(("http://", "https://", "/")) else static(self.js),
             mark_safe(flatatt(self.attrs)),
         )
-
-
-def dispatch(event_name: str, *args, **kwargs):
-    events: Events = settings.EVENTS
-    with suppress(AttributeError):
-        probably_event = getattr(events, f"on_{event_name}", events.on_timer_complete)
-        if callable(probably_event):
-            probably_event(*args, **kwargs)
 
 
 class CMMSRequest(HttpRequest):
