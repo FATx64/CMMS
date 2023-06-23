@@ -59,7 +59,7 @@ class Timer(threading.Thread, metaclass=singleton.Singleton):
             print("Restarting...")
             raise TimerInterrupted()
 
-        # As long as have_data.set() is executed (not by Timer.stop()), this will always return models.Timer
+        # As long as have_data.set() is executed (not by Timer.restart()), this will always return models.Timer
         return self.get_active_timer(days=future)  # type: ignore
 
     def handle_timer(self, timer: models.Timer):
