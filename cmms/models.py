@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from cmms import constants
+from cmms import constants, timer
 from cmms.enums import Periodicity, UserType, WorkOrderType
 from cmms.utils import (
     generate_hexa_id,
@@ -192,6 +192,7 @@ class TimerManager(models.Manager):
     ) -> Timer:
         t = Timer(name=name, repeat=repeat, repeat_frequency=repeat_frequency, expires_at=expires_at, extra=extra)
         t.save()
+        timer.Timer().restart()
         return t
 
 

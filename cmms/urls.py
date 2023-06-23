@@ -4,8 +4,8 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
 
+from cmms import views
 from cmms.timer import Timer
-from cmms import events, views
 
 
 dashboard_urls = (
@@ -46,6 +46,4 @@ urlpatterns = [
 ]
 
 
-events = events.Events()
-timer = Timer()
-timer.start()
+Timer().start()

@@ -7,6 +7,7 @@ from contextlib import suppress
 from dateutil.relativedelta import relativedelta
 
 from cmms import models
+from cmms.abstract import singleton
 from cmms.enums import Periodicity
 from cmms.events import Events
 from cmms.utils import utcnow
@@ -17,7 +18,7 @@ class TimerInterrupted(RuntimeError):
         super().__init__("Timer is interrupted")
 
 
-class Timer(threading.Thread):
+class Timer(threading.Thread, metaclass=singleton.Singleton):
     """Modified version of Z3R0's Timer extension
 
     Modified to work in sync environment, probably doesn't work exactly the
@@ -29,16 +30,16 @@ class Timer(threading.Thread):
     def __init__(self) -> None:
         self.have_data = threading.Event()
         self._current_timer = None
-        self._stop_event = threading.Event()
+        self._restart_event = threading.Event()
         self.events = Events()
         super().__init__(daemon=True)
 
     def wait(self, timeout: float | None = None):
-        self._stop_event.wait(timeout)
+        self._restart_event.wait(timeout)
 
-    def stop(self) -> None:
+    def restart(self) -> None:
         self.have_data.set()
-        self._stop_event.set()
+        self._restart_event.set()
 
     def get_active_timer(self, days=40) -> models.Timer | None:
         return models.Timer.objects.filter(expires_at__lt=utcnow() + dt.timedelta(days=days)).order_by("expires_at").first()
@@ -53,8 +54,9 @@ class Timer(threading.Thread):
 
         self.have_data.clear()
         self._current_timer = None
-        self.have_data.wait(future*86400)
-        if self._stop_event.is_set():
+        self.have_data.wait(future * 86400)
+        if self._restart_event.is_set():
+            print("Restarting...")
             raise TimerInterrupted()
 
         # As long as have_data.set() is executed (not by Timer.stop()), this will always return models.Timer
@@ -88,13 +90,15 @@ class Timer(threading.Thread):
             # time is added while the logic is trying to get active timer or
             # when the logic is waiting for active timer to expired
             with suppress(TimerInterrupted):
+                self._restart_event.clear()
                 timer = self._current_timer = self.wait_for_active_timer()
                 now = utcnow()
 
                 if timer.expires_at >= now:
                     self.wait((timer.expires_at - now).total_seconds())
 
-                if self._stop_event.is_set():
+                if self._restart_event.is_set():
+                    print("Restarting...")
                     raise TimerInterrupted()
 
                 self.handle_timer(timer)
