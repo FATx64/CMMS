@@ -17,10 +17,18 @@
 - [NodeJS v18 or later](https://nodejs.org/en/) (for tailwind)
 - `libwebp` (`libwebp-dev` in Debian/Ubuntu, for Pillow)
 
-### Deploy
+### Deployment
+- Run `poetry install` to install all required dependencies in a virtualenv
+- Setup Linux environment properly (use stuff in `.boilerplate` directory when needed)
+- Run `poetry run manage tailwind install` to prepare tailwind
+- Run `poetry run manage tailwind build` to build tailwind CSS
+- Run `poetry run manage collectstatic` to serve django static files (you may need to setup proper perms first)
+- Finally run `poetry run gunicorn cmms.asgi:application -k uvicorn.workers.UvicornWorker` to start the server
+
+### Development
 - Run `poetry install` to install all required dependencies in a virtualenv
 - Run `poetry run manage tailwind install` to prepare tailwind
-- Run `poetry run manage tailwind build` to build the website's CSS
+- Run `poetry run tailwind` to start tailwind in debug mode
 - Finally run `poetry run start` to start the server
 
 ### Environment Variables

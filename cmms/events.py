@@ -15,10 +15,15 @@ class Events:
 
     def on_scheduled_pm(self, equipment_id, *, timer: models.Timer):
         """Should be triggered by cmms.Timer"""
-        e = models.Equipment.objects.get(pk=equipment_id)
-        if not e:
+        e: models.Equipment | None = None
+        try:
+            e = models.Equipment.objects.get(pk=equipment_id)
+        except models.Equipment.DoesNotExists:
             timer.delete()
             return
+
+        if not e:
+            raise RuntimeError("How did we get here?")
 
         expires_at: dt.datetime = timer.expires_at  # type: ignore
 
