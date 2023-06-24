@@ -18,7 +18,7 @@ class Events:
         e: models.Equipment | None = None
         try:
             e = models.Equipment.objects.get(pk=equipment_id)
-        except models.Equipment.DoesNotExists:
+        except models.Equipment.DoesNotExist:
             timer.delete()
             return
 
