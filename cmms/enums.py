@@ -10,6 +10,7 @@ class Periodicity(models.TextChoices):
     MONTHLY = "M", "Monthly"
     WEEKLY = "W", "Weekly"
     DAILY = "D", "Daily"
+    HOURLY = "H", "Hourly"
     NEVER = "N", "Never"
 
     @staticmethod
@@ -23,6 +24,8 @@ class Periodicity(models.TextChoices):
                 key = "weeks"
             case Periodicity.DAILY:
                 key = "days"
+            case Periodicity.HOURLY:
+                key = "hours"
             case None | Periodicity.NEVER:
                 key = None
 

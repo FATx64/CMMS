@@ -6,7 +6,7 @@ from contextlib import suppress
 from dateutil.relativedelta import relativedelta
 
 from cmms import models
-from cmms.enums import WorkOrderType
+from cmms.enums import Periodicity, WorkOrderType
 
 
 class Events:
@@ -27,7 +27,9 @@ class Events:
 
         expires_at: dt.datetime = timer.expires_at  # type: ignore
 
-        date = expires_at + dt.timedelta(weeks=1)  # automated PM is triggered 7 days before the actual scheduled PM
+        date = expires_at
+        if timer.repeat_frequency == Periodicity.MONTHLY:
+            date += dt.timedelta(weeks=1)  # automated PM is triggered 7 days before the actual scheduled PM
         end_date = date + relativedelta(months=1)
 
         models.WorkOrder.objects.create(WorkOrderType.PM, e.name, date, end_date, e)
