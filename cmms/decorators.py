@@ -10,10 +10,7 @@ from cmms.models import User
 def admin_exists(view_func):
     @wraps(view_func)
     def _wrapper_view(request, *args, **kwargs):
-        try:
-            exists = len(User.objects.filter(type=UserType.ADMIN)) > 0
-        except User.DoesNotExist:
-            exists = False
+        exists = len(User.objects.filter(type=UserType.ADMIN)) > 0
 
         if exists:
             return view_func(request, *args, **kwargs)
@@ -25,10 +22,7 @@ def admin_exists(view_func):
 def admin_not_exists(view_func):
     @wraps(view_func)
     def _wrapper_view(request, *args, **kwargs):
-        try:
-            exists = len(User.objects.filter(type=UserType.ADMIN)) > 0
-        except User.DoesNotExist:
-            exists = False
+        exists = len(User.objects.filter(type=UserType.ADMIN)) > 0
 
         if not exists:
             return view_func(request, *args, **kwargs)
