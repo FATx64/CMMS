@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
 from typing import TYPE_CHECKING, Any, Type
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
+from django.core import serializers
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -248,12 +250,26 @@ class User(AbstractBaseUser):
     def role(self):
         return UserType(self.type)
 
+    def as_json(self):
+        base = {"id": self.pk}
+        base["email"] = self.email
+        base["type"] = self.type
+        employee = self.employee.as_json()
+        base["employee"] = employee.pop("id", None)
+        base.update(employee)
+        return base
+
 
 class TypedModel(models.Model):
     """models.Model but with better typehint support"""
 
     if TYPE_CHECKING:
         objects: models.Manager
+
+    def as_json(self):
+        base = {"id": self.pk}
+        base.update(json.loads(serializers.serialize("json", (self,)))[0]["fields"])
+        return base
 
     class Meta:
         abstract = True

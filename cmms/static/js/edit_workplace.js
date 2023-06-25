@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             modal.classList.add("overflow-hidden")
 
             const id = modal.querySelector("input[name='id']").getAttribute("value")
-            fetch(`/dashboard/workplace/${id}`)
+            fetch(`/api/v1/workplace/${id}`)
                 .then(parseJSON)
                 .then((data) => {
                     spinner.classList.add("hidden")

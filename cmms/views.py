@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-from typing import Type
+from typing import TYPE_CHECKING, Type
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Model
 from django.forms.forms import Form
 from django.http.response import JsonResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormView
 
 from cmms import forms, models
@@ -54,6 +55,19 @@ class CMMSFormView(FormView):
 
     class Meta:
         forms: dict[str, Type[Form]] = {}
+
+
+class CMMSJSONModelView(View):
+    model: Type[Model] | None = None
+
+    def get(self, request, *args, **kwargs):
+        if not self.model:
+            raise RuntimeError
+
+        pk = kwargs.get("id")
+        if not pk:
+            return super().get(request, *args, **kwargs)  # type: ignore
+        return JsonResponse(self.model.objects.get(pk=pk).as_json())
 
 
 @method_decorator(admin_exists, name="dispatch")
@@ -105,6 +119,11 @@ class DashboardView(TemplateView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
+class AJAXEmployeeView(CMMSJSONModelView):
+    model = models.User
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardEmployeeView(CMMSFormView):
     template_name = "dashboard/users.html"
     form_class = forms.EmployeeForm
@@ -151,23 +170,15 @@ class DashboardEmployeeView(CMMSFormView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
+class AJAXWorkPlaceView(CMMSJSONModelView):
+    model = models.WorkPlace
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardWorkPlaceView(CMMSFormView):
     template_name = "dashboard/workplace.html"
     form_class = forms.WorkPlaceForm
     form_classes = [forms.EditWorkPlaceForm]
-
-    def get(self, request, *args, **kwargs):
-        wp_id = kwargs.get("id")
-        if not wp_id:
-            return super().get(request, *args, **kwargs)
-        work_place = models.WorkPlace.objects.get(pk=wp_id)
-        rt = dict(
-            id=work_place.id,
-            name=work_place.name,
-            code=work_place.code,
-            location=work_place.location,
-        )
-        return JsonResponse(rt)
 
     def post(self, request, *args, **kwargs):
         manage: str | None = request.POST.get("manage")
