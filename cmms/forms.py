@@ -283,7 +283,11 @@ class EditEquipmentForm(EquipmentCommon):
 
 
 class WorkOrderCommon(CMMSForm):
-    pass
+    code = forms.IntegerField()
+    description = forms.CharField(max_length=150)
+    start_date = CMMSDateField()
+    end_date = CMMSDateField()
+    equipment = forms.ModelChoiceField(queryset=Equipment.objects.all(), empty_label=None)  # type: ignore
 
 
 class WorkOrderForm(WorkOrderCommon):

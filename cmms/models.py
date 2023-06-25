@@ -311,6 +311,9 @@ class Equipment(TypedModel):
 
     objects = EquipmentManager()
 
+    def __str__(self) -> str:
+        return f"{self.name} ({self.tag})"
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.id = snowflake()

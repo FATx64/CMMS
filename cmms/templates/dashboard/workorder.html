@@ -6,17 +6,65 @@
 
     <div class="space-y-2 mb-12">
         <h1 class="text-lg font-medium">Work Order List</h1>
-        <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 hover:bg-green-600 focus-visible:outline-green-500" data-modal="#{{ form.meta.id }}">
-            <span class="flex material-symbols-outlined">
-            add
-            </span>
-            Add Work Order
-        </button>
+        <div class="flex flex-row gap-6">
+            <button class="flex rounded-md ps-4 pe-6 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-green-500 enabled:hover:bg-green-600 focus-visible:outline-green-500 disabled:opacity-75" data-modal="#{{ form.meta.id }}" {% if not equipments_exists %} disabled {% endif %}>
+                <span class="flex material-symbols-outlined">
+                add
+                </span>
+                Add Work Order
+            </button>
+
+            <button class="flex rounded-md px-5 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-cyan-500 enabled:hover:bg-cyan-600 focus-visible:outline-cyan-500 disabled:opacity-75" {% if not equipments_exists %} disabled {% endif %}>
+                <span class="material-symbols-outlined">
+                   print
+                </span>
+            </button>
+        </div>
+
+        {% if not equipments_exists %}
+        <p class="select-none text-sm text-white bg-red-600 px-2 py-1">
+        There's no equipment yet! Please add one first from
+        <a class="underline font-semibold" href="{% url "dashboard:equipment" %}">Equipment</a> page.
+        </p>
+        {% endif %}
     </div>
 
-    {% for workorder in workorders %}
-        {{ workorder.id }}
-    {% endfor %}
+    {% if workorders %}
+    <table class="w-full">
+        <thead>
+            <tr class="select-none">
+                <th>Code</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Cost</th>
+                <th>Work Center</th>
+                <th>Location</th>
+                <th>Equipment</th>
+            </tr>
+        </thead>
+        <tbody class="text-center overflow-auto border-t-8 border-transparent">
+        {% for workorder in workorders %}
+            <tr>
+                <td>{{ workorder.type }} - {{ workorder.code }}</td>
+                <td>{{ workorder.type }} - {{ workorder.description }}</td>
+                <td>{{ workorder.start_date }}</td>
+                <td>{{ workorder.end_date }}</td>
+                <td>{{ workorder.equipment.cost }}</td>
+                <td>{{ workorder.equipment.work_place }}</td>
+                <td>{{ workorder.equipment.location }}</td>
+                <td class="flex justify-center items-center gap-2 my-2">
+                    <img class="h-8 w-8 rounded-full" src="/pictures/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
+                    {{ workorder.equipment }}
+                </td>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="select-none p-8 text-sm text-center text-gray-400">
+        No work order yet.
+    </p>
+    {% endif %}
 
 </div>
 {% endblock %}

@@ -226,5 +226,6 @@ class DashboardWorkOrderView(CMMSFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["equipments_exists"] = len(models.Equipment.objects.all()) > 0
         context["workorders"] = models.WorkOrder.objects.all()
         return context
