@@ -203,6 +203,11 @@ class DashboardWorkPlaceView(CMMSFormView):
 
 
 @method_decorator(login_required(login_url="/"), name="dispatch")
+class AJAXEquipmentView(CMMSJSONModelView):
+    model = models.Equipment
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
 class DashboardEquipmentView(CMMSFormView):
     template_name = "dashboard/equipment.html"
     form_class = forms.EquipmentForm

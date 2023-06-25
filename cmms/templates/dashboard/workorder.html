@@ -55,7 +55,7 @@
                 <td>{{ workorder.equipment.location }}</td>
                 <td class="flex justify-center items-center gap-2 my-2">
                     <img class="h-8 w-8 rounded-full" src="/pictures/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
-                    {{ workorder.equipment }}
+                    {{ workorder.equipment.work_order_format }}
                 </td>
         {% endfor %}
         </tbody>

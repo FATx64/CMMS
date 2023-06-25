@@ -153,11 +153,9 @@ class EquipmentManager(models.Manager):
             if pict:
                 filter.update(picture=pict)
 
-        t = Timer.objects.get(extra={"kwargs": {"equipment_id": id}})
-        if t:
-            t.delete()
-
-        self.create_timer(pm_frequency, id)
+        t = Timer.objects.delete(extra={"kwargs": {"equipment_id": id}})
+        if t is not None:
+            self.create_timer(pm_frequency, id)
 
         return Equipment.objects.get(pk=id)
 
@@ -196,6 +194,14 @@ class TimerManager(models.Manager):
         t.save()
         timer.Timer().restart()
         return t
+
+    def delete(self, **filter):
+        t = Timer.objects.get(**filter)
+        rt = None
+        if t:
+            rt = t.delete()
+        timer.Timer().restart()
+        return rt
 
 
 class WorkOrderManager(models.Manager):
@@ -326,6 +332,9 @@ class Equipment(TypedModel):
     note = models.CharField(max_length=150, blank=True)
 
     objects = EquipmentManager()
+
+    def work_order_format(self) -> str:
+        return f"{self.name} - {self.tag}"
 
     def __str__(self) -> str:
         return f"{self.name} ({self.tag})"

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     modal.querySelector("input[name='date_of_birth']").value = data.date_of_birth
                     modal.querySelector("input[name='address']").value = data.address
                     modal.querySelector("input[name='work_hour']").value = data.work_hour
-                    modal.querySelector("select[name='work_place']").value = data.work_place_id
+                    modal.querySelector("select[name='work_place']").value = data.work_place
                 })
         })
 })

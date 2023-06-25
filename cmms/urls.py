@@ -11,6 +11,7 @@ from cmms.timer import Timer
 api_urls = (
     [
         re_path(r'^/?$', lambda _: redirect("/dashboard/home", name="index")),
+        re_path(r'^/equipment/(?P<id>[\w]+)/?$', views.AJAXEquipmentView.as_view(), name="ajax_equipment"),
         re_path(r'^/users/(?P<id>[\w]+)/?$', views.AJAXEmployeeView.as_view(), name="ajax_users"),
         re_path(r'^/workplace/(?P<id>[\w]+)/?$', views.AJAXWorkPlaceView.as_view(), name="ajax_workplace"),
     ],
