@@ -30,7 +30,7 @@
                 <p>Manufacture: {{ equipment.manufacture }}</p>
                 <p>Tag No: {{ equipment.tag }}</p>
                 <p>Location: {{ equipment.location }}</p>
-                <p>PM: {{ equipment.pm_frequency }}</p>
+                <p>PM: {{ equipment.get_pm_frequency_display }}</p>
             </div>
             <div class="flex flex-row-reverse gap-2 p-2">
                 <button type="button" data-modal="#{{ forms.edit_equipment.meta.id }}" data-modal-value="{{ equipment.id }}">
