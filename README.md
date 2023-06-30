@@ -23,6 +23,7 @@
 - Run `poetry run manage tailwind install` to prepare tailwind
 - Run `poetry run manage tailwind build` to build tailwind CSS
 - Run `poetry run manage collectstatic` to serve django static files (you may need to setup proper perms first)
+- Run `poetry run manage migrate` to make sure DB structure is up to date
 - Finally run `poetry run gunicorn cmms.asgi:application -k uvicorn.workers.UvicornWorker` to start the server
 
 ### Development
