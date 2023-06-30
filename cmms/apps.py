@@ -9,5 +9,5 @@ class CMMSConfig(AppConfig):
     def ready(self):
         from cmms.timer import Timer
 
-        if "runserver" in sys.argv or "django.core.wsgi" in sys.modules or "django.core.asgi" in sys.modules:
+        if "django.core.wsgi" in sys.modules or "django.core.asgi" in sys.modules:
             Timer().start()
