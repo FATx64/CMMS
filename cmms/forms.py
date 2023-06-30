@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Type
+from typing import Type
 
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
-from django.forms.utils import flatatt
-from django.forms.widgets import static
-from django.utils.html import format_html, html_safe, mark_safe
 from phonenumber_field.formfields import PhoneNumberField
 
-from cmms.enums import Periodicity, UserType
+from cmms.enums import Periodicity, UserType, WorkOrderType
 from cmms.models import Equipment, User, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
@@ -284,6 +281,7 @@ class EditEquipmentForm(EquipmentCommon):
 
 class WorkOrderCommon(CMMSForm):
     code = forms.IntegerField()
+    type = forms.ChoiceField(choices=WorkOrderType.choices)
     description = forms.CharField(max_length=150)
     start_date = CMMSDateField()
     end_date = CMMSDateField()
