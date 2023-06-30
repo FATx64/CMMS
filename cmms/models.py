@@ -109,7 +109,7 @@ class EquipmentManager(models.Manager):
         if picture:
             pict = handle_equipment_pict_upload(e.id, picture)
             if pict:
-                e.picture = pict
+                e.picture = pict  # type: ignore [reportGeneralTypeIssues]
                 e.save()
 
         self.create_timer(pm_frequency, e.id)
@@ -229,6 +229,9 @@ class WorkOrderManager(models.Manager):
 
 class User(AbstractBaseUser):
     """Holds users' auth detail"""
+
+    if TYPE_CHECKING:
+        employee: Employee
 
     id: int = models.BigIntegerField(primary_key=True, unique=True)  # type: ignore
     email = models.EmailField(
