@@ -243,6 +243,16 @@ class DashboardWorkOrderView(CMMSFormView):
     form_class = forms.WorkOrderForm
     form_classes = [forms.EditWorkOrderForm]
 
+    def post(self, request, *args, **kwargs):
+        manage: str | None = request.POST.get("manage")
+        if not manage:
+            return super().post(request, *args, **kwargs)
+        if manage.startswith("delete"):
+            p = models.WorkOrder.objects.get(pk=manage.split(":")[1])
+            if p:
+                p.delete()
+        return redirect(self.request.path_info)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["equipments_exists"] = len(models.Equipment.objects.all()) > 0

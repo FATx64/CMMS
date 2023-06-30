@@ -30,17 +30,18 @@
     </div>
 
     {% if workorders %}
-    <table class="w-full">
+    <table class="w-full table-fixed">
         <thead>
             <tr class="select-none">
-                <th>Code</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Cost</th>
-                <th>Work Center</th>
-                <th>Location</th>
-                <th>Equipment</th>
+                <th class="w-1/12">Code</th>
+                <th class="w-1/8">Description</th>
+                <th class="w-1/12">Start Date</th>
+                <th class="w-1/12">End Date</th>
+                <th class="w-1/12">Cost</th>
+                <th class="w-1/8">Work Center</th>
+                <th class="w-1/8">Location</th>
+                <th class="w-1/6">Equipment</th>
+                <th class="text-transparent w-[3.5%]">-</th>
             </tr>
         </thead>
         <tbody class="text-center overflow-auto border-t-8 border-transparent">
@@ -51,11 +52,20 @@
                 <td>{{ workorder.start_date }}</td>
                 <td>{{ workorder.end_date }}</td>
                 <td>{{ workorder.equipment.cost }}</td>
-                <td>{{ workorder.equipment.work_place }}</td>
-                <td>{{ workorder.equipment.location }}</td>
+                <td class="break-words">{{ workorder.equipment.work_place }}</td>
+                <td class="break-words">{{ workorder.equipment.location }}</td>
                 <td class="flex justify-center items-center gap-2 my-2">
-                    <img class="h-8 w-8 rounded-full" src="/pictures/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
+                    <img class="h-8 min-w-[2rem] rounded-full" src="/pictures/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
+                    <span class="break-words">
                     {{ workorder.equipment.work_order_format }}
+                    </span>
+                </td>
+                <td>
+                    <button class="disabled:opacity-50" data-modal="#confirmation-modal" data-modal-value="delete:{{ workorder.id }}" {% if not workorder.id %}disabled{% endif %}>
+                        <span class="flex material-symbols-outlined">
+                        delete
+                        </span>
+                    </button>
                 </td>
         {% endfor %}
         </tbody>
@@ -67,11 +77,6 @@
     {% endif %}
 
 </div>
-{% endblock %}
-
-{% block script %}
-{{ block.super }}
-{{ forms.edit_equipment.media }}
 {% endblock %}
 
 {% block headerbody %}
