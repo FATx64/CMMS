@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Type
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Model
 from django.forms.forms import Form
 from django.http.response import JsonResponse
 from django.shortcuts import redirect
@@ -14,6 +13,10 @@ from django.views.generic.edit import FormView
 
 from cmms import forms, models
 from cmms.decorators import admin_exists, admin_not_exists
+
+
+if TYPE_CHECKING:
+    from cmms.models import TypedModel
 
 
 class CMMSFormView(FormView):
@@ -58,7 +61,7 @@ class CMMSFormView(FormView):
 
 
 class CMMSJSONModelView(View):
-    model: Type[Model] | None = None
+    model: Type[TypedModel] | Type[models.User] | None = None
 
     def get(self, request, *args, **kwargs):
         if not self.model:
