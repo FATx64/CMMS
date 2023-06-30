@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import Periodicity, UserType, WorkOrderType
-from cmms.models import Equipment, User, WorkPlace
+from cmms.models import Equipment, User, WorkOrder, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
 
@@ -280,7 +280,6 @@ class EditEquipmentForm(EquipmentCommon):
 
 
 class WorkOrderCommon(CMMSForm):
-    code = forms.IntegerField()
     type = forms.ChoiceField(choices=WorkOrderType.choices)
     description = forms.CharField(max_length=150)
     start_date = CMMSDateField()
@@ -290,25 +289,7 @@ class WorkOrderCommon(CMMSForm):
 
 class WorkOrderForm(WorkOrderCommon):
     def save(self):
-        raise NotImplementedError
+        return WorkOrder.objects.create(**self.cleaned_data)
 
     class Meta:
         id = "new_workorder"
-
-
-class EditWorkOrderForm(WorkOrderCommon):
-    id = forms.IntegerField(widget=forms.HiddenInput())
-
-    def save(self):
-        raise NotImplementedError
-
-    @property
-    def media(self):
-        return forms.Media(
-            js=[
-                JS("js/edit_workorder.js", {"data-id": self.meta.id}),
-            ]
-        )
-
-    class Meta:
-        id = "edit_workorder"

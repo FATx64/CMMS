@@ -241,7 +241,6 @@ class DashboardEquipmentView(CMMSFormView):
 class DashboardWorkOrderView(CMMSFormView):
     template_name = "dashboard/workorder.html"
     form_class = forms.WorkOrderForm
-    form_classes = [forms.EditWorkOrderForm]
 
     def post(self, request, *args, **kwargs):
         manage: str | None = request.POST.get("manage")
@@ -258,3 +257,7 @@ class DashboardWorkOrderView(CMMSFormView):
         context["equipments_exists"] = len(models.Equipment.objects.all()) > 0
         context["workorders"] = models.WorkOrder.objects.all()
         return context
+
+    def form_valid(self, form: forms.WorkOrderForm):
+        form.save()
+        return redirect(self.request.path_info)
