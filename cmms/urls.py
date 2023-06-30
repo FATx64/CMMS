@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 from django.http.response import HttpResponse
@@ -55,4 +56,7 @@ urlpatterns = [
 ]
 
 
-Timer().start()
+# Timer should only started in prod OR dev with runserver
+# Also, according to Django docs we must NOT use runserver prod
+if "runserver" in sys.argv or "django.core.wsgi" in sys.modules:
+    Timer().start()
