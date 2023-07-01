@@ -229,7 +229,7 @@ class WorkOrderManager(models.Manager):
 
 class SparepartManager(models.Manager):
     def create(self, *args, **kwargs):
-        picture = kwargs.pop("picture")
+        picture = kwargs.pop("picture", None)
 
         s = Sparepart(*args, **kwargs)
         s.save()
@@ -241,7 +241,7 @@ class SparepartManager(models.Manager):
                 s.save()
 
     def edit(self, *args, **kwargs):
-        id = kwargs.pop("id", kwargs.pop("pk"))
+        id = kwargs.pop("id", kwargs.pop("pk", None))
         picture = kwargs.pop("picture")
 
         s = Sparepart.objects.filter(pk=id)
