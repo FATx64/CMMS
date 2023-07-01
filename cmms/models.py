@@ -15,9 +15,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 from cmms import constants, timer
 from cmms.enums import Periodicity, UserType, WorkOrderType
 from cmms.utils import (
-    generate_hexa_id,
     handle_avatar_upload,
     handle_equipment_pict_upload,
+    handle_sparepart_pict_upload,
     snowflake,
     utcnow,
 )
@@ -227,6 +227,32 @@ class WorkOrderManager(models.Manager):
         return wo
 
 
+class SparepartManager(models.Manager):
+    def create(self, *args, **kwargs):
+        picture = kwargs.pop("picture")
+
+        s = Sparepart(*args, **kwargs)
+        s.save()
+
+        if picture:
+            pict = handle_sparepart_pict_upload(s.pk, picture)
+            if pict:
+                s.picture = pict  # type: ignore [reportGeneralTypeIssues]
+                s.save()
+
+    def edit(self, *args, **kwargs):
+        id = kwargs.pop("id", kwargs.pop("pk"))
+        picture = kwargs.pop("picture")
+
+        s = Sparepart.objects.filter(pk=id)
+        s.update(**kwargs)
+
+        if picture:
+            pict = handle_sparepart_pict_upload(s.pk, picture)
+            if pict:
+                s.update(picture=pict)
+
+
 class User(AbstractBaseUser):
     """Holds users' auth detail"""
 
@@ -312,7 +338,7 @@ class Employee(TypedModel):
     work_hour = models.IntegerField()
     # Empty by default since on first-time setup Work Center is empty
     work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True, default=None)
-    avatar = models.CharField(max_length=32, blank=True, default=generate_hexa_id)
+    avatar = models.CharField(max_length=32, blank=True, default="")
 
     def full_name(self):
         full_name = f"{self.first_name} {self.last_name}"
@@ -327,7 +353,7 @@ class Equipment(TypedModel):
     pm_frequency = models.CharField(max_length=5, choices=Periodicity.choices, default=Periodicity.MONTHLY)
     work_place = models.ForeignKey(WorkPlace, on_delete=models.SET_NULL, blank=True, null=True)
     cost = models.IntegerField()
-    picture = models.CharField(max_length=32, blank=True, default=generate_hexa_id)
+    picture = models.CharField(max_length=32, blank=True, default="")
     location = models.CharField(max_length=150)
     installation_date = models.DateField()
     warranty_date = models.DateField()
@@ -375,3 +401,22 @@ class WorkOrder(TypedModel):
 
     class Meta:
         unique_together = ("type", "code")
+
+
+class Agent(TypedModel):
+    agent_id = models.IntegerField()
+    full_name = models.CharField(max_length=255)
+    address = models.CharField(max_length=150, blank=True)
+    phone_number = PhoneNumberField()
+    email = models.EmailField()
+    note = models.CharField(max_length=150, blank=True)
+
+
+class Sparepart(TypedModel):
+    tag = models.IntegerField()
+    name = models.CharField(max_length=150)
+    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    picture = models.CharField(max_length=32, blank=True, default="")
+
+    objects = SparepartManager()

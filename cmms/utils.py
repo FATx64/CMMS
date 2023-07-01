@@ -68,7 +68,11 @@ def handle_avatar_upload(user_id: int, file: UploadedFile) -> str:
 
 
 def handle_equipment_pict_upload(equipment_id: int, file: UploadedFile) -> str:
-    return handle_image_upload(Path(f"data/pictures/{equipment_id}"), file)
+    return handle_image_upload(Path(f"data/pictures/equipment/{equipment_id}"), file)
+
+
+def handle_sparepart_pict_upload(sparepart_id: int, file: UploadedFile) -> str:
+    return handle_image_upload(Path(f"data/pictures/sparepart/{sparepart_id}"), file)
 
 
 @html_safe

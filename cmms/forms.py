@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
 from cmms.enums import Periodicity, UserType, WorkOrderType
-from cmms.models import Equipment, User, WorkOrder, WorkPlace
+from cmms.models import Agent, Equipment, Sparepart, User, WorkOrder, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
 
@@ -293,3 +293,71 @@ class WorkOrderForm(WorkOrderCommon):
 
     class Meta:
         id = "new_workorder"
+
+
+class AgentCommon(CMMSForm):
+    agent_id = forms.IntegerField()
+    full_name = forms.CharField(max_length=255)
+    address = forms.CharField(max_length=150)
+    phone_number = PhoneNumberField(label="Phone", region="ID")
+    email = forms.EmailField(label="Email Address", required=True)
+    note = forms.CharField(max_length=150, required=False)
+
+
+class AgentForm(AgentCommon):
+    def save(self):
+        return Agent.objects.create(**self.cleaned_data)
+
+    class Meta:
+        id = "new_agent"
+
+
+class EditAgentForm(AgentCommon):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def save(self):
+        return Agent.objects.filter(pk=self.cleaned_data.pop("id")).update(**self.cleaned_data)
+
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_agent.js", {"data-id": self.meta.id}),
+            ]
+        )
+
+    class Meta:
+        id = "edit_agent"
+
+
+class SparepartCommon(CMMSForm):
+    tag = forms.IntegerField()
+    name = forms.CharField(max_length=150)
+    equipment = forms.ModelChoiceField(queryset=Equipment.objects.all(), empty_label=None)  # type: ignore
+    amount = forms.IntegerField()
+    picture = forms.ImageField(
+        label="Picture",
+        widget=forms.FileInput(attrs={"class": "px-3"}),
+    )
+
+
+class SparepartForm(SparepartCommon):
+    def save(self):
+        return Sparepart.objects.create(**self.cleaned_data)
+
+    class Meta:
+        id = "new_sparepart"
+
+
+class EditSparepartForm(SparepartCommon):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["picture"].required = False
+
+    def save(self):
+        return Sparepart.objects.edit(**self.cleaned_data)
+
+    class Meta:
+        id = "edit_sparepart"
