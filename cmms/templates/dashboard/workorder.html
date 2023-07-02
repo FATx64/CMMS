@@ -14,7 +14,7 @@
                 Add Work Order
             </button>
 
-            <a href="{% url "dashboard:workorder_excel" %}" class="flex rounded-md px-5 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-cyan-500 hover:bg-cyan-600 focus-visible:outline-cyan-500 select-none {% if not equipments_exists %} pointer-events-none opacity-75 {% endif %}">
+            <a href="{% url "dashboard:workorder_excel" %}" class="flex rounded-md px-5 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-cyan-500 hover:bg-cyan-600 focus-visible:outline-cyan-500 select-none {% if not equipments_exists or not workorders %} pointer-events-none opacity-75 {% endif %}">
                 <span class="material-symbols-outlined">
                    print
                 </span>
@@ -55,7 +55,7 @@
                 <td class="break-words">{{ workorder.equipment.work_place }}</td>
                 <td class="break-words">{{ workorder.equipment.location }}</td>
                 <td class="flex justify-center items-center gap-2 my-2">
-                    <img class="h-8 min-w-[2rem] rounded-full" src="/pictures/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
+                    <img class="h-8 min-w-[2rem] rounded-full" src="/pictures/equipment/{{ workorder.equipment.id }}/{{ workorder.equipment.picture }}.webp"/>
                     <span class="break-words">
                     {{ workorder.equipment.work_order_format }}
                     </span>
