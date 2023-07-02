@@ -359,5 +359,13 @@ class EditSparepartForm(SparepartCommon):
     def save(self):
         return Sparepart.objects.edit(**self.cleaned_data)
 
+    @property
+    def media(self):
+        return forms.Media(
+            js=[
+                JS("js/edit_sparepart.js", {"data-id": self.meta.id}),
+            ]
+        )
+
     class Meta:
         id = "edit_sparepart"

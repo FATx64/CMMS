@@ -29,6 +29,7 @@ dashboard_urls = (
         re_path(r'^/equipment/?$', views.DashboardEquipmentView.as_view(), name="equipment"),
         re_path(r'^/workorder/?$', views.DashboardWorkOrderView.as_view(), name="workorder"),
         re_path(r'^/agent/?$', views.DashboardAgentView.as_view(), name="agent"),
+        re_path(r'^/spareparts/?$', views.DashboardSparepartView.as_view(), name="spareparts"),
     ],
     "dashboard",
 )

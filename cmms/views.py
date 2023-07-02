@@ -287,3 +287,30 @@ class DashboardAgentView(CMMSFormView):
     def form_valid(self, form):
         form.save()
         return redirect(self.request.path_info)
+
+
+@method_decorator(login_required(login_url="/"), name="dispatch")
+class DashboardSparepartView(CMMSFormView):
+    template_name = "dashboard/sparepart.html"
+    form_class = forms.SparepartForm
+    form_classes = [forms.EditSparepartForm]
+
+    def post(self, request, *args, **kwargs):
+        manage: str | None = request.POST.get("manage")
+        if not manage:
+            return super().post(request, *args, **kwargs)
+        if manage.startswith("delete"):
+            p = models.Sparepart.objects.get(pk=manage.split(":")[1])
+            if p:
+                p.delete()
+        return redirect(self.request.path_info)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipments_exists"] = len(models.Equipment.objects.all()) > 0
+        context["spareparts"] = models.Sparepart.objects.all()
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.request.path_info)

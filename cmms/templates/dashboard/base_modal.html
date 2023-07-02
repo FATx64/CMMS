@@ -36,7 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
 function openModal(probablyModal) {
     if (openedModal)  // How?
         closeModal()
-    openedModal = probablyModal instanceof HTMLDialogElement ? probablyModal : document.querySelector(this.dataset.modal)
+    
+    if (!(probablyModal instanceof HTMLDialogElement)) {
+        try {
+            probablyModal = document.querySelector(this.dataset.modal)
+        } catch (err) {}
+    }
+
+    if (!(probablyModal instanceof HTMLDialogElement))
+        return
+
+    openedModal = probablyModal
 
     const modalValue = this.dataset.modalValue
     if (modalValue !== null) {
