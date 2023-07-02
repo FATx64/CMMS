@@ -1,11 +1,6 @@
 import sys
 
 from django.apps import AppConfig
-from django.db import models
-from graphene import Field
-from graphene_django.converter import convert_django_field
-
-from cmms.scalars import BigInt
 
 
 class CMMSConfig(AppConfig):
@@ -22,7 +17,3 @@ class CMMSConfig(AppConfig):
 
     def ready(self):
         self.setup_timer()
-
-        @convert_django_field.register(models.BigIntegerField)
-        def convert_field_to_big_int_field(field, registry=None):
-            return Field(BigInt, description=field.help_text, required=not field.null)

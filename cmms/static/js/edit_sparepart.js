@@ -1,7 +1,3 @@
-function parseJSON(response) {
-    return response.json()
-}
-
 const self = document.currentScript
 
 document.addEventListener("DOMContentLoaded", () => {
