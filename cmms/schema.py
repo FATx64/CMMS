@@ -9,10 +9,11 @@ from cmms.models import Agent as AgentModel
 class Agent(DjangoObjectType):
     class Meta:
         model = AgentModel
+        field = ("id",)
 
 
 class Query(graphene.ObjectType):
-    agents = graphene.List(Agent)
+    agents = graphene.List(Agent, id=graphene.Int())
 
     @staticmethod
     def is_authenticated(info):
@@ -24,6 +25,8 @@ class Query(graphene.ObjectType):
         if not Query.is_authenticated(info):
             return
 
+        if kwargs:
+            return AgentModel.objects.filter(**kwargs)
         return AgentModel.objects.all()
 
 
