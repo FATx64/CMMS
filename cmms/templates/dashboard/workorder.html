@@ -91,20 +91,6 @@
 </form>
 {% endmodal %}
 
-{% modal forms.edit_workorder.meta.id data-modal-value-target="input[name='id']" data-scroll-to-top-on-open="true" %}
-<div id="spinner" class="flex justify-center items-center bg-white stroke-black absolute rounded-xl w-full h-full hidden">
-    {% include "spinner.html" %}
-</div>
-<form class="p-8" method="post">
-    <div class="flex flex-col gap-6 bg-white pb-4">
-        {{ forms.edit_workorder.as_div }}
-    </div>
-    <div class="bg-gray-50 pt-3 sm:flex sm:flex-row-reverse">
-        <button type="submit" name="form_id" value="{{ forms.edit_workorder.meta.id }}" class="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm bg-green-500 hover:bg-green-600 text-white">Edit Work Order</button>
-    </div>
-</form>
-{% endmodal %}
-
 {% modal "confirmation-modal" data-modal-value-target="button[type='submit']" %}
 <form method="post">
     <div>
