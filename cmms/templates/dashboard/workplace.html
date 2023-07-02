@@ -28,7 +28,7 @@
     </thead>
     <tbody class="text-center overflow-auto border-t-8 border-transparent">
     {% for workplace in workplaces %}
-    {% if not workplace.id and workplace.employee_count >= 1 or workplace.id %}
+    {% if not workplace.id and workplace.employee_count >= 1 or workplace.equipment_count >= 1 or workplace.id %}
         <tr>
             <td>
                 {% if not workplace.id %}
