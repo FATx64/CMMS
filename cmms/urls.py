@@ -4,6 +4,7 @@ from pathlib import Path
 from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
+from graphene_django.views import GraphQLView
 
 from cmms import views
 from cmms.timer import Timer
@@ -51,6 +52,7 @@ urlpatterns = [
     re_path("^setup/?$", views.SetupView.as_view(), name="setup"),
     re_path("^dashboard", include(dashboard_urls), name="dashboard"),
     re_path("^api/v1", include(api_urls), name="api"),
+    re_path("^graphql/?$", GraphQLView.as_view(graphiql=True)),
     re_path("^logout/?$", views.logout_view, name="logout"),
     path("__reload__", include("django_browser_reload.urls"), name="meta_reload"),
 ]

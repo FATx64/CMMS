@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "phonenumber_field",
     "widget_tweaks",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,5 @@ MENU_ITEMS = [
     Item("Report", "/dashboard/report", "summarize"),
     Item("Asset Report", "/dashboard/report", "speed"),
 ]
+
+GRAPHENE = {"SCHEMA": "cmms.schema.schema"}
