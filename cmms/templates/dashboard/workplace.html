@@ -42,7 +42,7 @@
             <td>{{ workplace.name }}</td>
             <td>{{ workplace.location }}</td>
             <td>{{ workplace.employee_count }}</td>
-            <td>0</td>
+            <td>{{ workplace.equipment_count }}</td>
             <td>
                 <button class="disabled:opacity-50" data-modal="#{{ forms.edit_workplace.meta.id }}" data-modal-value="{{ workplace.id }}" {% if not workplace.id %}disabled{% endif %}>
                     <span class="flex material-symbols-outlined">

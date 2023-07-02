@@ -321,6 +321,9 @@ class WorkPlace(TypedModel):
     def employee_count(self) -> int:
         return Employee.objects.filter(work_place=self).count()
 
+    def equipment_count(self) -> int:
+        return Equipment.objects.filter(work_place=self).count()
+
 
 class Employee(TypedModel):
     """Holds users' data"""
