@@ -35,8 +35,11 @@ dashboard_urls = (
 
 
 def image(_path: Path):
-    def predicate(request, user_id, file_id):
-        path = _path / user_id / file_id
+    def predicate(request, user_id, file_id, type=None):
+        path = _path
+        if type:
+            path = path / type
+        path = path / user_id / file_id
         with open(path, "rb") as a:
             response = HttpResponse(a.read())
         response["Content-Type"] = ""
@@ -49,7 +52,9 @@ def image(_path: Path):
 urlpatterns = [
     re_path("^$", views.HomeView.as_view(), name="index"),
     re_path(r"^avatars/(?P<user_id>\d+)/(?P<file_id>[\w]+\.webp)", image(Path("data/avatars"))),
-    re_path(r"^pictures/(?P<user_id>\d+)/(?P<file_id>[\w]+\.webp)", image(Path("data/pictures"))),
+    re_path(
+        r"^pictures/(?P<type>equipment|sparepart)/(?P<user_id>\d+)/(?P<file_id>[\w]+\.webp)", image(Path("data/pictures"))
+    ),
     re_path("^setup/?$", views.SetupView.as_view(), name="setup"),
     re_path("^dashboard", include(dashboard_urls), name="dashboard"),
     re_path("^api/v1", include(api_urls), name="api"),
