@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.urls import include, path, re_path
 from graphene_django.views import GraphQLView
 
-from cmms import views
+from cmms import utils, views
 from cmms.timer import Timer
 
 
@@ -20,6 +20,15 @@ api_urls = (
     "api",
 )
 
+
+def export_as_xl(request):
+    buffer = utils.export_workorder_to_xl()
+    response = HttpResponse(buffer.read())
+    response["Content-Type"] = ""
+    response["Content-Disposition"] = f"inline; filename=\"WorkOrder-{utils.utcnow().date()}.xlsx\""
+    return response
+
+
 dashboard_urls = (
     [
         re_path(r'^/?$', lambda _: redirect("/dashboard/home"), name="index"),
@@ -28,6 +37,7 @@ dashboard_urls = (
         re_path(r'^/workplace/?$', views.DashboardWorkPlaceView.as_view(), name="workplace"),
         re_path(r'^/equipment/?$', views.DashboardEquipmentView.as_view(), name="equipment"),
         re_path(r'^/workorder/?$', views.DashboardWorkOrderView.as_view(), name="workorder"),
+        re_path(r'^/workorder/excel/?$', export_as_xl, name="workorder_excel"),
         re_path(r'^/agent/?$', views.DashboardAgentView.as_view(), name="agent"),
         re_path(r'^/spareparts/?$', views.DashboardSparepartView.as_view(), name="spareparts"),
     ],

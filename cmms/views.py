@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormView
 
-from cmms import forms, models
+from cmms import forms, models, utils
 from cmms.decorators import admin_exists, admin_not_exists
 
 
@@ -253,6 +253,7 @@ class DashboardWorkOrderView(CMMSFormView):
         return redirect(self.request.path_info)
 
     def get_context_data(self, **kwargs):
+        utils.export_workorder_to_xl()
         context = super().get_context_data(**kwargs)
         context["equipments_exists"] = len(models.Equipment.objects.all()) > 0
         context["workorders"] = models.WorkOrder.objects.all()
