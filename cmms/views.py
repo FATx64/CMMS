@@ -274,7 +274,7 @@ class DashboardAgentView(CMMSFormView):
         if not manage:
             return super().post(request, *args, **kwargs)
         if manage.startswith("delete"):
-            p = models.WorkPlace.objects.get(pk=manage.split(":")[1])
+            p = models.Agent.objects.get(pk=manage.split(":")[1])
             if p:
                 p.delete()
         return redirect(self.request.path_info)
