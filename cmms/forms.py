@@ -296,8 +296,8 @@ class WorkOrderForm(WorkOrderCommon):
 
 
 class AgentCommon(CMMSForm):
-    agent_id = forms.IntegerField()
-    full_name = forms.CharField(max_length=255)
+    agent_id = forms.IntegerField(label="Agent / Supplier ID")
+    full_name = forms.CharField(label="Full Name", max_length=255)
     address = forms.CharField(max_length=150)
     phone_number = PhoneNumberField(label="Phone", region="ID")
     email = forms.EmailField(label="Email Address", required=True)

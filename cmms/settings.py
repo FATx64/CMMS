@@ -158,7 +158,7 @@ MENU_ITEMS = [
     Item("Dashboard", "/dashboard/home", "home"),
     Item("Employees", "/dashboard/users", "person", roles=[UserType.ADMIN]),
     Item("Spareparts", "/dashboard/spareparts", "settings", roles=[UserType.ADMIN]),
-    Item("Agent / Supplier", "/dashboard/supplier", "folder_supervised", roles=[UserType.ADMIN]),
+    Item("Agent / Supplier", "/dashboard/agent", "folder_supervised", roles=[UserType.ADMIN]),
     Item("Work Order", "/dashboard/workorder", "assignment"),
     Item("Work Center", "/dashboard/workplace", "group", roles=[UserType.ADMIN]),
     Item("Equipment", "/dashboard/equipment", "home_repair_service"),

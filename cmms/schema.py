@@ -14,6 +14,7 @@ class Agent(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     agents = graphene.List(Agent, id=graphene.Int())
+    agent = graphene.Field(Agent, id=graphene.Int())
 
     @staticmethod
     def is_authenticated(info):
@@ -28,6 +29,12 @@ class Query(graphene.ObjectType):
         if kwargs:
             return AgentModel.objects.filter(**kwargs)
         return AgentModel.objects.all()
+
+    def resolve_agent(self, info, *, id):
+        if not Query.is_authenticated(info):
+            return
+
+        return AgentModel.objects.filter(id=id).first()
 
 
 schema = graphene.Schema(query=Query)
