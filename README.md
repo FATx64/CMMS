@@ -1,55 +1,41 @@
-<h1 align="center"><code>CMMS</code></h1>
+<h1 align="center">
+<img src="cmms/static/icon.svg"/>
+<br/>CMMS<br/>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href="https://pycqa.github.io/isort"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336"></a>
+<a href="/LICENSE"><img alt="License: BSD-3-Clause" src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
+</h1>
 
-<h3 align="center"> A reliable scheduling, tracking, reporting tools for equipment and facilities maintenance.</h3>
+**Computerized Maintenance Management System** or **CMMS** is a webapp created for Pertamina Hulu Energi, designed to provide a reliable scheduling, tracking, reporting tools for equipment and facilities maintenance.
 
-## About
-CMMS (Computerized Maintenance Management System) is a software designed to store maintenance data on a computer, whether it's a work order for a breakdown or a daily inspection. This software simplifies the maintenance management by giving users insight into the state of maintenance needs with comprehensive work order schedules, accurate inventory of spare parts, and access to very important reports. This information makes it easier for maintenance workers to do their jobs more effectively. CMMS is designed to be used in the medical field, but it can also be used in other industry.
-This web app is used for pertamina hulu energi for maintenance scheduling
-
-![Work Orders](images/Feat_1.png)
-![Work Orders](images/Feat_2.png)
-
-## Usage
-
-> **Note**
->
-> For user usage, please read [USAGE.md](USAGE.md) instead!
+## Setup
 
 ### Prerequisites
-- [NodeJS v15 or later](https://nodejs.org/en/)
-- SQL-based Database ([MariaDB](https://mariadb.com) is recommended)
-  - You can use [Ampps](https://www.ampps.com/downloads) if you're in a hurry
-- A bit of SQL and JavaScript knowledge
-- [Redis](https://redis.com/redis-enterprise-software/download-center/software/) for Session Manager
+- [Python 3.10 or later](https://www.python.org/)
+- [Poetry](https://python-poetry.org/docs/#installation)
+- [Redis](https://redis.com/redis-enterprise-software/download-center/software/) (for Session Management and Cache)
+- [NodeJS v18 or later](https://nodejs.org/en/) (for tailwind)
+- `libwebp` (`libwebp-dev` in Debian/Ubuntu, for Pillow)
 
-### Setup
+### Deployment
+- Run `poetry install` to install all required dependencies in a virtualenv
+- Setup Linux environment properly (use stuff in `.boilerplate` directory when needed)
+- Run `poetry run manage tailwind install` to prepare tailwind
+- Run `poetry run manage tailwind build` to build tailwind CSS
+- Run `poetry run manage collectstatic` to serve django static files (you may need to setup proper perms first)
+- Run `poetry run manage migrate` to make sure DB structure is up to date
+- Finally run `poetry run gunicorn cmms.asgi:application -k uvicorn.workers.UvicornWorker` to start the server
 
-1. Create new database for CMMS, for this example we name it `cmms`.
+### Development
+- Run `poetry install` to install all required dependencies in a virtualenv
+- Run `poetry run manage tailwind install` to prepare tailwind
+- Run `poetry run tailwind` to start tailwind in debug mode
+- Finally run `poetry run start` to start the server
 
-2. Open the folder of the project using your IDE.
+### Environment Variables
 
-3. Copy `config.json-example` and paste it as `config.json`, then change `dbUrl` with your database connection url (e.g. `mysql://root:mysql@localhost:3306/cmms`)
-
-> **Note**: Changing `sessionSecret` is recommended in production!
-
-4. Open terminal (or command prompt) and run `npm install`
-
-5. After all the packages are installed you run the server by running `npm start` or `node server.js`.
-
-6. You can access the CMMS by opening **localhost:5000** in your browser.
-
-7. You will find the home of the CMMS. To see the rest of the CMMS you have to log in.
-
-> **Note**: **email**: admin@gmail.com, **password**: 0000
-
-8. Now you can see all the content of our website and edit it.
-
-> **Note**: There is an uploaded SQL file for CMMS in [`.sql-dumps`](.sql-dumps/) if you need a sample data
-
-<!-- I don't even know why you need this in the first place?
-## CMMS Database Relation
-![Work Orders](images/RM.png)
--->
-
-## License
-This software is licensed under [New BSD License](./LICENSE).
+|Name|Description|Example|
+|----|-----------|-------|
+|DATABASE\_URL|URL to your database. Check out [`dj-database-url`](https://github.com/jazzband/dj-database-url#url-schema) for more information|`postgres://user:p#ssword!@localhost/foobar`|
+|REDIS\_URL|URL to your redis. Check out [`django-redis`](https://github.com/jazzband/django-redis#configure-as-cache-backend) for more information|`redis://127.0.0.1:6379/1`|
+|DJANGO\_DEBUG|Toggle django's debug mode, for production it's highly recommended to disable it|`true` or `yes`|

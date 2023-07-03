@@ -1,0 +1,101 @@
+{% extends "dashboard/base.html" %}
+
+{% block script %}
+<script>
+let openedModal = null
+const onModalOpen = new Event("modalOpen");
+
+function getModal(name) {
+    return document.querySelector(`dialog.modal#${name}`)
+}
+
+function getModalButton(name) {
+    return document.querySelector(`button[data-modal="#${name}"]`)
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll("button[data-modal]")
+    buttons.forEach((btn) => {
+        btn.onclick = openModal
+    })
+
+    const modals = document.querySelectorAll("dialog.modal")
+    modals.forEach((modal) => {
+        modal.addEventListener("cancel", (event) => {
+            event.preventDefault()
+            closeModal()
+        })
+    })
+
+    {% if form.errors and form.modal_id %}
+    const modal = document.querySelector("#{{ form.modal_id }}")
+    openModal(modal)
+    {% endif %}
+})
+
+function openModal(probablyModal) {
+    if (openedModal)  // How?
+        closeModal()
+    
+    if (!(probablyModal instanceof HTMLDialogElement)) {
+        try {
+            probablyModal = document.querySelector(this.dataset.modal)
+        } catch (err) {}
+    }
+
+    if (!(probablyModal instanceof HTMLDialogElement))
+        return
+
+    openedModal = probablyModal
+
+    const modalValue = this.dataset.modalValue
+    if (modalValue !== null) {
+        const modalValueTarget = openedModal.dataset.modalValueTarget
+        const modalValueTargetAttribute = openedModal.dataset.modalValueTargetAttribute || "value"
+        const targetDOM = openedModal.querySelector(modalValueTarget)
+        if (targetDOM !== null)
+            targetDOM.setAttribute(modalValueTargetAttribute, modalValue)
+    }
+
+    const buttons = openedModal.querySelectorAll("button[data-dismiss]")
+    buttons.forEach((btn) => {
+        btn.onclick = closeModal
+    })
+
+    document.documentElement.style.overflow = "hidden"
+    openedModal.dispatchEvent(onModalOpen)
+    openedModal.showModal()
+    if (openedModal.dataset.scrollToTopOnOpen || false)
+        openedModal.scrollTop = 0
+}
+
+function closeModal() {
+    if (!openedModal ) {  // Just in-case
+        if (!(this instanceof HTMLButtonElement))
+            return
+        openedModal = document.querySelector(this.dataset.dismiss)
+        if (!openedModal)  // Let's just assume it's already closed
+            openedModal = null
+    }
+    document.documentElement.style.overflow = ""
+    openedModal.classList.add("hide")
+
+    openedModal.addEventListener("animationend", function() {
+        if (!openedModal)
+            return
+        openedModal.classList.remove("hide")
+        const form = openedModal.querySelector("form")
+        if (form)
+            form.reset()
+
+        openedModal.close()
+        openedModal = null
+    }, { once: true })
+}
+
+window.onclick = function(event) {
+    if (openedModal && event.target === openedModal)
+        closeModal()
+}
+</script>
+{% endblock %}

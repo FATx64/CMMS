@@ -1,0 +1,27 @@
+http:// {
+	handle /pma* {
+		root * /usr/share/webapps/phpMyAdmin
+		file_server
+		uri /pma* strip_prefix /pma
+		php_fastcgi unix//run/php-fpm/php-fpm.sock
+	}
+
+	handle /static* {
+		uri /static* strip_prefix /static
+		file_server {
+			root /var/django/static
+		}
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:8000 {
+		        header_up Host {http.request.host}
+			header_up X-Real-IP {http.request.remote}
+			header_up X-Forwarded-For {http.request.remote}
+			header_up X-Forwarded-Port {http.request.port}
+			header_up X-Forwarded-Proto {http.request.scheme}
+		}
+	}
+}
+
+import /etc/caddy/conf.d/*
