@@ -163,7 +163,7 @@ class DashboardEmployeeView(CMMSFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        data = {"workplaces_exists": len(models.WorkPlace.objects.all()) > 0, "employees": models.Employee.objects.all()}
+        data = {"workplaces_exists": len(models.WorkPlace.objects.all()) > 0, "users": models.User.objects.all()}
         context.update(data)
         return context
 

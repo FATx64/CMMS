@@ -22,25 +22,25 @@
     </div>
 
     <div class="grid grid-cols-3 gap-8">
-        {% for employee in employees %}
+        {% for user in users %}
         <div class="w-full border-solid border border-gray-400 rounded-md">
-            <img class="h-48 w-full" src="/avatars/{{ employee.user.id }}/{{ employee.avatar }}.webp"/>
+            <img class="h-48 w-full" src="/avatars/{{ user.id }}/{{ user.employee.avatar }}.webp"/>
             <div class="text-sm px-4 py-2">
-                <p>ID: {{ employee.employee_id }}</p>
-                <p>Name: {{ employee.full_name }}</p>
-                <p>Address: {{ employee.address }}</p>
-                <p>Phone Number: {{ employee.phone_number }}</p>
-                <p>Work Center: {% if employee.work_place %}{{ employee.work_place }}{% else %}No work center{% endif %}</p>
-                <p>Work Hour: {{ employee.work_hour }}</p>
-                <p>Email: {{ employee.user.email }}</p>
+                <p>ID: {{ user.employee.employee_id }}</p>
+                <p>Name: {{ user.employee.full_name }}</p>
+                <p>Address: {{ user.employee.address }}</p>
+                <p>Phone Number: {{ user.employee.phone_number }}</p>
+                <p>Work Center: {% if user.employee.work_place %}{{ user.employee.work_place }}{% else %}No work center{% endif %}</p>
+                <p>Work Hour: {{ user.employee.work_hour }}</p>
+                <p>Email: {{ user.email }}</p>
             </div>
             <div class="flex flex-row-reverse gap-2 p-2">
-                <button type="button" data-modal="#{{ forms.edit_employee.meta.id }}" data-modal-value="{{ employee.user.id }}">
+                <button type="button" data-modal="#{{ forms.edit_employee.meta.id }}" data-modal-value="{{ user.id }}">
                     <span class="flex material-symbols-outlined">
                     edit
                     </span>
                 </button>
-                <button type="button" data-modal="#confirmation-modal" data-modal-value="delete:{{ employee.user.id }}">
+                <button type="button" data-modal="#confirmation-modal" data-modal-value="delete:{{ user.id }}">
                     <span class="flex material-symbols-outlined">
                     delete
                     </span>
