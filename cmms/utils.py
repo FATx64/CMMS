@@ -142,7 +142,7 @@ def export_workorder_to_xl():
         to_be_added.append(
             [
                 f"{wo.type}-{wo.code}",
-                f"{wo.type} - {wo.equipment.name}",
+                f"{wo.type} - {wo.description}",
                 wo.start_date,
                 wo.end_date,
                 wo.equipment.cost,
