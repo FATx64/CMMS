@@ -61,7 +61,7 @@ class UserManager(BaseUserManager):
 
         e = Employee(
             user=u,
-            employee_id=form_data["id"],
+            employee_id=form_data["employee_id"],
             first_name=form_data["first_name"],
             last_name=form_data["last_name"],
             address=form_data["address"],
