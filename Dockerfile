@@ -58,4 +58,6 @@ COPY --from=builder /app/pyproject.toml /app/
 COPY --from=builder /app/manage.py /app/
 COPY --from=builder /app/cmms/ /app/cmms
 
+EXPOSE 8000
+
 CMD [ "gunicorn", "cmms.asgi:application", "-k", "uvicorn.workers.UvicornWorker" ]
