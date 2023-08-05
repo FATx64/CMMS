@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "widget_tweaks",
     "graphene_django",
+    "django_htmx",
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 CACHES = {
