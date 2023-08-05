@@ -36,7 +36,7 @@ SECRET_KEY = getenv(
 if not SECRET_KEY and not DEBUG:
     raise RuntimeError("You must set DJANGO_SECRET_KEY in production mode!")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + getenv("DJANGO_HOSTS", "").split(",")
+ALLOWED_HOSTS = (["localhost", "127.0.0.1"] if DEBUG else []) + getenv("DJANGO_HOSTS", "").split(",")
 
 
 # Application definition
