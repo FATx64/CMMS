@@ -1,0 +1,7 @@
+<!-- vim: set filetype=htmldjango: -->
+<div id="modal" class="modal rounded-lg bg-white text-left shadow-xl sm:w-full sm:max-w-lg p-0" aria-labelledby="modal-title" aria-modal="true" _="on closeModal add .closing then wait for animationend then remove me" {% for key, value in modal_attrs.items %} {{ key }}={{ value }} {% endfor %}>
+    <div class="modal-underlay" _="on click trigger closeModal"></div>
+    <div class="modal-content">
+        {{ modal_content }}
+    </div>
+</div>
