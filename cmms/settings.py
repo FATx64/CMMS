@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 
+from cmms.core.utils.meta import str_bool
 from cmms.enums import UserType
 from cmms.menu import Item
 
@@ -26,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(getenv("DJANGO_DEBUG", "true"))
+DEBUG = str_bool(getenv("DJANGO_DEBUG", "y"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv(
