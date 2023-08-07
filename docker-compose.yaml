@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  cmms:
+    container_name: cmms
+    image: ghcr.io/fatx64/cmms:nightly
+    restart: on-failure
+    environment:
+      DATABASE_URL: postgres://postgres:youshallnotpass@db/cmms
+    volumes:
+      - "data:/app/cmms/data:rw"
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:15.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: youshallnotpass
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cmms
+
+volumes:
+  data:
