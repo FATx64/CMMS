@@ -11,7 +11,17 @@ dialog.modal::backdrop {
     background: transparent;
 }
 
-@-webkit-keyframes show{
+/* Modal with htmx */
+#modal {
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.25);
+    animation: show 300ms ease-out normal;
+}
+
+#modal.closing {
+    animation: hide 200ms ease-in normal;
+}
+
+@-webkit-keyframes show {
     from {
         opacity: 0;
         transform: translateY(1rem);
@@ -26,7 +36,7 @@ dialog.modal::backdrop {
     }
 }
 
-@-webkit-keyframes hide{
+@-webkit-keyframes hide {
     to {
         opacity: 0;
         transform: translateY(1rem);
@@ -41,7 +51,7 @@ dialog.modal::backdrop {
     }
 }
 
-@-webkit-keyframes hide-backdrop{
+@-webkit-keyframes hide-backdrop {
     to {
         background: transparent;
     }

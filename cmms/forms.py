@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, password_validation
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
-from cmms.enums import Periodicity, UserType, WorkOrderType
-from cmms.models import Agent, Equipment, Sparepart, User, WorkOrder, WorkPlace
+from cmms.core.enums import Periodicity, UserType, WorkOrderType
+from cmms.core.models import Agent, Equipment, Sparepart, User, WorkOrder, WorkPlace
 from cmms.utils import JS, handle_avatar_upload
 
 

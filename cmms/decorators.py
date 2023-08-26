@@ -3,8 +3,8 @@ from functools import wraps
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect
 
-from cmms.enums import UserType
-from cmms.models import User
+from cmms.core.models import User
+from cmms.core.enums import UserType
 
 
 def admin_exists(view_func):

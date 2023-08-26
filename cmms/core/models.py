@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
-from typing import TYPE_CHECKING, Any, Type
+from typing import TYPE_CHECKING, Any, Type, TypeVar
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -13,7 +13,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from cmms import constants, timer
-from cmms.enums import Periodicity, UserType, WorkOrderType
+from cmms.core.enums import Periodicity, UserType, WorkOrderType
 from cmms.utils import (
     handle_avatar_upload,
     handle_equipment_pict_upload,
@@ -300,6 +300,7 @@ class TypedModel(models.Model):
 
     if TYPE_CHECKING:
         objects: models.Manager
+        DoesNotExist: Any
 
     def as_json(self):
         base = {"id": self.pk}

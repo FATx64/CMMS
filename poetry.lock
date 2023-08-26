@@ -127,10 +127,6 @@ files = [
     {file = "dj_database_url-2.0.0-py3-none-any.whl", hash = "sha256:9c9e5f7224f62635a787e9cc3c6762c9be2b19541a21e3c08fa573bd01609b4b"},
 ]
 
-[package.dependencies]
-Django = ">=3.2"
-typing-extensions = ">=3.10.0.0"
-
 [[package]]
 name = "django"
 version = "4.2.3"
@@ -161,6 +157,20 @@ python-versions = ">=3.8"
 files = [
     {file = "django_browser_reload-1.11.0-py3-none-any.whl", hash = "sha256:ce9576bd31562fda01dd8fca73e07696a9a1c7138d2aee084abfb7315dc633a4"},
     {file = "django_browser_reload-1.11.0.tar.gz", hash = "sha256:fe232478a58e9e5d8b703537651d5a76b017d2208d1da5dfbe013937b5cca065"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
+name = "django-htmx"
+version = "1.16.0"
+description = "Extensions for using Django with htmx."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_htmx-1.16.0-py3-none-any.whl", hash = "sha256:360d11266666e5d92bda57069f671f2c04642eb1fc071e4c4160cf9f504cbfa6"},
+    {file = "django_htmx-1.16.0.tar.gz", hash = "sha256:56a65045e079503877ba1354acb481030cf54da1e1f731d33c280e0a14b214cf"},
 ]
 
 [package.dependencies]
@@ -602,4 +612,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7647790d3a0604b9b644a5aa42ce77ae4eee9ce1147c14a6a5aa2e9dd02bae39"
+content-hash = "3f6b5076c77396817d708e10151d0d9e1e794835072a693f8ce9e0d549f95bb7"

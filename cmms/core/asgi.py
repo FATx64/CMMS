@@ -11,7 +11,9 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+from cmms import constants
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmms.settings")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", constants.DJANGO_SETTINGS_PATH)
 
 application = get_asgi_application()

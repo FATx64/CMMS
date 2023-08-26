@@ -6,9 +6,9 @@ from contextlib import suppress
 
 from dateutil.relativedelta import relativedelta
 
-from cmms import models
+from cmms.core import models
 from cmms.abstract import singleton
-from cmms.enums import Periodicity
+from cmms.core.enums import Periodicity
 from cmms.events import Events
 from cmms.utils import utcnow
 

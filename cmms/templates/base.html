@@ -14,7 +14,8 @@
         {% tailwind_css %}
         {% block extrastyle %}{% endblock %}
         {% block extrahead %}{% endblock %}
-        <script src="https://cdn.jsdelivr.net/npm/json-bigint-parser-browser@1.0.4/json-bigint-browser.min.js"></script>
+        <script src="{% static "js/json-bigint-browser.min.js" %}"></script>
+        <script src="{% static "js/htmx.min.js" %}"></script>
         <script src="{% static "js/global.js" %}"></script>
         {% block script %}{% endblock %}
     </head>
