@@ -2,24 +2,31 @@ version: "3"
 
 services:
   cmms:
-    container_name: cmms
+    container_name: cmms_cmms
     image: ghcr.io/fatx64/cmms:nightly
     restart: on-failure
     environment:
       DATABASE_URL: postgres://postgres:youshallnotpass@db/cmms
+      REDIS_URL: redis://redis:6379/0
     volumes:
       - "data:/app/cmms/data:rw"
     depends_on:
       - db
+      - redis
 
   db:
-    container_name: db
-    image: postgres:15.1
+    container_name: cmms_db
+    image: postgres:15.4-alpine
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: youshallnotpass
       POSTGRES_USER: postgres
       POSTGRES_DB: cmms
+  
+  redis:
+    container_name: cmms_redis
+    image: redis:7.0.12-alpine
+    restart: unless-stopped
 
 volumes:
   data:
