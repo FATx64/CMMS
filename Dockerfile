@@ -60,4 +60,4 @@ COPY --from=builder /app/cmms/ /app/cmms
 
 EXPOSE 8000
 
-CMD [ "gunicorn", "cmms.asgi:application", "-k", "uvicorn.workers.UvicornWorker" ]
+CMD [ "gunicorn", "cmms.core.asgi:application", "-k", "uvicorn.workers.UvicornWorker" ]

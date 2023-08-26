@@ -1,3 +1,4 @@
+# TODO: Move all these classes to their own files in 'ui/' dir
 from __future__ import annotations
 
 from django.contrib.auth import login, logout
@@ -8,7 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
-from cmms import forms, models, utils
+from cmms import forms, utils
+from cmms.core import models
 from cmms.abstract.view import CMMSFormView, CMMSJSONModelView
 from cmms.decorators import admin_exists, admin_not_exists
 

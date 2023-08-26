@@ -9,11 +9,12 @@ from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import FormView
 
-from cmms import forms, models
+from cmms import forms
+from cmms.core import models
 
 
 if TYPE_CHECKING:
-    from cmms.models import TypedModel
+    from cmms.core.models import TypedModel
 
 
 # TODO: Use this

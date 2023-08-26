@@ -5,8 +5,8 @@ from contextlib import suppress
 
 from dateutil.relativedelta import relativedelta
 
-from cmms import models
-from cmms.enums import Periodicity, WorkOrderType
+from cmms.core import models
+from cmms.core.enums import Periodicity, WorkOrderType
 
 
 class Events:

@@ -1,1 +1,3 @@
 SCHEDULED_PM = "scheduled_pm"
+DJANGO_SETTINGS_PATH = "cmms.core.settings"
+CMMS_EPOCH = 1672531200000

@@ -17,10 +17,8 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from PIL import Image
 
-from cmms import models
-
-
-CMMS_EPOCH: int = 1672531200000
+from cmms.core import models
+from cmms.constants import CMMS_EPOCH
 
 
 def utcnow() -> datetime.datetime:

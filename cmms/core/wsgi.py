@@ -11,7 +11,9 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from cmms import constants
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmms.settings")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", constants.DJANGO_SETTINGS_PATH)
 
 application = get_wsgi_application()

@@ -15,9 +15,9 @@ from pathlib import Path
 
 import dj_database_url
 
+from cmms.core.menu import Item
 from cmms.core.utils.meta import str_bool
-from cmms.enums import UserType
-from cmms.menu import Item
+from cmms.core.enums import UserType
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

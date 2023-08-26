@@ -3,9 +3,9 @@ from __future__ import annotations
 import graphene
 from graphene_django import DjangoObjectType
 
-from cmms.models import Agent as AgentModel
-from cmms.models import Equipment as EquipmentModel
-from cmms.models import Sparepart as SparepartModel
+from cmms.core.models import Agent as AgentModel
+from cmms.core.models import Equipment as EquipmentModel
+from cmms.core.models import Sparepart as SparepartModel
 
 
 class Equipment(DjangoObjectType):

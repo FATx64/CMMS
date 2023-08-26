@@ -6,11 +6,11 @@ from django.conf import settings
 from django.http.request import HttpRequest
 from django.template import Context
 
-from cmms.enums import UserType
+from cmms.core.enums import UserType
 
 
 if TYPE_CHECKING:
-    from cmms.models import User
+    from cmms.core.models import User
 
 
 class ItemNotConstructed(RuntimeError):

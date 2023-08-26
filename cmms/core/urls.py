@@ -6,7 +6,8 @@ from django.shortcuts import redirect
 from django.urls import include, path, re_path
 from graphene_django.views import GraphQLView
 
-from cmms import utils, views
+from cmms import utils
+from cmms.core import views
 from cmms.timer import Timer
 
 
