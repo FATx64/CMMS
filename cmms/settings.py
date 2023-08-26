@@ -82,7 +82,7 @@ SESSION_COOKIE_HTTPONLY = False
 SESSION_COOKIE_AGE = 60 * 60 * 24  # 1 day in seconds
 SESSION_SAVE_EVERY_REQUEST = True
 
-ROOT_URLCONF = "cmms.urls"
+ROOT_URLCONF = "cmms.core.urls"
 
 TEMPLATES = [
     {
